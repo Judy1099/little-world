@@ -1097,7 +1097,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v14';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v15';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1113,6 +1113,31 @@ window.playAy=function(n,a,cb,k){k=k||0;const L=QV[n+'_'+a]?[QV[n+'_'+a]]:qsrc(n
  QA.onended=()=>{if(fin||moved)return;fin=1;clearTimeout(w);qmsg('');cb&&cb()};
  QA.onerror=nxt;QA.src=L[k];
  const pr=QA.play();if(pr&&pr.catch)pr.catch(e=>{if(e&&e.name=='NotAllowedError'){clearTimeout(w);qmsg('اضغطي زر التشغيل مرة ثانية')}else nxt()})};
+
+/* richer fruit art */
+(function(){
+let sd=7;const rnd=()=>{sd=(sd*9301+49297)%233280;return sd/233280};
+const sh=(rx=30)=>`<ellipse cx="50" cy="95" rx="${rx}" ry="3.6" fill="#000" opacity=".13"/>`;
+const leaf=(d,id,vein)=>`<path d="${d}" fill="url(#${id})" stroke="#3f7a35" stroke-width="1.6" stroke-linejoin="round"/><path d="${vein}" stroke="#3f7a35" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".8"/>`;
+const gr=(id,a,b)=>`<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const rg=(id,s,cx=.35,cy=.3,r=.85)=>`<radialGradient id="${id}" cx="${cx}" cy="${cy}" r="${r}">${s.map(([o,c,op])=>`<stop offset="${o}" stop-color="${c}"${op!=null?` stop-opacity="${op}"`:''}/>`).join('')}</radialGradient>`;
+// APPLE
+const body='M50 27C42 18 19 21 14 46C10 69 28 92 42 92C47 92 48 89.5 50 89.5C52 89.5 53 92 58 92C72 92 90 69 86 46C81 21 58 18 50 27Z';
+ART.apple=`<defs>${rg('zz_ap1',[[0,'#ffa095'],[.45,'#e8463d'],[1,'#a31f2b']])}${gr('zz_apl','#8ccf63','#4b8a3c')}</defs>${sh()}<path d="${body}" fill="url(#zz_ap1)" stroke="#951c27" stroke-width="2" stroke-linejoin="round"/><path d="M72 30C88 42 90 66 74 84C68 90 62 92 58 92C72 80 78 54 72 30Z" fill="#6e0f1f" opacity=".17"/><path d="M50 27C48 24 47 22 47 19" stroke="#8a1c25" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/><path d="M50 26C50 19 52 13 57 8" stroke="#6b4328" stroke-width="4" fill="none" stroke-linecap="round"/>${leaf('M54 17C60 5 77 6 85 12C79 25 62 27 54 17Z','zz_apl','M57 17C66 13 74 11 82 12')}<ellipse cx="29" cy="42" rx="5.5" ry="12" fill="#fff" opacity=".55" transform="rotate(18 29 42)"/><circle cx="33" cy="63" r="2.4" fill="#fff" opacity=".45"/>`;
+// ORANGE
+let pores='';for(let i=0;i<34;i++){const a=rnd()*6.28,r=Math.sqrt(rnd())*31;pores+=`<circle cx="${(50+r*Math.cos(a)).toFixed(1)}" cy="${(57+r*Math.sin(a)).toFixed(1)}" r="${(.8+rnd()*.7).toFixed(1)}"/>`}
+ART.orange=`<defs>${rg('zz_or1',[[0,'#ffd27f'],[.5,'#f79a2b'],[1,'#d8680e']])}${rg('zz_or2',[[.6,'#7a3000',0],[1,'#7a3000',.28]],.5,.5,.5)}${gr('zz_orl','#8ccf63','#4b8a3c')}</defs>${sh(32)}<circle cx="50" cy="57" r="38" fill="url(#zz_or1)" stroke="#c45d0c" stroke-width="2"/><circle cx="50" cy="57" r="38" fill="url(#zz_or2)"/><g fill="#b85a0c" opacity=".38">${pores}</g><path d="M50 21C46 24 42 23 38 26C43 27 47 27 50 25C53 27 57 27 62 26C58 23 54 24 50 21Z" fill="#5f9a3c" stroke="#3f7a35" stroke-width="1"/>${leaf('M53 22C59 8 77 9 84 16C77 28 61 30 53 22Z','zz_orl','M56 21C65 17 74 15 81 16')}<ellipse cx="33" cy="44" rx="6.5" ry="12" fill="#fff" opacity=".5" transform="rotate(-28 33 44)"/><circle cx="29" cy="62" r="2.2" fill="#fff" opacity=".4"/>`;
+// STRAWBERRY
+let seeds='';[[38,48],[52,46],[64,50],[30,58],[44,60],[58,62],[72,60],[36,72],[50,74],[64,74],[43,85],[57,85],[50,66],[26,48],[76,48]].forEach(([x,y])=>{const d=((x-50)/32)**2+((y-62)/34)**2;if(d<.92)seeds+=`<g transform="translate(${x} ${y}) rotate(${(x-50)/3})"><path d="M0 -4C3 -2 3 3 0 4C-3 3 -3 -2 0 -4Z" fill="#ffe28a" stroke="#c98f22" stroke-width=".8"/><path d="M-.8 -2L-.8 1" stroke="#fff" stroke-width=".8" opacity=".8"/></g>`});
+ART.strawberry=`<defs>${rg('zz_sb1',[[0,'#ff8a80'],[.5,'#e2372f'],[1,'#a51e29']],.38,.32)}${gr('zz_sbl','#7fc45a','#3f8a3a')}</defs>${sh(26)}<path d="M50 95C22 82 8 56 19 39C27 29 40 33 50 33C60 33 73 29 81 39C92 56 78 82 50 95Z" fill="url(#zz_sb1)" stroke="#9c1c26" stroke-width="2" stroke-linejoin="round"/><path d="M70 40C86 52 80 76 56 92C70 76 74 58 70 40Z" fill="#6e0f1f" opacity=".16"/>${seeds}<path d="M50 36C40 38 26 34 20 28C28 27 32 23 36 19C38 25 43 28 50 30C57 28 62 25 64 19C68 23 72 27 80 28C74 34 60 38 50 36Z" fill="url(#zz_sbl)" stroke="#357a33" stroke-width="1.6" stroke-linejoin="round"/><path d="M50 32C50 25 52 19 56 14" stroke="#4b8a3c" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="30" cy="52" rx="4.5" ry="9" fill="#fff" opacity=".45" transform="rotate(20 30 52)"/>`;
+// WATERMELON
+let ws='';[[34,50,-20],[50,61,0],[66,50,20],[42,43,-10],[58,43,10],[50,49,0]].forEach(([x,y,r])=>ws+=`<g transform="translate(${x} ${y}) rotate(${r})"><path d="M0 -5.5C3.6 -2.5 3.6 3.5 0 5.5C-3.6 3.5 -3.6 -2.5 0 -5.5Z" fill="#33231c"/><path d="M-1 -3L-1 1.5" stroke="#8a7365" stroke-width="1" opacity=".7"/></g>`);
+ART.melon=`<defs>${rg('zz_mf',[[0,'#ff9c96'],[.55,'#ef4a52'],[1,'#d02f3e']],.5,.15,1)}${gr('zz_mr1','#3f9a45','#276b30')}</defs>${sh(36)}<g transform="translate(0 6)"><path d="M5 34A45 45 0 0 0 95 34Z" fill="url(#zz_mr1)" stroke="#225c2a" stroke-width="2.4" stroke-linejoin="round"/><path d="M12 38A38 38 0 0 0 88 38" stroke="#7cc65e" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><path d="M9 34A41 41 0 0 0 91 34Z" fill="#f0f7d0"/><path d="M13 34A37 37 0 0 0 87 34Z" fill="url(#zz_mf)"/>${ws}<path d="M20 38A31 31 0 0 0 40 63" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".5"/></g>`;
+// GRAPES
+const rows=[[30,[34,50,66]],[42,[26,42,58,74]],[54,[34,50,66]],[66,[42,58]],[78,[50]]];let bs='';let k=0;
+rows.forEach(([y,xs])=>xs.forEach(x=>{const f=k++%2?'zz_gp2':'zz_gp1';bs+=`<circle cx="${x}" cy="${y}" r="11.5" fill="url(#${f})" stroke="#432468" stroke-width="1.2"/><ellipse cx="${x-4}" cy="${y-4.5}" rx="3.4" ry="2.2" fill="#fff" opacity=".6" transform="rotate(-35 ${x-4} ${y-4.5})"/><circle cx="${x+4}" cy="${y+5}" r="1.4" fill="#fff" opacity=".18"/>`}));
+ART.grapes=`<defs>${rg('zz_gp1',[[0,'#cba3ee'],[.45,'#8a4fc0'],[1,'#4a2a78']])}${rg('zz_gp2',[[0,'#b9a8f0'],[.45,'#6f55bd'],[1,'#3b2a78']])}${gr('zz_gl','#8ccf63','#4b8a3c')}</defs>${sh(24)}<g transform="translate(5 9) scale(.9)"><path d="M22 40C22 28 40 22 50 22C62 22 80 28 78 42C76 58 62 66 56 80C54 88 46 88 44 80C38 66 22 58 22 40Z" fill="#2c1550" opacity=".28"/>${bs}</g><path d="M50 31C50 21 54 12 62 8" stroke="#6b4328" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M60 11C68 6 76 10 74 16C72 21 66 18 68 14" stroke="#6b9a3c" stroke-width="1.8" fill="none" stroke-linecap="round"/><g transform="translate(8 -3) scale(.8)">${leaf('M20 22C16 14 22 7 29 9C31 3 41 3 43 9C49 7 55 13 51 20C55 25 50 31 43 29C40 34 31 33 28 29C22 31 17 27 20 22Z','zz_gl','M35 28L35 12M35 24L25 14M35 24L45 14')}</g>`;
+})();
 
 intro();LWBOOT();
 </script></body></html>
