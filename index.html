@@ -268,7 +268,7 @@ QT[105]=["أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأ�
 const pad=n=>String(n).padStart(3,'0');
 const nrm=t=>t.replace(/[ً-ٰٟـۖ-ۭ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/[^ء-ي\s]/g,'').trim();
 function qm(){return Math.min(Math.floor((Date.now()-(sub?sub.start:Date.now()))/2592e6),SM.length-1)}
-function quran(){const p=P();$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2>${SM[qm()].map(([n,c])=>`<div class="card"><h2 style="margin:0 0 8px">${SN[n]} ${spk(SN[n])}</h2><div class="row">${QT[n]?`<button class="btn" onclick="go('qlearn',${n})">${ic('book',28)}</button>`:''}<button class="btn w" onclick="playSteps(${n},0)">${ic('play',24)}</button><button class="btn" onclick="go('recite',${n})">${ic('mic',24)}</button></div>${QT[n]?QT[n].map((t,i)=>`<div class="ay" onclick="playQ(${n},${i+1},${i+1})">${t} ﴿${i+1}﴾</div>`).join(''):'<p class="sm">تُضاف الآيات بعد مراجعتها.</p>'}</div>`).join('')}<p class="sm">التلاوة من everyayah.com (تحتاج إنترنت). يمكن تغيير القارئ من الإعدادات. راجعي النص مع المصحف.</p>`}
+function quran(){const p=P();$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2>${SM[qm()].map(([n,c])=>`<div class="card"><h2 style="margin:0 0 8px;cursor:pointer" ${QT[n]?`onclick="go('qlearn',${n})"`:''}>${SN[n]} ${spk(SN[n])}</h2><div class="row">${QT[n]?`<button class="btn" onclick="go('qlearn',${n})">${ic('book',28)}</button>`:''}<button class="btn w" onclick="playSteps(${n},0)">${ic('play',24)}</button><button class="btn" onclick="go('recite',${n})">${ic('mic',24)}</button></div>${QT[n]?QT[n].map((t,i)=>`<div class="ay" onclick="playQ(${n},${i+1},${i+1})">${t} ﴿${i+1}﴾</div>`).join(''):'<p class="sm">تُضاف الآيات بعد مراجعتها.</p>'}</div>`).join('')}<p class="sm">التلاوة من everyayah.com (تحتاج إنترنت). يمكن تغيير القارئ من الإعدادات. راجعي النص مع المصحف.</p>`}
 const GA={1:1,103:6177,105:6189,106:6194,107:6198,108:6205,109:6208,110:6214,111:6217,112:6222,113:6226,114:6231};
 const RC=[['Minshawy_Teacher_128kbps','المنشاوي مع الأطفال'],['Husary_Muallim_128kbps','الحصري المعلّم'],['Alafasy_128kbps','العفاسي'],['Abdul_Basit_Murattal_192kbps','عبدالباسط'],['Minshawy_Murattal_128kbps','المنشاوي مرتّل'],['Husary_128kbps','الحصري'],['Maher_AlMuaiqly_128kbps','ماهر المعيقلي'],['Abdurrahmaan_As-Sudais_192kbps','السديس'],['Abu_Bakr_Ash-Shaatree_128kbps','الشاطري']];
 const rcur=()=>(S('set')||{}).q||0;
@@ -1025,7 +1025,7 @@ function level(v){ // 0..1 -> five bars + ring
   const b=document.querySelectorAll('#lvl i');b.forEach((e,k)=>{const on=v>(k+1)/6;e.classList.toggle('on',on);e.style.height=(8+(on?k*7+8:0))+'px'});
   const q=document.querySelector('.qb.rc,.qb.hr');if(q){q.classList.toggle('hr',v>.15);q.classList.toggle('rc',v<=.15)}}
 function stopAll(){if(ctl){try{ctl.stop()}catch(e){}ctl=null}try{rec&&rec.abort&&rec.abort()}catch(e){}try{rec&&rec.stop()}catch(e){}level(0)}
-function failed(msg){QL.said=0;QL.fail=(QL.fail||0)+1;qlDraw();cheer(msg||'حاول مرة أخرى',1)}
+function failed(msg){QL.said=0;QL.fail=(QL.fail||0)+1;qlDraw();cheer(msg||'حاول مرة أخرى',1);window.qlFail&&qlFail()}
 async function volume(text,ok){ // fallback: the microphone itself, so the child sees it hears his voice
   let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){failed('اسمحي للمتصفح باستخدام المايكروفون');return}
   const AC=window.AudioContext||window.webkitAudioContext,ac=new AC(),src=ac.createMediaStreamSource(stream),an=ac.createAnalyser();an.fftSize=1024;src.connect(an);
@@ -1087,6 +1087,24 @@ $('#app').innerHTML=`${ctop('games')}<div class="card"><div class="row" style="m
 window.cntT=function(b){if(!CN||b.dataset.d)return;b.dataset.d=1;b.style.opacity=.45;b.style.outline='4px solid #f2b94b';CN.c++;say(NM[CN.c]);if(CN.c==CN.n){win(NM[CN.n]);setTimeout(count,2800)}};
 window.pzTap=function(j){if(PZ.s===null)PZ.s=j;else{const a=PZ.s;[PZ.o[a],PZ.o[j]]=[PZ.o[j],PZ.o[a]];PZ.s=null;if(PZ.o.every((v,i)=>v==i)){pz();document.querySelectorAll('.pc').forEach(e=>{e.style.pointerEvents='none'});const c=document.querySelector('.card');if(c)c.style.boxShadow='0 0 0 6px #f2b94b';win('أحسنت');setTimeout(puzzle,3800);return}}pz()};
 (function(){const st=document.createElement('style');st.textContent='.fall{width:76px;height:76px;display:flex;align-items:center;justify-content:center;z-index:2;touch-action:manipulation}.fall svg{width:72px;height:72px;pointer-events:none}';document.head.appendChild(st)})();
+
+/* Quran: automatic flow  listen, listen, then say, then next ayah */
+(function(){
+const alive=t=>QL&&QL.tok===t&&QL.ph=='play'&&document.querySelector('.ayb');
+function run(listens){const t=QL.tok;if(!alive(t))return;
+ const step=k=>{if(!alive(t))return;
+  if(k>listens){QL.st=2;QL.play=0;qlDraw();setTimeout(()=>{if(alive(t)&&!QL.said)qlSay()},400);return}
+  QL.play=k;QL.st=Math.max(QL.st||0,k-1);qlDraw();
+  playStep(QL.n,QL.i,()=>{if(!alive(t))return;QL.st=Math.max(QL.st||0,k);QL.play=0;qlDraw();setTimeout(()=>step(k+1),500)})};
+ step(1)}
+const oldLearn=window.qlearn;
+window.qlearn=function(n){QL={n,i:0,ph:'play',st:0,tok:Date.now()};qlDraw();setTimeout(()=>run(2),700)};
+const oldEar=window.qlEar;
+window.qlEar=function(k){QL.tok=Date.now();oldEar(k)};
+const oldNext=window.qlNext;
+window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
+window.qlFail=function(){const t=QL.tok;if(QL.fail>=2)return;setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
+})();
 
 intro();LWBOOT();
 </script></body></html>
