@@ -219,7 +219,7 @@ function who(){$('#app').innerHTML=`${LOGO}<div class="row" style="margin:6px 0"
 <div class="tile" style="background:var(--sky)" onclick="go(kid?'child':'choose')"><div class="ta">${me(96)}</div>الطفل</div></div>`}
 function choose(){$('#app').innerHTML=`${ctop('who')}<h2>من أنت؟ ${spk('من أنت')}</h2><div class="row"><div class="tile" style="background:var(--pk)" onclick="pick('girl')"><div class="ta" style="height:200px">${girl(190)}</div>بنت${spk('بنت')}</div><div class="tile" style="background:var(--sky)" onclick="pick('boy')"><div class="ta" style="height:200px">${boy(190)}</div>ولد${spk('ولد')}</div></div>`;setTimeout(()=>cheer('من أنت؟ بنت أو ولد'),300)}
 function pick(c){kid={c};S('kid',kid);go('child')}
-function child(){let i=0;$('#app').innerHTML=`<div class="top">${ib("go('who')",'home')}<div id="bub" class="bub on">هيا نتعلم ${spk('هيا نتعلم')}</div>${me(78)}</div>${stage(`<div class="row">${T('apple','فواكه',"go('fruits')",'var(--pe)')}${T('pal','ألوان',"go('colors')",'var(--lv)')}${T('qbook','قرآن',"go('quran')",'var(--sage)')}${T('maj','مجلسنا',"go('majlis')",'var(--sky)')}${T('puz','أنشطة',"go('games')",'var(--pk)')}${T('star','نجومي',"go('trophy')",'var(--lv)')}${T('car','نحن في رحلة',"go('trip')",'var(--y)')}${T('brush','نصنع قصة',"go('mkstory')",'var(--pe)')}</div>`)}`;orbit();
+function child(){let i=0;$('#app').innerHTML=`<div class="top">${ib("go('who')",'home')}<div id="bub" class="bub on">هيا نتعلم ${spk('هيا نتعلم')}</div>${me(78)}</div>${stage(`<div class="row">${T('apple','فواكه',"go('fruits')",'var(--pe)')}${T('pal','ألوان',"go('colors')",'var(--lv)')}${T('qbook','قرآن',"go('quran')",'var(--sage)')}${T('maj','مجلسنا',"go('majlis')",'var(--sky)')}${T('puz','أنشطة',"go('games')",'var(--pk)')}${T('star','نجومي',"go('trophy')",'var(--lv)')}${T('car','نحن في رحلة',"go('trip')",'var(--y)')}${T('brush','هيا نصنع قصة',"go('mkstory')",'var(--pe)')}</div>`)}`;orbit();
 tmr=setInterval(()=>{const u=$('#bub');if(u){u.textContent=MOT[i++%MOT.length];u.classList.add('on')}},5000)}
 const menu=(b,items)=>`${ctop2(b)}${stage(`<div class="row">${items.map(i=>T(...i)).join('')}</div>`)}`;
 function fruits(){$('#app').innerHTML=menu('child',[['strawberry','تعلّم',"go('learn')",'var(--pk)'],['magn','أين الفاكهة؟',"go('pickF')",'var(--pe)'],['shapes','الأشكال',"go('shapes','fruits')",'var(--sky)'],['brush','نلوّن',"go('paint','apple','fruits')",'var(--lv)']]);orbit()}
@@ -725,7 +725,7 @@ window.mkstory=function(from){
   $('#app').innerHTML=(mom?mtop('mom','قصص طفلي'):ctop('child'))
    +'<div class="card" style="text-align:center">'+(mom&&!L.length?'<p>لا توجد قصص بعد. عندما يصنع طفلك قصة تظهر هنا مع تسجيل صوته.</p>':'')
    +'<div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:flex-start">'+plus+bk+'</div></div>';
-  if(!mom)cheer('نصنع قصة')};
+  if(!mom)cheer('هيا نصنع قصة')};
 window.momstories=()=>mkstory('mom');
 
 /* ---------- editor ---------- */
