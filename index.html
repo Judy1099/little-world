@@ -83,7 +83,7 @@ a.vid .pl{width:44px;height:44px;border-radius:50%;background:#e5534b;color:#fff
 .dots{display:flex;justify-content:center;gap:8px;margin:6px}.dots i{width:16px;height:16px;border-radius:50%;background:#e1d5b8}.dots i.dn{background:#8fc486}.dots i.cu{background:#f2b94b;transform:scale(1.3)}
 .ayb{font-family:'Amiri',serif;font-size:34px;line-height:1.8;background:#fffaf0;border-radius:22px;padding:14px;margin:8px;box-shadow:0 6px 16px rgba(90,58,36,.12)}
 .qb{width:92px;height:92px;border-radius:50%;border:0;background:#fff;box-shadow:0 5px 12px rgba(90,58,36,.18);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.qb.off{opacity:.28;pointer-events:none}.qb.on{box-shadow:0 0 0 6px #f2b94b;animation:pls 1s ease-in-out infinite}.qb.pl{box-shadow:0 0 0 6px #6fb2e6}@keyframes pls{50%{transform:scale(1.1)}}
-@media print{@page{size:A4;margin:10mm}body{background:#fff!important}#bg{display:none}.noprint{display:none!important}.pg{box-shadow:none;border-radius:0;page-break-after:always;min-height:26cm;margin:0}}
+/*PRINTFIX*/@media print{@page{size:A4;margin:8mm}html,body{background:#fff!important;min-height:0!important;height:auto!important;margin:0!important;padding:0!important}#bg,#lwbar,#qm,.ovl{display:none!important}.noprint{display:none!important}#app{padding:0!important;margin:0!important;min-height:0!important;animation:none!important}.pg{box-shadow:none;border-radius:0;margin:0;padding:6mm;min-height:0!important;height:27.2cm;overflow:hidden;break-inside:avoid;page-break-after:always}.pg:last-child{page-break-after:auto}.pg svg{max-height:17.5cm!important}}
 .bw{display:inline-block}.wing{transform-box:fill-box}.wl{transform-origin:100% 50%}.wr{transform-origin:0 50%}
 .arm{transform-box:fill-box;transform-origin:70% 100%}.eyes{transform-box:fill-box;transform-origin:center}
 .spin{transform-box:view-box}
@@ -288,7 +288,7 @@ function qlDraw(){const n=QL.n,tx=QTL(n),st=QL.st||0;let body='';
 const bt=(k,ic_,cls,act)=>`<button class="qb ${cls}" onclick="${act}">${ic(ic_,46,'#5a3a24')}</button>`;
 if(QL.ph=='all')body=`<div class="row"><span class="qb on pl">${ic('ear',56,'#5a3a24')}</span></div>`;
 else if(QL.ph=='done')body=`<div class="row">${bee(150)}</div><button class="btn" onclick="go('quran')">${ic('check',30)}</button>`;
-else body=`<div class="row" style="gap:16px">${bt(1,'ear',(QL.play==1?'pl ':'')+(st==0?'on':''),'qlEar(1)')}${bt(2,'ear',(QL.play==2?'pl ':'')+(st<1?'off':st==1?'on':''),'qlEar(2)')}${bt(3,'mic',(st<2?'off':QL.said?'':'on'),'qlSay()')}</div>${QL.said?`<div class="row" style="margin-top:14px"><button class="btn" onclick="qlNext()">${ic('next',34)}</button></div>`:''}`;
+else body=`<div class="row" style="gap:16px">${bt(1,'ear',(QL.play==1?'pl ':'')+(st==0?'on':''),'qlEar(1)')}${bt(2,'ear',(QL.play==2?'pl ':'')+(st<1?'off':st==1?'on':''),'qlEar(2)')}${bt(3,'mic',(st<2?'off':QL.said?'rc':'on'),'qlSay()')}</div>${QL.said?`<div id="lvl"><i></i><i></i><i></i><i></i><i></i></div>`:''}${(QL.fail>=2&&!QL.said)?`<div class="row" style="margin-top:14px"><button class="btn" onclick="qlNext()">${ic('next',34)}</button></div>`:''}`;
 $('#app').innerHTML=`${ctop('quran')}<h2 style="margin:4px">${SN[n]} ${spk(SN[n])}</h2><div class="dots">${tx.map((_,k)=>`<i class="${k<QL.i?'dn':k==QL.i&&QL.ph!='all'?'cu':''}"></i>`).join('')}</div>${QL.ph=='play'?`<div class="ayb">${tx[QL.i]}</div>`:''}<div class="row">${bee(100,'t')}</div>${body}`}
 function qlEar(k){QL.play=k;qlDraw();playStep(QL.n,QL.i,()=>{QL.st=Math.max(QL.st||0,k);QL.play=0;qlDraw()})}
 function qlSay(){try{aud&&aud.pause()}catch(e){}QL.said=1;qlDraw();listenFor(QTL(QL.n)[QL.i],()=>setTimeout(qlNext,900))}
@@ -394,7 +394,7 @@ const SHN={apple:'تفاحة',orange:'برتقالة',melon:'بطيخ',banana:'�
 const OL={apple:'<path d="M100 60C60 30 20 70 30 120C40 170 80 185 100 175C120 185 160 170 170 120C180 70 140 30 100 60Z"/><path d="M100 60C100 40 105 30 115 20"/><path d="M105 40C125 20 150 25 155 40C135 50 115 50 105 40Z"/>',
 orange:'<circle cx="100" cy="112" r="72"/><path d="M100 40C100 25 110 18 124 18C124 32 112 40 100 40Z"/><path d="M80 90Q100 70 120 90"/>',
 melon:'<path d="M12 70A88 88 0 0 0 188 70Z"/><path d="M30 70A70 70 0 0 0 170 70"/><ellipse cx="70" cy="100" rx="6" ry="10"/><ellipse cx="100" cy="115" rx="6" ry="10"/><ellipse cx="130" cy="100" rx="6" ry="10"/>',
-banana:'<path d="M40 40C50 120 110 170 170 150C175 140 170 135 160 135C110 135 75 100 70 35Z"/><path d="M40 40L70 35"/><path d="M40 40L38 28L50 26"/>',
+banana:'<path d="M58 42C46 112 96 182 176 160C182 156 180 148 172 146C122 152 96 108 94 40Z"/><path d="M62 41L60 20L77 18L78 40"/><path d="M76 50C72 112 108 160 168 153"/>',
 strawberry:'<path d="M100 178C40 142 28 80 60 65C80 55 90 62 100 60C110 62 120 55 140 65C172 80 160 142 100 178Z"/><path d="M68 62L84 38L100 54L116 38L132 62"/><ellipse cx="80" cy="95" rx="4" ry="6"/><ellipse cx="115" cy="90" rx="4" ry="6"/><ellipse cx="100" cy="120" rx="4" ry="6"/><ellipse cx="78" cy="130" rx="4" ry="6"/><ellipse cx="122" cy="125" rx="4" ry="6"/>',
 grapes:'<circle cx="70" cy="80" r="22"/><circle cx="114" cy="80" r="22"/><circle cx="92" cy="115" r="22"/><circle cx="136" cy="115" r="22"/><circle cx="48" cy="115" r="22"/><circle cx="92" cy="155" r="20"/><path d="M92 58C92 40 100 30 112 24"/>'};
 const svgO=k=>`<svg viewBox="0 0 200 200" style="width:100%;max-height:17cm" fill="none" stroke="#444" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${OL[k]}</svg>`;
@@ -1011,6 +1011,47 @@ window.momletters=function(){
   $('#app').innerHTML=mtop('mom','حروف طفلي')+'<div class="card"><p style="margin:0 0 8px">أنجز طفلك <b dir="ltr">'+done+' / '+tot+'</b> من ألعاب الحروف ('+pct+'%)</p><div style="height:12px;border-radius:8px;background:#eadfca;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:#6fae66"></div></div></div>'
    +'<div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px">'+L.map((l,i)=>'<div style="text-align:center;padding:8px;border-radius:16px;background:'+(i<PER*U()?'#fffaf0':'#efe7d8')+'">'+big(l[0],44,i<PER*U()?COL[grp(i)%COL.length]:'#b9a994')+'<div dir="ltr" style="font-size:14px">'+(i<PER*U()?stars(i)+' / '+GAMES.length:'')+'</div></div>').join('')+'</div></div>'};
 MT.splice(5,0,['star','حروف طفلي','momletters','#4aa8a0']);
+})();
+
+/* ---- Quran: make the "say it" step really listen and show that it hears ---- */
+(function(){
+const st=document.createElement('style');
+st.textContent='.qb.rc{background:#ffe3e0;animation:none;box-shadow:0 0 0 8px rgba(229,83,75,.35);transition:box-shadow .12s}.qb.hr{background:#e0f5dd;box-shadow:0 0 0 12px rgba(111,174,102,.45);animation:none}'
+ +'#lvl{display:flex;gap:6px;justify-content:center;align-items:flex-end;height:46px;margin-top:12px}#lvl i{width:12px;height:8px;border-radius:6px;background:#e0d4bb;transition:height .1s,background .1s}#lvl i.on{background:#e5534b}';
+document.head.appendChild(st);
+let ctl=null;
+const SRc=()=>window.SpeechRecognition||window.webkitSpeechRecognition;
+function level(v){ // 0..1 -> five bars + ring
+  const b=document.querySelectorAll('#lvl i');b.forEach((e,k)=>{const on=v>(k+1)/6;e.classList.toggle('on',on);e.style.height=(8+(on?k*7+8:0))+'px'});
+  const q=document.querySelector('.qb.rc,.qb.hr');if(q){q.classList.toggle('hr',v>.15);q.classList.toggle('rc',v<=.15)}}
+function stopAll(){if(ctl){try{ctl.stop()}catch(e){}ctl=null}try{rec&&rec.abort&&rec.abort()}catch(e){}try{rec&&rec.stop()}catch(e){}level(0)}
+function failed(msg){QL.said=0;QL.fail=(QL.fail||0)+1;qlDraw();cheer(msg||'حاول مرة أخرى',1)}
+async function volume(text,ok){ // fallback: the microphone itself, so the child sees it hears his voice
+  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){failed('اسمحي للمتصفح باستخدام المايكروفون');return}
+  const AC=window.AudioContext||window.webkitAudioContext,ac=new AC(),src=ac.createMediaStreamSource(stream),an=ac.createAnalyser();an.fftSize=1024;src.connect(an);
+  const buf=new Uint8Array(an.fftSize),need=Math.min(4500,Math.max(1400,String(text).split(/\s+/).length*420));let voiced=0,t0=Date.now(),alive=1;
+  const tick=setInterval(()=>{an.getByteTimeDomainData(buf);let s=0;for(const x of buf){const d=(x-128)/128;s+=d*d}const r=Math.sqrt(s/buf.length);level(Math.min(1,r*6));if(r>.035)voiced+=100;
+    if(voiced>=need){fin();ok()}else if(Date.now()-t0>14000){fin();failed('لم أسمعك جيداً، حاول مرة أخرى')}},100);
+  const fin=()=>{if(!alive)return;alive=0;clearInterval(tick);try{stream.getTracks().forEach(t=>t.stop())}catch(e){}try{ac.close()}catch(e){}ctl=null;level(0)};
+  ctl={stop:()=>{fin()}}}
+window.listenFor=function(text,ok){
+  stopAll();try{aud&&aud.pause()}catch(e){}
+  const R=SRc();if(!R){volume(text,ok);return}
+  const heard=new Set();let done=0,sound=0;
+  rec=new R();rec.lang='ar-SA';rec.continuous=false;rec.interimResults=true;
+  rec.onaudiostart=()=>level(.05);
+  rec.onsoundstart=()=>{sound=1;level(.6)};rec.onspeechstart=()=>{sound=1;level(.8)};rec.onspeechend=()=>level(0);
+  rec.onresult=e=>{for(let i=0;i<e.results.length;i++)nrm(e.results[i][0].transcript).split(/\s+/).forEach(w=>w&&heard.add(w))};
+  rec.onerror=e=>{if(done)return;done=1;if(e.error==='not-allowed'||e.error==='service-not-allowed'){volume(text,ok)}else if(e.error==='no-speech'||e.error==='aborted'){if(e.error==='no-speech')failed('لم أسمعك، حاول مرة أخرى')}else volume(text,ok)};
+  rec.onend=()=>{if(done)return;done=1;level(0);
+    if(!heard.size){sound?(ok(),0):failed('لم أسمعك، حاول مرة أخرى');return}
+    const w=nrm(text).split(/\s+/).filter(Boolean),hit=w.filter(x=>heard.has(x)).length/w.length;
+    if(hit>=.5)ok();else failed('حاول مرة أخرى')};
+  try{rec.start();cheer('أنا أسمعك',1)}catch(e){volume(text,ok)}};
+window.qlSay=function(){
+  if(QL.said){stopAll();QL.said=0;qlDraw();return}
+  QL.said=1;qlDraw();
+  listenFor(QTL(QL.n)[QL.i],()=>{QL.fail=0;level(1);setTimeout(()=>{if(QL.said)qlNext()},700)})};
 })();
 
 /* recorded voice for the story tile */
