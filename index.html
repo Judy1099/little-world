@@ -873,13 +873,15 @@ const finish=(i,g)=>{mark(i,g);win('أحسنت');const t=Date.now();$('#app').in
 
 /* ---------- hub: months and letters ---------- */
 window.letters=function(){
-  const months=Math.ceil(L.length/PER);let h='';
-  for(let m=0;m<months;m++){const lock=m>=U();
-    h+='<div class="card" style="text-align:center;background:'+(lock?'#efe7d8':'#fffaf0')+'"><div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;align-items:stretch">';
+  const months=Math.ceil(L.length/PER),shown=Math.min(months,U()+1);let h='';
+  for(let m=0;m<shown;m++){const lock=m>=U();
+    h+='<div class="card" style="text-align:center;'+(lock?'background:#f3ecdf;border:4px dashed #d3c3a4;':'background:#fffaf0;')+'">'
+      +(lock?'<div style="margin:0 0 8px;font-size:22px;font-weight:800;color:#8a7a6a;display:flex;align-items:center;justify-content:center;gap:8px">'+ic('lock',24,'#8a7a6a')+'قريباً<button class="spk" aria-label="استمع" onclick="say(\'قريباً\')">'+ic('speaker',20)+'</button></div>':'')
+      +'<div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;align-items:stretch">';
     for(let i=m*PER;i<Math.min(L.length,(m+1)*PER);i++){
-      h+='<button class="tile" style="background:'+(lock?'#d9cdb8':COL[m%COL.length]+'33')+';flex:0 0 140px;max-width:140px;padding:10px 6px" onclick="'+(lock?"qmsg('قريباً');setTimeout(()=>qmsg(''),1200)":"go('ltPick',"+i+")")+'" aria-label="حرف">'
-       +(lock?'<div style="opacity:.55">'+big(L[i][0],84,'#8a7a6a')+'</div><div style="height:22px">'+ic('lock',22,'#8a7a6a')+'</div>'
-             :big(L[i][0],84,COL[m%COL.length])+'<div style="height:22px;display:flex;justify-content:center;gap:2px">'+GAMES.map(g=>ic('star',12,got(i,g)?'#f2b94b':'#d9cdb0')).join('')+'</div>')
+      h+='<button class="tile" style="background:'+(lock?'#e4d9c4':COL[m%COL.length]+'33')+';flex:0 0 140px;max-width:140px;padding:10px 6px" onclick="'+(lock?"say('قريباً')":"go('ltPick',"+i+")")+'" aria-label="حرف">'
+       +(lock?'<div style="opacity:.6">'+big('؟',84,'#a89878')+'</div><div style="height:22px"></div>'
+             :big(L[i][0],84,COL[m%COL.length])+'<div style="height:22px;display:flex;justify-content:center;gap:2px">'+GAMES.map(g=>ic('star',10,got(i,g)?'#f2b94b':'#d9cdb0')).join('')+'</div>')
        +'</button>'}
     h+='</div></div>'}
   $('#app').innerHTML=ctop('child')+h;cheer('هيا نتعلم')};
