@@ -816,7 +816,7 @@ MT.splice(4,0,['book','قصص طفلي','momstories','#e58a5a']);
 /* ---- Arabic letters: 4 letters a month, 6 games for every letter ---- */
 (function(){
 const L=[['ا','ألف'],['ب','باء'],['ت','تاء'],['ث','ثاء'],['ج','جيم'],['ح','حاء'],['خ','خاء'],['د','دال'],['ذ','ذال'],['ر','راء'],['ز','زاي'],['س','سين'],['ش','شين'],['ص','صاد'],['ض','ضاد'],['ط','طاء'],['ظ','ظاء'],['ع','عين'],['غ','غين'],['ف','فاء'],['ق','قاف'],['ك','كاف'],['ل','لام'],['م','ميم'],['ن','نون'],['ه','هاء'],['و','واو'],['ي','ياء']];
-const PER=4,GAMES=['learn','trace','find','bub','mem','drag'];
+const PER=4,GAMES=['learn','trace','find','bub','mem','drag','pic','first'];
 const COL=['#e5834a','#6fae66','#4a90d9','#9a7fd0','#e58aa0','#d9a521','#4aa8a0'];
 const FONT="'Rubik','Tajawal',sans-serif";
 ART.hrf='<circle cx="50" cy="50" r="43" fill="#fff3d6"/><text x="50" y="70" font-size="62" text-anchor="middle" font-family="Rubik,Tajawal,sans-serif" fill="#e5834a" font-weight="800">أ</text>';
@@ -825,8 +825,37 @@ IC.pop='<circle cx="12" cy="12" r="8"/><path d="M8 9a5 5 0 0 1 3-2"/>';
 IC.pair='<rect x="3" y="5" width="8" height="14" rx="2"/><rect x="13" y="5" width="8" height="14" rx="2"/>';
 IC.drag='<path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>';
 IC.find='<circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/>';
-const GI={learn:'ear',trace:'pen',find:'find',bub:'pop',mem:'pair',drag:'drag'};
-const GC={learn:'#6fae66',trace:'#e5834a',find:'#4a90d9',bub:'#e58aa0',mem:'#9a7fd0',drag:'#d9a521'};
+const GI={learn:'ear',trace:'pen',find:'find',bub:'pop',mem:'pair',drag:'drag',pic:'camera',first:'star'};
+const GC={learn:'#6fae66',trace:'#e5834a',find:'#4a90d9',bub:'#e58aa0',mem:'#9a7fd0',drag:'#d9a521',pic:'#4aa8a0',first:'#d9754a'};
+
+/* ---- word pictures (flat, simple) ---- */
+Object.assign(ART,{
+w_rabbit:'<ellipse cx="38" cy="22" rx="8" ry="20" fill="#f3ece4"/><ellipse cx="62" cy="22" rx="8" ry="20" fill="#f3ece4"/><ellipse cx="38" cy="24" rx="4" ry="14" fill="#f4b6c2"/><ellipse cx="62" cy="24" rx="4" ry="14" fill="#f4b6c2"/><ellipse cx="50" cy="62" rx="30" ry="28" fill="#f3ece4"/><circle cx="40" cy="56" r="3.5" fill="#3b2314"/><circle cx="60" cy="56" r="3.5" fill="#3b2314"/><ellipse cx="50" cy="66" rx="4" ry="3" fill="#f08aa0"/><path d="M50 69v5M44 74q6 4 12 0" stroke="#8a6a5a" stroke-width="2" fill="none" stroke-linecap="round"/>',
+w_fox:'<path d="M16 22l22 14h24l22-14-4 40q-4 26-30 30-26-4-30-30z" fill="#ee8a3c"/><path d="M34 62q16 30 32 0q-8 14-16 14t-16-14z" fill="#fff"/><circle cx="38" cy="52" r="3.5" fill="#3b2314"/><circle cx="62" cy="52" r="3.5" fill="#3b2314"/><ellipse cx="50" cy="72" rx="4" ry="3" fill="#3b2314"/>',
+w_camel:'<ellipse cx="46" cy="58" rx="26" ry="16" fill="#d9a066"/><circle cx="38" cy="40" r="11" fill="#d9a066"/><circle cx="58" cy="40" r="11" fill="#d9a066"/><path d="M70 52q10-20 12-30" stroke="#d9a066" stroke-width="9" fill="none" stroke-linecap="round"/><ellipse cx="84" cy="20" rx="9" ry="6" fill="#d9a066"/><circle cx="86" cy="18" r="1.8" fill="#3b2314"/><g stroke="#c28a50" stroke-width="6" stroke-linecap="round"><path d="M30 70v20M40 72v18M54 72v18M64 70v20"/></g>',
+w_whale:'<ellipse cx="46" cy="60" rx="34" ry="24" fill="#5a9fd4"/><path d="M76 58q16-14 20-26-2 22-8 32 8 8 8 14-16-2-24-12z" fill="#5a9fd4"/><ellipse cx="42" cy="70" rx="26" ry="10" fill="#cfe7f7"/><circle cx="28" cy="54" r="3" fill="#2b2b3b"/><path d="M40 36q-2-10-10-12M40 36q2-10 10-12" stroke="#8fc4ea" stroke-width="3" fill="none" stroke-linecap="round"/>',
+w_sheep:'<g fill="#fff" stroke="#e6e0d6" stroke-width="2"><circle cx="30" cy="52" r="14"/><circle cx="46" cy="42" r="16"/><circle cx="62" cy="48" r="15"/><circle cx="60" cy="64" r="14"/><circle cx="34" cy="66" r="13"/><circle cx="46" cy="62" r="16"/></g><ellipse cx="78" cy="58" rx="12" ry="14" fill="#4a3b36"/><circle cx="81" cy="54" r="2" fill="#fff"/><g stroke="#4a3b36" stroke-width="5" stroke-linecap="round"><path d="M36 78v14M58 78v14"/></g>',
+w_bear:'<circle cx="28" cy="28" r="12" fill="#a46b3c"/><circle cx="72" cy="28" r="12" fill="#a46b3c"/><circle cx="50" cy="54" r="34" fill="#b9794a"/><ellipse cx="50" cy="66" rx="14" ry="11" fill="#ead2b4"/><circle cx="38" cy="48" r="3.5" fill="#3b2314"/><circle cx="62" cy="48" r="3.5" fill="#3b2314"/><ellipse cx="50" cy="62" rx="5" ry="3.5" fill="#3b2314"/>',
+w_corn:'<path d="M50 90q-30-6-30-44 14 10 30 44z" fill="#6fae66"/><path d="M50 90q30-6 30-44-14 10-30 44z" fill="#85c27a"/><ellipse cx="50" cy="46" rx="15" ry="34" fill="#f4c542"/><g stroke="#d9a521" stroke-width="2"><path d="M50 14v64M40 24v44M60 24v44M36 38h28M36 52h28"/></g>',
+w_pom:'<circle cx="50" cy="56" r="30" fill="#d94a56"/><path d="M38 30l6 8h12l6-8-6 4-6-6-6 6z" fill="#b83a46"/><ellipse cx="40" cy="48" rx="7" ry="10" fill="#e8737c" opacity=".6"/>',
+w_flower:'<path d="M50 92V56" stroke="#6fae66" stroke-width="5"/><path d="M50 78q14-2 18-12-12-2-18 12z" fill="#6fae66"/><g fill="#f28ba0"><circle cx="50" cy="22" r="12"/><circle cx="67" cy="34" r="12"/><circle cx="61" cy="52" r="12"/><circle cx="39" cy="52" r="12"/><circle cx="33" cy="34" r="12"/></g><circle cx="50" cy="38" r="9" fill="#f6c84c"/>',
+w_rocket:'<path d="M44 72q6 20 6 22 0-2 6-22z" fill="#f6b43c"/><path d="M50 8q20 18 18 48H32Q30 26 50 8z" fill="#e8ecf2"/><circle cx="50" cy="36" r="7" fill="#5aa8e0" stroke="#cfd6e0" stroke-width="3"/><path d="M32 52l-12 18 14-4zM68 52l12 18-14-4z" fill="#e5605a"/><path d="M40 56h20l-4 12H44z" fill="#e5605a"/>',
+w_frog:'<ellipse cx="50" cy="62" rx="34" ry="26" fill="#6fbf5a"/><circle cx="32" cy="36" r="12" fill="#6fbf5a"/><circle cx="68" cy="36" r="12" fill="#6fbf5a"/><circle cx="32" cy="35" r="7" fill="#fff"/><circle cx="68" cy="35" r="7" fill="#fff"/><circle cx="33" cy="36" r="3.5" fill="#2b2b3b"/><circle cx="67" cy="36" r="3.5" fill="#2b2b3b"/><path d="M32 64q18 14 36 0" stroke="#2f7a2f" stroke-width="3" fill="none" stroke-linecap="round"/>',
+w_plane:'<path d="M50 8q6 6 6 20l30 28v8L56 52v22l10 8v6l-16-4-16 4v-6l10-8V52L14 64v-8l30-28Q44 14 50 8z" fill="#e6edf5" stroke="#b9c6d6" stroke-width="2"/><circle cx="50" cy="26" r="3" fill="#5aa8e0"/>',
+w_env:'<rect x="12" y="26" width="76" height="52" rx="6" fill="#f6e7b6" stroke="#d9b86a" stroke-width="3"/><path d="M14 30l36 28 36-28" stroke="#d9b86a" stroke-width="3" fill="none"/>',
+w_cloud:'<g fill="#dcebf7"><circle cx="34" cy="58" r="18"/><circle cx="54" cy="46" r="22"/><circle cx="72" cy="60" r="16"/><rect x="20" y="58" width="64" height="18" rx="9"/></g><g fill="#c4dcef"><rect x="24" y="68" width="60" height="8" rx="4"/></g>',
+w_moon:'<circle cx="50" cy="50" r="34" fill="#f6e08a"/><circle cx="38" cy="42" r="6" fill="#e7cb6a"/><circle cx="60" cy="58" r="8" fill="#e7cb6a"/><circle cx="56" cy="32" r="4" fill="#e7cb6a"/>',
+w_book:'<path d="M50 28q-18-10-38-4v54q20-6 38 4z" fill="#fff" stroke="#8aa8d0" stroke-width="3"/><path d="M50 28q18-10 38-4v54q-20-6-38 4z" fill="#fff" stroke="#8aa8d0" stroke-width="3"/><path d="M50 28v54" stroke="#8aa8d0" stroke-width="3"/><g stroke="#cfd9e8" stroke-width="3" fill="none"><path d="M20 40q14-3 24 2M20 52q14-3 24 2M56 42q10-5 24-2M56 54q10-5 24-2"/></g>',
+w_lemon:'<ellipse cx="50" cy="56" rx="32" ry="24" fill="#f4dc3c" transform="rotate(-20 50 56)"/><path d="M52 32q10-14 22-8-4 12-22 8z" fill="#6fae66"/>',
+w_bee:'<svg x="14" y="0" width="72" height="100" viewBox="0 0 200 250">'+beeG+'</svg>',
+w_cres:'<path d="M62 12A40 40 0 1 0 62 88A31 31 0 1 1 62 12Z" fill="#f4c542"/><path d="M76 34l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z" fill="#f4c542"/>',
+w_rose:'<path d="M50 94V60" stroke="#5f9e5a" stroke-width="5"/><path d="M50 78q-16-4-20-14 12 0 20 14z" fill="#6fae66"/><circle cx="50" cy="40" r="26" fill="#d9475a"/><path d="M50 40m-4 0a4 4 0 1 1 8 0a8 8 0 1 1-16 0a13 13 0 1 1 26 0" stroke="#a42f40" stroke-width="3" fill="none" stroke-linecap="round"/>',
+w_hand:'<g fill="#fbd9bb" stroke="#e8b995" stroke-width="2" stroke-linejoin="round"><rect x="26" y="46" width="48" height="42" rx="16"/><rect x="26" y="22" width="9" height="34" rx="4.5"/><rect x="38" y="12" width="9" height="42" rx="4.5"/><rect x="50" y="14" width="9" height="40" rx="4.5"/><rect x="62" y="22" width="9" height="34" rx="4.5"/><path d="M26 66q-14-8-16-22 2-4 7-2 6 10 16 18z"/></g>',
+w_gift:'<rect x="16" y="42" width="68" height="46" rx="5" fill="#e58aa0"/><rect x="12" y="32" width="76" height="16" rx="5" fill="#f2a3b6"/><rect x="45" y="32" width="10" height="56" fill="#f6d86a"/><path d="M50 32q-18-22-26-8t26 8zM50 32q18-22 26-8t-26 8z" fill="#f6d86a"/>'
+});
+const W=[['أرنب','w_rabbit'],['بالون','balloon'],['تفاحة','apple'],['ثعلب','w_fox'],['جمل','w_camel'],['حوت','w_whale'],['خروف','w_sheep'],['دب','w_bear'],['ذرة','w_corn'],['رمان','w_pom'],['زهرة','w_flower'],['سمكة','fish'],['شمس','sun'],['صاروخ','w_rocket'],['ضفدع','w_frog'],['طائرة','w_plane'],['ظرف','w_env'],['عنب','grapes'],['غيمة','w_cloud'],['فراولة','strawberry'],['قمر','w_moon'],['كتاب','w_book'],['ليمون','w_lemon'],['موز','banana'],['نحلة','w_bee'],['هلال','w_cres'],['وردة','w_rose'],['يد','w_hand']];
+const pic=k=>A(W[k][1],118);
+const spkW=k=>'<button class="spk" aria-label="استمع" onclick="event.stopPropagation();say(\''+W[k][0]+'\')">'+ic('speaker',22)+'</button>';
 const U=()=>LWON?lwUnlocked():99;
 const grp=i=>Math.floor(i/PER),open=i=>grp(i)<U();
 const PR=()=>S('lt')||{};
@@ -866,15 +895,17 @@ window.ltPick=function(i){
 LWLOCK.push('ltGame');
 window.ltGame=function(g,i){
   if(!open(i)){go('letters');return}
-  const f={learn,trace,find,bub,mem,drag}[g];if(f)f(i)};
+  const f={learn,trace,find,bub,mem,drag,pic:gPic,first:gFirst}[g];if(f)f(i)};
 const shell=(i,body,extra)=>{$('#app').innerHTML='<div class="top">'+ib("go('ltPick',"+i+")",'back')+'<div style="flex:1;text-align:center">'+(extra||'')+'</div>'+bee(64)+'</div>'+body};
 
-/* 1. learn: hear the name */
+/* 1. learn: hear the letter and its word */
 function learn(i){
-  const c=COL[grp(i)%COL.length],cs=[c,'#4a90d9','#e58aa0'];
-  shell(i,'<div class="card" style="text-align:center"><div class="row" style="justify-content:center">'+cs.map(k=>'<button class="tile" style="flex:0 0 190px;max-width:190px;background:#fffaf0" onclick="ltLearnTap('+i+')" aria-label="حرف">'+big(L[i][0],150,k)+'</button>').join('')+'</div>'+spkL(i)+'</div>');
+  const c=COL[grp(i)%COL.length];window.__lt=0;
+  shell(i,'<div class="card" style="text-align:center"><div class="row" style="justify-content:center;align-items:stretch">'
+   +'<button class="tile" style="flex:0 0 230px;max-width:230px;background:#fffaf0" onclick="ltLearnTap('+i+',0)" aria-label="حرف">'+big(L[i][0],170,c)+'</button>'
+   +'<button class="tile" style="flex:0 0 230px;max-width:230px;background:#fffaf0;display:flex;flex-direction:column;align-items:center;justify-content:center" onclick="ltLearnTap('+i+',1)" aria-label="صورة">'+pic(i)+'<div style="font-size:28px;margin-top:6px">'+W[i][0]+'</div></button></div>'+spkL(i)+spkW(i)+'</div>');
   say(nm(i))}
-window.ltLearnTap=function(i){say(nm(i));const t=(window.__lt=(window.__lt||0)+1);if(t>=3){window.__lt=0;finish(i,'learn')}};
+window.ltLearnTap=function(i,w){say(w?W[i][0]:nm(i));const t=(window.__lt=(window.__lt||0)+1);if(t>=3){window.__lt=0;finish(i,'learn')}};
 
 /* 2. trace: follow the letter with a finger */
 function trace(i){
@@ -940,6 +971,22 @@ function drag(i){
         else{if(sl)wrong();el.style.transition='transform .25s';el.style.transform='';setTimeout(()=>{el.style.transition='';el.style.zIndex=5},260)}};
       el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)})});
   say(nm(i))}
+
+/* 7. pic: hear the letter, pick the picture that starts with it */
+function gPic(i){let n=0;const round=()=>{
+  const opts=shuf([i].concat(others(i,2)));
+  shell(i,'<div class="card" style="text-align:center"><div style="font-size:26px;margin-bottom:4px">'+big(L[i][0],90,COL[grp(i)%COL.length])+'</div><div class="row" style="justify-content:center">'+opts.map(k=>'<button class="tile" style="flex:0 0 170px;max-width:170px;background:#fffaf0" onclick="ltPic('+k+')" aria-label="صورة">'+pic(k)+'</button>').join('')+'</div>'+spkL(i)+'<div style="margin-top:8px">'+[0,1,2,3].map(k=>ic('star',22,k<n?'#f2b94b':'#d9cdb0')).join('')+'</div></div>');
+  setTimeout(()=>say(nm(i)),250)};
+  window.ltPic=k=>{if(k===i){n++;say(W[i][0]);if(n>=4)finish(i,'pic');else{cheer('أحسنت');setTimeout(round,1100)}}else wrong()};
+  round()}
+
+/* 8. first: see the picture, pick the letter it starts with */
+function gFirst(i){let n=0;const round=()=>{
+  const opts=shuf([i].concat(others(i,2)));
+  shell(i,'<div class="card" style="text-align:center"><div onclick="say(\''+W[i][0]+'\')" style="cursor:pointer">'+pic(i)+'<div style="font-size:30px">'+W[i][0]+'</div></div><div class="row" style="justify-content:center">'+opts.map(k=>'<button class="tile" style="flex:0 0 130px;max-width:130px;background:#fffaf0" onclick="ltFirst('+k+')" aria-label="حرف">'+big(L[k][0],90,COL[(k+1)%COL.length])+'</button>').join('')+'</div>'+spkW(i)+'<div style="margin-top:8px">'+[0,1,2,3].map(k=>ic('star',22,k<n?'#f2b94b':'#d9cdb0')).join('')+'</div></div>');
+  setTimeout(()=>say(W[i][0]),250)};
+  window.ltFirst=k=>{if(k===i){n++;say(nm(i));if(n>=4)finish(i,'first');else{cheer('أحسنت');setTimeout(round,1100)}}else wrong()};
+  round()}
 
 /* ---------- mother: progress overview ---------- */
 window.momletters=function(){
