@@ -219,7 +219,7 @@ function who(){$('#app').innerHTML=`${LOGO}<div class="row" style="margin:6px 0"
 <div class="tile" style="background:var(--sky)" onclick="go(kid?'child':'choose')"><div class="ta">${me(96)}</div>الطفل</div></div>`}
 function choose(){$('#app').innerHTML=`${ctop('who')}<h2>من أنت؟ ${spk('من أنت')}</h2><div class="row"><div class="tile" style="background:var(--pk)" onclick="pick('girl')"><div class="ta" style="height:200px">${girl(190)}</div>بنت${spk('بنت')}</div><div class="tile" style="background:var(--sky)" onclick="pick('boy')"><div class="ta" style="height:200px">${boy(190)}</div>ولد${spk('ولد')}</div></div>`;setTimeout(()=>cheer('من أنت؟ بنت أو ولد'),300)}
 function pick(c){kid={c};S('kid',kid);go('child')}
-function child(){let i=0;$('#app').innerHTML=`<div class="top">${ib("go('who')",'home')}<div id="bub" class="bub on">هيا نتعلم ${spk('هيا نتعلم')}</div>${me(78)}</div>${stage(`<div class="row">${T('apple','فواكه',"go('fruits')",'var(--pe)')}${T('pal','ألوان',"go('colors')",'var(--lv)')}${T('qbook','قرآن',"go('quran')",'var(--sage)')}${T('maj','مجلسنا',"go('majlis')",'var(--sky)')}${T('puz','أنشطة',"go('games')",'var(--pk)')}${T('star','نجومي',"go('trophy')",'var(--lv)')}${T('car','نحن في رحلة',"go('trip')",'var(--y)')}</div>`)}`;orbit();
+function child(){let i=0;$('#app').innerHTML=`<div class="top">${ib("go('who')",'home')}<div id="bub" class="bub on">هيا نتعلم ${spk('هيا نتعلم')}</div>${me(78)}</div>${stage(`<div class="row">${T('apple','فواكه',"go('fruits')",'var(--pe)')}${T('pal','ألوان',"go('colors')",'var(--lv)')}${T('qbook','قرآن',"go('quran')",'var(--sage)')}${T('maj','مجلسنا',"go('majlis')",'var(--sky)')}${T('puz','أنشطة',"go('games')",'var(--pk)')}${T('star','نجومي',"go('trophy')",'var(--lv)')}${T('car','نحن في رحلة',"go('trip')",'var(--y)')}${T('brush','نصنع قصة',"go('mkstory')",'var(--pe)')}</div>`)}`;orbit();
 tmr=setInterval(()=>{const u=$('#bub');if(u){u.textContent=MOT[i++%MOT.length];u.classList.add('on')}},5000)}
 const menu=(b,items)=>`${ctop2(b)}${stage(`<div class="row">${items.map(i=>T(...i)).join('')}</div>`)}`;
 function fruits(){$('#app').innerHTML=menu('child',[['strawberry','تعلّم',"go('learn')",'var(--pk)'],['magn','أين الفاكهة؟',"go('pickF')",'var(--pe)'],['shapes','الأشكال',"go('shapes','fruits')",'var(--sky)'],['brush','نلوّن',"go('paint','apple','fruits')",'var(--lv)']]);orbit()}
@@ -465,7 +465,7 @@ $('#app').innerHTML=`<div class="top">${ib("go('who')",'back')}<h2 style="margin
 <div class="row">${MT.map(m=>`<div class="mtile" onclick="go('${m[2]}')"><span class="mi" style="background:${m[3]}">${ic(m[0],32,'#fff')}</span>${m[1]}</div>`).join('')}</div>`}
 /* ===================== LW backend (additive; inactive unless config.js is filled) ===================== */
 const LWC=window.LW_CONFIG||{},LWON=!!(LWC.url&&!/YOUR-/.test(LWC.url)&&LWC.anonKey&&!/YOUR-/.test(LWC.anonKey)&&window.supabase);
-const LWSYNC=['kid','prof','prog','plan','done','trip','maj','st'],LWCC=[['966','السعودية +966'],['971','الإمارات +971'],['965','الكويت +965'],['973','البحرين +973'],['974','قطر +974'],['968','عُمان +968'],['962','الأردن +962'],['20','مصر +20']];
+const LWSYNC=['kid','prof','prog','plan','done','trip','maj','st','mys'],LWCC=[['966','السعودية +966'],['971','الإمارات +971'],['965','الكويت +965'],['973','البحرين +973'],['974','قطر +974'],['968','عُمان +968'],['962','الأردن +962'],['20','مصر +20']];
 let SB=null,LWU=null,LWSUB=null,CMS={st:[],games:[],plans:[]},LWT={},LWPH='',lwBusy=0,lwPT,lwAT;
 try{LWT=JSON.parse(localStorage.getItem('lw_t')||'{}')}catch(e){}
 const lwq=s=>String(s==null?'':s).replace(/['"\\<>&`]/g,'');
@@ -523,6 +523,7 @@ async function lwOut(force){
   if(!force){const a=await lwSync(),b=await lwArt();if(!a||!b){alert('لا يوجد اتصال الآن. اتصلي بالإنترنت ثم اخرجي حتى لا يضيع التقدم.');return}}
   try{await SB.auth.signOut()}catch(e){}
   LWSYNC.concat(['art','lw_t','lw_seen','sub','lw_sub']).forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+  try{window.stbClear&&stbClear()}catch(e){}
   LWT={};LWU=null;LWSUB=null;kid=null;sub=null;CMS={st:[],games:[],plans:[]};go('landing')}
 /* ---- progress sync (per-key, newest wins) ---- */
 async function lwSync(){
@@ -559,7 +560,7 @@ async function lwArt(){
         const s=await new Promise((ok,no)=>{const fr=new FileReader();fr.onload=()=>ok(fr.result);fr.onerror=no;fr.readAsDataURL(f.data)});
         keep.push({s,d,l:r.label||''})}}
     keep.sort((a,b)=>a.d-b.d);localStorage.setItem('art',JSON.stringify(keep));
-    localStorage.setItem('lw_seen',JSON.stringify(keep.map(x=>x.d)));return true
+    localStorage.setItem('lw_seen',JSON.stringify(keep.map(x=>x.d)));if(window.stbAud&&!(await window.stbAud()))return false;return true
   }catch(e){console.warn('art',e);return false}}
 document.addEventListener('visibilitychange',()=>{if(!LWU)return;if(document.hidden){lwSync();lwArt()}else lwRefresh()});
 setInterval(()=>{if(LWU&&!document.hidden)lwRefresh()},300000);
@@ -645,6 +646,172 @@ async function LWBOOT(){
   SB.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY')setTimeout(lwNewPw,0)});
   let s=null;try{s=(await SB.auth.getSession()).data.session}catch(e){}
   if(s){LWU=s.user;try{await lwEnter()}catch(e){console.warn(e);go('who')}}else go('landing')}
+
+/* ---- story builder: pages = scene + characters + the child's own voice ---- */
+(function(){
+IC.plus='<path d="M12 5v14M5 12h14"/>';
+const st=document.createElement('style');
+st.textContent='.stbb{width:68px;height:68px;border-radius:50%;border:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;margin:4px;color:#fff;box-shadow:0 5px 0 rgba(90,58,36,.2),0 10px 16px rgba(90,58,36,.14)}.stbb:active{transform:translateY(4px)}.stbb[disabled]{opacity:.35}'
+ +'.stbb.rec{animation:stbp 1s infinite}@keyframes stbp{50%{box-shadow:0 0 0 14px rgba(220,60,60,.25)}}'
+ +'.stbr{display:flex;gap:10px;overflow-x:auto;padding:8px 4px;justify-content:center;flex-wrap:wrap}.stbt{background:#fff;border-radius:18px;padding:6px 8px;border:0;cursor:pointer;box-shadow:0 4px 0 rgba(90,58,36,.12);line-height:0}.stbt:active{transform:translateY(3px)}'
+ +'.stbs{width:54px;height:54px;border-radius:50%;border:4px solid #fff;overflow:hidden;position:relative;padding:0;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.2)}.stbs.on{border-color:#f2b94b}'
+ +'.stbi.sel{outline:3px dashed #e58a5a;outline-offset:3px;border-radius:12px}'
+ +'.stbk{width:150px;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 8px 0 rgba(90,58,36,.13),0 14px 22px rgba(90,58,36,.14);cursor:pointer;border:0;padding:0}.stbk:active{transform:translateY(4px)}'
+ +'.stbn{width:150px;height:110px;border-radius:14px;border:4px dashed #b9a48c;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,.6);color:#8a7a6a}';
+document.head.appendChild(st);
+
+/* ---------- artwork ---------- */
+const SC=[
+ '<rect width="320" height="200" fill="#cfe8f5"/><circle cx="262" cy="44" r="26" fill="#f6dc7a"/><ellipse cx="80" cy="196" rx="200" ry="72" fill="#9fd07c"/><ellipse cx="270" cy="204" rx="170" ry="62" fill="#86c26a"/>',
+ '<rect width="320" height="200" fill="#d8eefa"/><circle cx="60" cy="40" r="24" fill="#f6dc7a"/><rect y="104" width="320" height="96" fill="#5fb3e0"/><path d="M0 128q20-12 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0v14H0z" fill="#8fd0f0"/><path d="M0 164q20-12 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0v36H0z" fill="#4aa2d2"/>',
+ '<rect width="320" height="200" fill="#26325f"/><circle cx="250" cy="48" r="24" fill="#f4e7a8"/><circle cx="260" cy="42" r="21" fill="#26325f"/><g fill="#fff6c8"><circle cx="40" cy="30" r="2.5"/><circle cx="90" cy="64" r="2"/><circle cx="140" cy="24" r="3"/><circle cx="190" cy="70" r="2"/><circle cx="30" cy="96" r="2"/><circle cx="210" cy="28" r="2"/></g><ellipse cx="160" cy="214" rx="240" ry="64" fill="#3b4a7c"/>',
+ '<rect width="320" height="200" fill="#d6ecf7"/><ellipse cx="160" cy="206" rx="260" ry="60" fill="#a9d884"/><g fill="#fff" stroke="#e4d2b2" stroke-width="2"><rect x="10" y="118" width="300" height="9" rx="3"/><rect x="10" y="140" width="300" height="9" rx="3"/></g><g fill="#e4d2b2"><rect x="30" y="104" width="10" height="64" rx="3"/><rect x="110" y="104" width="10" height="64" rx="3"/><rect x="190" y="104" width="10" height="64" rx="3"/><rect x="270" y="104" width="10" height="64" rx="3"/></g><g><circle cx="60" cy="176" r="8" fill="#f28ba0"/><circle cx="150" cy="182" r="8" fill="#f6c84c"/><circle cx="240" cy="176" r="8" fill="#b79be0"/></g>',
+ '<rect width="320" height="200" fill="#fbe9cf"/><rect y="150" width="320" height="50" fill="#d9b48a"/><rect x="214" y="30" width="76" height="76" rx="6" fill="#bfe3f5" stroke="#fff" stroke-width="6"/><path d="M252 30v76M214 68h76" stroke="#fff" stroke-width="4"/><rect x="24" y="64" width="64" height="86" rx="6" fill="#f2c9d0"/>'
+];
+const PEOPLE={girl:{g:()=>girlG,vb:'0 0 160 245',h:.58},boy:{g:()=>boyG,vb:'0 0 160 245',h:.58},bee:{g:()=>beeG,vb:'0 0 200 250',h:.4}};
+const PROPS=['apple','orange','banana','strawberry','fish','sun','car','balloon'];
+const TRAY=['girl','boy','bee'].concat(PROPS);
+const BG='#fff8ea';
+const sceneSVG=i=>'<svg viewBox="0 0 320 200" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">'+SC[i%SC.length]+'</svg>';
+function itemHTML(it,H,idx){
+  const d=PEOPLE[it.k],px=Math.round(H*(d?d.h:.24));
+  const inner=d?'<svg viewBox="'+d.vb+'" style="height:'+px+'px;width:auto;display:block" aria-hidden="true">'+d.g()+'</svg>':(ART[it.k]?A(it.k,px):'');
+  return '<div class="stbi" data-i="'+idx+'" style="position:absolute;left:'+(it.x*100)+'%;top:'+(it.y*100)+'%;transform:translate(-50%,-50%);line-height:0;touch-action:none">'+inner+'</div>'}
+function pageHTML(p,W,id,edit){
+  const H=Math.round(W*.625);
+  return '<div '+(id?'id="'+id+'" ':'')+'style="position:relative;width:'+W+'px;height:'+H+'px;max-width:100%;overflow:hidden;border-radius:22px;background:'+BG+';box-shadow:0 8px 0 rgba(90,58,36,.13),0 16px 26px rgba(90,58,36,.12);margin:0 auto;direction:ltr">'
+   +sceneSVG(p.sc)+(p.it||[]).map((it,i)=>itemHTML(it,H,i)).join('')+'</div>'}
+const CW=()=>Math.max(260,Math.min(720,(window.innerWidth||800)-32));
+
+/* ---------- audio storage: this device (IndexedDB) + the mother's account ---------- */
+let _db=null;
+function idb(){return _db||(_db=new Promise((ok,no)=>{try{const r=indexedDB.open('lwstb',1);r.onupgradeneeded=()=>r.result.createObjectStore('aud');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}catch(e){no(e)}}))}
+const tx=async(m,f)=>{const d=await idb();return new Promise((ok,no)=>{const t=d.transaction('aud',m),s=t.objectStore('aud'),r=f(s);t.oncomplete=()=>ok(r&&r.result);t.onerror=()=>no(t.error)})};
+const aGet=id=>tx('readonly',s=>s.get(id)),aPut=(id,v)=>tx('readwrite',s=>s.put(v,id)),aAll=async()=>{const d=await idb();return new Promise((ok,no)=>{const o=[],r=d.transaction('aud').objectStore('aud').openCursor();r.onsuccess=()=>{const c=r.result;if(c){o.push([c.key,c.value]);c.continue()}else ok(o)};r.onerror=()=>no(r.error)})};
+window.stbClear=()=>{try{_db=null;indexedDB.deleteDatabase('lwstb')}catch(e){}};
+const refs=()=>{const s=new Set();(S('mys')||[]).forEach(b=>(b.p||[]).forEach(p=>p.a&&s.add(p.a)));return s};
+window.stbAud=async function(){ // upload clips that belong to saved stories
+  if(!LWON||!LWU||LWRO())return true;
+  try{const R=refs();for(const [id,r] of await aAll()){if(r.up||!R.has(id))continue;
+    const up=await SB.storage.from('user-art').upload(LWU.id+'/aud/'+id,r.blob,{contentType:r.type,upsert:true});if(up.error)throw up.error;
+    r.up=true;await aPut(id,r)}return true}catch(e){console.warn('aud',e);return false}};
+async function clipURL(id){
+  let r=null;try{r=await aGet(id)}catch(e){}
+  if(!r&&LWON&&LWU){try{const f=await SB.storage.from('user-art').download(LWU.id+'/aud/'+id);if(!f.error&&f.data){r={blob:f.data,type:f.data.type,up:true};try{await aPut(id,r)}catch(e){}}}catch(e){}}
+  return r?URL.createObjectURL(r.blob):null}
+let AU=null;
+async function playClip(id,btn){
+  try{if(AU){AU.pause();AU=null}}catch(e){}
+  if(!id)return;const u=await clipURL(id);if(!u){qmsg('لا يوجد صوت');setTimeout(()=>qmsg(''),1800);return}
+  AU=new Audio(u);try{await AU.play()}catch(e){}}
+
+/* ---------- data ---------- */
+const list=()=>(S('mys')||[]).slice();
+let E=null,dT=0,MR=null,MS=null,rT=0,rSec=0,backTo='child';
+function persist(){ // auto-save the story being built (nothing is ever lost by leaving)
+  if(!E)return;clearTimeout(dT);dT=setTimeout(commit,500)}
+function commit(){
+  if(!E)return;const used=E.p.some(p=>(p.it&&p.it.length)||p.a);if(!used)return;
+  const L=list(),i=L.findIndex(b=>b.id===E.id);E.t=Date.now();const c=JSON.parse(JSON.stringify(E));delete c.cur;delete c.sel;
+  if(i>=0)L[i]=c;else L.push(c);S('mys',L);
+  if(LWON&&LWU)setTimeout(()=>{try{lwArt()}catch(e){}},400)}
+const blocked=()=>{if(LWON&&LWRO()){LWBLK();return true}return false};
+
+/* ---------- shelf (child and mother) ---------- */
+window.mkstory=function(from){
+  backTo=from==='mom'?'mom':'child';const L=list().sort((a,b)=>b.t-a.t),mom=backTo==='mom',W=140;
+  const bk=L.map(b=>'<button class="stbk" onclick="stbRead(\''+b.id+'\',\''+backTo+'\')" aria-label="قصة">'+pageHTML(b.p[0]||{sc:0,it:[]},W)+'<div style="padding:6px 8px;font-size:15px;display:flex;justify-content:space-between;align-items:center"><span dir="ltr">'+b.p.length+'</span>'+ic('book',20)+(mom?'<span style="font-size:13px">'+new Date(b.t).toLocaleDateString('ar-SA')+'</span>':'')+'</div></button>').join('');
+  const plus=mom?'':'<div class="stbn" onclick="stbNew()" role="button" aria-label="قصة جديدة">'+ic('plus',54)+'</div>';
+  $('#app').innerHTML=(mom?mtop('mom','قصص طفلي'):ctop('child'))
+   +'<div class="card" style="text-align:center">'+(mom&&!L.length?'<p>لا توجد قصص بعد. عندما يصنع طفلك قصة تظهر هنا مع تسجيل صوته.</p>':'')
+   +'<div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:flex-start">'+plus+bk+'</div></div>';
+  if(!mom)cheer('نصنع قصة')};
+window.momstories=()=>mkstory('mom');
+
+/* ---------- editor ---------- */
+window.stbNew=function(){if(blocked())return;E={id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:Date.now(),p:[{sc:0,it:[],a:null}],cur:0,sel:-1};stbDraw()};
+window.stbEdit=function(id){if(blocked())return;const b=list().find(x=>x.id===id);if(!b)return;E=JSON.parse(JSON.stringify(b));E.cur=0;E.sel=-1;stbDraw()};
+const pg=()=>E.p[E.cur];
+function stbDraw(){
+  if(!E)return;const p=pg(),W=CW(),n=E.p.length,rec=!!MR&&MR.state==='recording';
+  const tray=TRAY.map(k=>'<button class="stbt" onclick="stbAdd(\''+k+'\')" aria-label="شخصية">'+(PEOPLE[k]?'<svg viewBox="'+PEOPLE[k].vb+'" style="height:58px;width:auto" aria-hidden="true">'+PEOPLE[k].g()+'</svg>':A(k,58))+'</button>').join('');
+  const scn=SC.map((s,i)=>'<button class="stbs '+(p.sc===i?'on':'')+'" onclick="stbScene('+i+')" aria-label="مشهد"><svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block">'+s+'</svg></button>').join('');
+  $('#app').innerHTML='<div class="top">'+ib("stbLeave()",'back')+'<div style="flex:1"></div>'+bee(64)+'</div>'
+   +'<div style="text-align:center">'+pageHTML(p,W,'stbc',true)
+   +'<div class="stbr">'+scn+'</div><div class="stbr">'+tray+'</div>'
+   +'<div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px">'
+   +'<button class="stbb" style="background:#6fae66" onclick="stbGo(-1)" '+(E.cur?'':'disabled')+' aria-label="السابقة">'+ic('next',30,'#fff')+'</button>'
+   +'<span dir="ltr" style="font-size:22px;font-weight:800;min-width:64px">'+(E.cur+1)+' / '+n+'</span>'
+   +(E.cur<n-1?'<button class="stbb" style="background:#6fae66" onclick="stbGo(1)" aria-label="التالية">'+ic('back',30,'#fff')+'</button>':'<button class="stbb" style="background:#4a90d9" onclick="stbPlus()" '+(n>=8?'disabled':'')+' aria-label="صفحة جديدة">'+ic('plus',34,'#fff')+'</button>')
+   +'<span style="width:18px"></span>'
+   +'<button class="stbb'+(rec?' rec':'')+'" style="background:'+(rec?'#d94a4a':'#e5834a')+';width:84px;height:84px" onclick="stbRec()" aria-label="تسجيل">'+ic(rec?'stop':'mic',40,'#fff')+'</button>'
+   +(rec?'<span id="stbq" dir="ltr" style="font-size:20px;min-width:44px">'+rSec+'</span>':'')
+   +'<button class="stbb" style="background:#9a7fd0" onclick="stbPlay()" '+(p.a&&!rec?'':'disabled')+' aria-label="استمع">'+ic('play',32,'#fff')+'</button>'
+   +'<button class="stbb" style="background:#b8a898" onclick="stbDel()" '+(E.sel>=0?'':'disabled')+' aria-label="حذف">'+ic('trash',30,'#fff')+'</button>'
+   +'<button class="stbb" style="background:#4aa86a" onclick="stbLeave()" aria-label="تم">'+ic('check',34,'#fff')+'</button>'
+   +'</div></div>';
+  stbBind()}
+function stbBind(){
+  const c=$('#stbc');if(!c)return;
+  c.querySelectorAll('.stbi').forEach(el=>{
+    const i=+el.dataset.i;if(i===E.sel)el.classList.add('sel');
+    el.addEventListener('pointerdown',ev=>{ev.preventDefault();E.sel=i;c.querySelectorAll('.stbi').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+      const d=document.querySelector('[aria-label="حذف"]');if(d)d.disabled=false;
+      try{el.setPointerCapture(ev.pointerId)}catch(e){}
+      const mv=e=>{const r=c.getBoundingClientRect(),x=Math.min(.95,Math.max(.05,(e.clientX-r.left)/r.width)),y=Math.min(.95,Math.max(.05,(e.clientY-r.top)/r.height));
+        el.style.left=(x*100)+'%';el.style.top=(y*100)+'%';const it=pg().it[i];if(it){it.x=x;it.y=y}};
+      const up=()=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);persist()};
+      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)})})}
+window.stbAdd=function(k){if(!E||recBusy())return;const p=pg();if(p.it.length>=10){qmsg('اكتفينا');setTimeout(()=>qmsg(''),1200);return}
+  p.it.push({k,x:.25+Math.random()*.5,y:.45+Math.random()*.2});E.sel=p.it.length-1;persist();stbDraw()};
+window.stbScene=function(i){if(!E)return;pg().sc=i;persist();stbDraw()};
+window.stbDel=function(){if(!E||E.sel<0)return;pg().it.splice(E.sel,1);E.sel=-1;persist();stbDraw()};
+window.stbGo=function(d){if(!E||recBusy())return;E.cur=Math.max(0,Math.min(E.p.length-1,E.cur+d));E.sel=-1;stbDraw()};
+window.stbPlus=function(){if(!E||recBusy()||E.p.length>=8)return;E.p.push({sc:pg().sc,it:[],a:null});E.cur=E.p.length-1;E.sel=-1;persist();stbDraw()};
+window.stbPlay=function(){if(E&&pg().a)playClip(pg().a)};
+const recBusy=()=>!!MR&&MR.state==='recording';
+window.stbLeave=function(){if(recBusy()){stbRec();return}clearTimeout(dT);commit();E=null;go('mkstory',backTo==='mom'?'mom':undefined)};
+window.stbRec=async function(){
+  if(!E)return;
+  if(recBusy()){clearInterval(rT);try{MR.stop()}catch(e){}return}
+  if(blocked())return;
+  if(!navigator.mediaDevices||!window.MediaRecorder){qmsg('هذا المتصفح لا يدعم التسجيل');setTimeout(()=>qmsg(''),2500);return}
+  try{if(AU){AU.pause();AU=null}}catch(e){}
+  try{MS=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){qmsg('اسمحي للمتصفح باستخدام المايكروفون');setTimeout(()=>qmsg(''),3500);return}
+  const mt=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/ogg'].find(t=>{try{return MediaRecorder.isTypeSupported(t)}catch(e){return false}})||'';
+  const chunks=[],pageRef=pg();
+  try{MR=new MediaRecorder(MS,mt?{mimeType:mt}:undefined)}catch(e){MS.getTracks().forEach(t=>t.stop());qmsg('تعذّر التسجيل');return}
+  MR.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  MR.onstop=async()=>{clearInterval(rT);MS.getTracks().forEach(t=>t.stop());
+    const type=((MR&&MR.mimeType)||mt||'audio/mp4').split(';')[0],blob=new Blob(chunks,{type});MR=null;
+    if(blob.size>600){const id='a'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+      try{await aPut(id,{blob,type,up:false});pageRef.a=id;persist()}catch(e){qmsg('تعذّر حفظ الصوت')}}
+    if(E)stbDraw()};
+  rSec=0;MR.start();rT=setInterval(()=>{rSec++;const q=$('#stbq');if(q)q.textContent=rSec;if(rSec>=90&&MR&&MR.state==='recording')MR.stop()},1000);
+  stbDraw()};
+
+/* ---------- reader (child and mother) ---------- */
+let R=null;
+window.stbRead=function(id,from){
+  backTo=from==='mom'?'mom':'child';const b=list().find(x=>x.id===id);if(!b)return;R={b,i:0};stbShow(false)};
+function stbShow(auto){
+  const b=R.b,p=b.p[R.i],n=b.p.length,W=CW(),mom=backTo==='mom';
+  $('#app').innerHTML='<div class="top">'+ib("go('mkstory'"+(mom?",'mom'":'')+")",'back')+'<div style="flex:1"></div>'+bee(64)+'</div>'
+   +'<div style="text-align:center">'+pageHTML(p,W,'stbc')
+   +'<div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;margin-top:6px">'
+   +'<button class="stbb" style="background:#6fae66" onclick="stbR(-1)" '+(R.i?'':'disabled')+' aria-label="السابقة">'+ic('next',30,'#fff')+'</button>'
+   +'<span dir="ltr" style="font-size:22px;font-weight:800;min-width:64px">'+(R.i+1)+' / '+n+'</span>'
+   +'<button class="stbb" style="background:#6fae66" onclick="stbR(1)" '+(R.i<n-1?'':'disabled')+' aria-label="التالية">'+ic('back',30,'#fff')+'</button>'
+   +'<span style="width:18px"></span>'
+   +'<button class="stbb" style="background:#9a7fd0;width:84px;height:84px" onclick="stbRP()" '+(p.a?'':'disabled')+' aria-label="استمع">'+ic('play',40,'#fff')+'</button>'
+   +(mom?'':'<button class="stbb" style="background:#e5834a" onclick="stbEdit(\''+b.id+'\')" aria-label="تعديل">'+ic('undo',30,'#fff')+'</button>')
+   +'</div></div>';
+  if(auto&&p.a)playClip(p.a)}
+window.stbR=function(d){if(!R)return;R.i=Math.max(0,Math.min(R.b.p.length-1,R.i+d));stbShow(true)};
+window.stbRP=function(){if(R&&R.b.p[R.i].a)playClip(R.b.p[R.i].a)};
+window.addEventListener('orientationchange',()=>setTimeout(()=>{if(E&&$('#stbc'))stbDraw();else if(R&&$('#stbc'))stbShow(false)},300));
+MT.splice(4,0,['book','قصص طفلي','momstories','#e58a5a']);
+})();
 
 intro();LWBOOT();
 </script></body></html>
