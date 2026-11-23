@@ -1026,28 +1026,20 @@ function level(v){ // 0..1 -> five bars + ring
   const q=document.querySelector('.qb.rc,.qb.hr');if(q){q.classList.toggle('hr',v>.15);q.classList.toggle('rc',v<=.15)}}
 function stopAll(){if(ctl){try{ctl.stop()}catch(e){}ctl=null}try{rec&&rec.abort&&rec.abort()}catch(e){}try{rec&&rec.stop()}catch(e){}level(0)}
 function failed(msg){QL.said=0;QL.fail=(QL.fail||0)+1;qlDraw();cheer(msg||'حاول مرة أخرى',1);window.qlFail&&qlFail()}
-async function volume(text,ok){ // fallback: the microphone itself, so the child sees it hears his voice
-  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){failed('اسمحي للمتصفح باستخدام المايكروفون');return}
-  const AC=window.AudioContext||window.webkitAudioContext,ac=new AC(),src=ac.createMediaStreamSource(stream),an=ac.createAnalyser();an.fftSize=1024;src.connect(an);
-  const buf=new Uint8Array(an.fftSize),need=Math.min(4500,Math.max(1400,String(text).split(/\s+/).length*420));let voiced=0,t0=Date.now(),alive=1;
-  const tick=setInterval(()=>{an.getByteTimeDomainData(buf);let s=0;for(const x of buf){const d=(x-128)/128;s+=d*d}const r=Math.sqrt(s/buf.length);level(Math.min(1,r*6));if(r>.035)voiced+=100;
-    if(voiced>=need){fin();ok()}else if(Date.now()-t0>14000){fin();failed('لم أسمعك جيداً، حاول مرة أخرى')}},100);
-  const fin=()=>{if(!alive)return;alive=0;clearInterval(tick);try{stream.getTracks().forEach(t=>t.stop())}catch(e){}try{ac.close()}catch(e){}ctl=null;level(0)};
+let MS=null,MAC=null;
+function micRelease(){try{MS&&MS.getTracks().forEach(t=>t.stop())}catch(e){}MS=null;try{MAC&&MAC.close()}catch(e){}MAC=null}
+window.micRelease=micRelease;
+async function volume(text,ok){
+  try{if(!MS||!MS.active)MS=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){failed('اسمحي للمتصفح باستخدام المايكروفون');return}
+  const AC=window.AudioContext||window.webkitAudioContext;try{if(!MAC||MAC.state=='closed')MAC=new AC();if(MAC.state=='suspended')await MAC.resume()}catch(e){}
+  const src=MAC.createMediaStreamSource(MS),an=MAC.createAnalyser();an.fftSize=1024;src.connect(an);
+  const buf=new Uint8Array(an.fftSize),need=Math.min(2200,Math.max(900,String(text).split(/\s+/).length*180));let voiced=0,t0=Date.now(),alive=1;
+  const fin=()=>{if(!alive)return;alive=0;clearInterval(tick);try{src.disconnect()}catch(e){}ctl=null;level(0)};
+  const tick=setInterval(()=>{if(!document.querySelector('.ayb')){fin();micRelease();return}
+    an.getByteTimeDomainData(buf);let s=0;for(const x of buf){const d=(x-128)/128;s+=d*d}const r=Math.sqrt(s/buf.length);level(Math.min(1,r*6));if(r>.03)voiced+=100;
+    if(voiced>=need){fin();ok()}else if(Date.now()-t0>12000){fin();failed('لم أسمعك جيداً، حاول مرة أخرى')}},100);
   ctl={stop:()=>{fin()}}}
-window.listenFor=function(text,ok){
-  stopAll();try{aud&&aud.pause()}catch(e){}
-  const R=SRc();if(!R){volume(text,ok);return}
-  const heard=new Set();let done=0,sound=0;
-  rec=new R();rec.lang='ar-SA';rec.continuous=false;rec.interimResults=true;
-  rec.onaudiostart=()=>level(.05);
-  rec.onsoundstart=()=>{sound=1;level(.6)};rec.onspeechstart=()=>{sound=1;level(.8)};rec.onspeechend=()=>level(0);
-  rec.onresult=e=>{for(let i=0;i<e.results.length;i++)nrm(e.results[i][0].transcript).split(/\s+/).forEach(w=>w&&heard.add(w))};
-  rec.onerror=e=>{if(done)return;done=1;if(e.error==='not-allowed'||e.error==='service-not-allowed'){volume(text,ok)}else if(e.error==='no-speech'||e.error==='aborted'){if(e.error==='no-speech')failed('لم أسمعك، حاول مرة أخرى')}else volume(text,ok)};
-  rec.onend=()=>{if(done)return;done=1;level(0);
-    if(!heard.size){sound?(ok(),0):failed('لم أسمعك، حاول مرة أخرى');return}
-    const w=nrm(text).split(/\s+/).filter(Boolean),hit=w.filter(x=>heard.has(x)).length/w.length;
-    if(hit>=.5)ok();else failed('حاول مرة أخرى')};
-  try{rec.start();cheer('أنا أسمعك',1)}catch(e){volume(text,ok)}};
+window.listenFor=function(text,ok){stopAll();try{aud&&aud.pause()}catch(e){}volume(text,ok)};
 window.qlSay=function(){
   if(QL.said){stopAll();QL.said=0;qlDraw();return}
   QL.said=1;qlDraw();
@@ -1103,10 +1095,24 @@ const oldEar=window.qlEar;
 window.qlEar=function(k){QL.tok=Date.now();oldEar(k)};
 const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
-window.qlFail=function(){const t=QL.tok;if(QL.fail>=2)return;setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
+window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v12';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v13';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
+
+/* no iPad voice inside the Quran; reliable ayah playback */
+let QQ=false;
+const _say=window.say;window.say=function(t){if(QQ&&!(window.VOICE&&VOICE[t]))return;return _say.apply(this,arguments)};
+const _go=window.go;window.go=function(v){QQ=(v=='quran'||v=='qlearn'||v=='recite');if(!QQ&&window.micRelease)micRelease();try{speechSynthesis.cancel()}catch(e){}return _go.apply(this,arguments)};
+window.playAy=function(n,a,cb,k){k=k||0;const L=QV[n+'_'+a]?[QV[n+'_'+a]]:qsrc(n,a);
+ if(k>=L.length){qmsg('تعذر تشغيل التلاوة');cb&&cb();return}
+ try{speechSynthesis.cancel()}catch(e){}try{QA.pause()}catch(e){}
+ let moved=0,fin=0;const nxt=()=>{if(moved||fin)return;moved=1;clearTimeout(w);playAy(n,a,cb,k+1)};
+ const w=setTimeout(nxt,9000);
+ QA.onplaying=()=>clearTimeout(w);
+ QA.onended=()=>{if(fin||moved)return;fin=1;clearTimeout(w);qmsg('');cb&&cb()};
+ QA.onerror=nxt;QA.src=L[k];
+ const pr=QA.play();if(pr&&pr.catch)pr.catch(e=>{if(e&&e.name=='NotAllowedError'){clearTimeout(w);qmsg('اضغطي زر التشغيل مرة ثانية')}else nxt()})};
 
 intro();LWBOOT();
 </script></body></html>
