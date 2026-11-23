@@ -990,6 +990,21 @@ function gFirst(i){let n=0;const round=()=>{
   window.ltFirst=k=>{if(k===i){n++;say(nm(i));if(n>=4)finish(i,'first');else{cheer('أحسنت');setTimeout(round,1100)}}else wrong()};
   round()}
 
+
+/* ---------- printable sheets: tracing + colouring, for the mother ---------- */
+const outl=k=>{const a=(ART[k]||'').replace(/fill="(?!none)[^"]*"/g,'fill="#fff"').replace(/stroke="[^"]*"/g,'stroke="#444"').replace(/ opacity="[^"]*"/g,'');return '<svg viewBox="0 0 100 100" style="width:100%;max-height:14cm" stroke="#444" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round">'+a+'</svg>'};
+const ghost=(ch,px)=>'<span style="font-family:'+FONT+';font-weight:800;font-size:'+px+'px;line-height:1.15;color:#ececec;-webkit-text-stroke:2px #bdbdbd">'+ch+'</span>';
+const trH=i=>pgH('تتبّعي حرف '+nm(i),'<div style="text-align:center">'+ghost(L[i][0],230)+'</div>'+[0,1,2,3,4].map(()=>'<div style="display:flex;justify-content:space-around;border-bottom:2px dotted #bbb;direction:rtl">'+[0,1,2,3,4,5].map(()=>ghost(L[i][0],96)).join('')+'</div>').join(''));
+const clH=i=>pgH('لوّني '+W[i][0]+' ('+L[i][0]+')','<div style="text-align:center;margin:-6px 0 6px">'+ghost(L[i][0],110)+'</div>'+outl(W[i][1]));
+window.momsheets=function(){
+  const u=Math.min(Math.ceil(L.length/PER),U()),rows=[];
+  for(let m=0;m<u;m++){const idx=[];for(let i=m*PER;i<Math.min(L.length,(m+1)*PER);i++)idx.push(i);
+    rows.push('<div class="card"><h3 style="margin:0 0 8px">الشهر '+(m+1)+'</h3><div class="row" style="justify-content:center">'
+      +idx.map(i=>'<button class="btn w" style="font-size:30px;min-width:96px" onclick="momSheet('+i+')" aria-label="ورقة">'+L[i][0]+'</button>').join('')
+      +'</div><button class="btn" onclick="momSheet('+idx.join(',')+')">'+ic('print',22)+' كل أوراق الشهر ('+idx.length*2+')</button></div>')}
+  $('#app').innerHTML=mtop('mom','أوراق الحروف')+(rows.join('')||'<div class="card"><p>تظهر أوراق الحروف بعد تفعيل الاشتراك.</p></div>')+'<p class="sm" style="text-align:center">لكل حرف ورقة تتبّع وورقة تلوين. للحفظ كملف PDF اختاري "حفظ كـ PDF" من نافذة الطباعة.</p>'};
+window.momSheet=function(){const a=[].slice.call(arguments);view('momsheets',a.map(i=>trH(i)+clH(i)).join(''))};
+MT.splice(6,0,['print','أوراق الحروف','momsheets','#e58a5a']);
 /* ---------- mother: progress overview ---------- */
 window.momletters=function(){
   const tot=L.length*GAMES.length,done=L.reduce((a,_,i)=>a+stars(i),0),pct=Math.round(done/tot*100);
