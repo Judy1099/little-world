@@ -344,12 +344,12 @@ function pattern(){const[a,b,c]=shuf(FK),t=ri(2),seq=t?[a,a,b,a,a]:[a,b,a,b],ans
 $('#app').innerHTML=`${ctop('games')}<div class="card"><div class="row">${seq.map(k=>A(k,64)).join('')}<span class="qd"></span></div><div class="row" style="margin-top:16px">${ch.map(k=>`<div class="tile" style="background:#fff;flex-basis:100px" onclick="patA(${k==ans})"><div class="ta" style="margin:0;height:80px">${A(k,72)}</div></div>`).join('')}</div></div>`}
 function patA(ok){if(ok){win();setTimeout(pattern,1800)}else{cheer('حاول مرة أخرى');setTimeout(pattern,1100)}}
 function catchg(){let n=0;const need=10,stars=()=>$('#sc').innerHTML=Array.from({length:need},(_,i)=>ic('star',28,i<n?'#f2b94b':'#d9cdb0')).join('');
-$('#app').innerHTML=`${ctop('games')}<div class="card" style="padding:0;overflow:hidden"><div id="sky" style="position:relative;height:420px;overflow:hidden"></div><div class="row" id="sc" style="padding:8px;gap:2px"></div></div>`;stars();
-const sp=()=>{const s=$('#sky');if(!s)return;const e=document.createElement('button');e.className='fall';e.style.left=(4+Math.random()*78)+'%';e.style.animationDuration=(4+Math.random()*2)+'s';e.innerHTML=A(FK[ri(6)],64);e.onclick=()=>{e.remove();n++;stars();if(n>=need){clearInterval(tmr);win();setTimeout(catchg,3500)}else cheer(null,1)};e.onanimationend=()=>e.remove();s.appendChild(e)};
+$('#app').innerHTML=`${ctop('games')}<div class="card" style="padding:0;overflow:hidden"><div id="skyg" style="position:relative;height:420px;overflow:hidden"></div><div class="row" id="sc" style="padding:8px;gap:2px"></div></div>`;stars();
+const sp=()=>{const s=$('#skyg');if(!s)return;const e=document.createElement('button');e.className='fall';e.style.left=(4+Math.random()*78)+'%';e.style.animationDuration=(4+Math.random()*2)+'s';e.innerHTML=A(FK[ri(6)],64);e.onclick=()=>{e.remove();n++;stars();if(n>=need){clearInterval(tmr);win();setTimeout(catchg,3500)}else cheer(null,1)};e.onanimationend=()=>e.remove();s.appendChild(e)};
 tmr=setInterval(sp,900);sp()}
 const BC=['rgba(120,190,240,.55)','rgba(244,168,200,.55)','rgba(180,150,230,.55)','rgba(250,220,120,.55)'];
-function bubbles(){$('#app').innerHTML=`${ctop('games')}<div class="card" style="padding:0;overflow:hidden"><div id="sky" style="position:relative;height:480px;overflow:hidden;background:linear-gradient(#e6f4fc,#d3e8f4)"></div></div>`;
-const sp=()=>{const s=$('#sky');if(!s)return;const e=document.createElement('button'),z=60+ri(50);e.className='rise';e.style.cssText=`left:${4+Math.random()*80}%;width:${z}px;height:${z}px;animation-duration:${6+Math.random()*4}s;background:radial-gradient(circle at 30% 30%,#fff 0,rgba(255,255,255,.35) 25%,${BC[ri(4)]} 100%)`;e.onclick=()=>{e.classList.add('popb');setTimeout(()=>e.remove(),250)};e.onanimationend=()=>e.remove();s.appendChild(e)};
+function bubbles(){$('#app').innerHTML=`${ctop('games')}<div class="card" style="padding:0;overflow:hidden"><div id="skyg" style="position:relative;height:480px;overflow:hidden;background:linear-gradient(#e6f4fc,#d3e8f4)"></div></div>`;
+const sp=()=>{const s=$('#skyg');if(!s)return;const e=document.createElement('button'),z=60+ri(50);e.className='rise';e.style.cssText=`left:${4+Math.random()*80}%;width:${z}px;height:${z}px;animation-duration:${6+Math.random()*4}s;background:radial-gradient(circle at 30% 30%,#fff 0,rgba(255,255,255,.35) 25%,${BC[ri(4)]} 100%)`;e.onclick=()=>{e.classList.add('popb');setTimeout(()=>e.remove(),250)};e.onanimationend=()=>e.remove();s.appendChild(e)};
 tmr=setInterval(sp,700);for(let i=0;i<4;i++)setTimeout(sp,i*250)}
 /* ---------- Majlisna: gradual Arabic conversation ---------- */
 const PROF=()=>S('prof')||{};
@@ -1086,6 +1086,7 @@ window.count=function(){const k=FK[ri(6)],n=1+ri(5);CN={n,c:0};
 $('#app').innerHTML=`${ctop('games')}<div class="card"><div class="row" style="min-height:90px">${Array.from({length:n},()=>`<button class="btn" style="background:#fff;padding:6px;margin:4px" onclick="cntT(this)">${A(k,64)}</button>`).join('')}</div></div>`};
 window.cntT=function(b){if(!CN||b.dataset.d)return;b.dataset.d=1;b.style.opacity=.45;b.style.outline='4px solid #f2b94b';CN.c++;say(NM[CN.c]);if(CN.c==CN.n){win(NM[CN.n]);setTimeout(count,2800)}};
 window.pzTap=function(j){if(PZ.s===null)PZ.s=j;else{const a=PZ.s;[PZ.o[a],PZ.o[j]]=[PZ.o[j],PZ.o[a]];PZ.s=null;if(PZ.o.every((v,i)=>v==i)){pz();document.querySelectorAll('.pc').forEach(e=>{e.style.pointerEvents='none'});const c=document.querySelector('.card');if(c)c.style.boxShadow='0 0 0 6px #f2b94b';win('أحسنت');setTimeout(puzzle,3800);return}}pz()};
+(function(){const st=document.createElement('style');st.textContent='.fall{width:76px;height:76px;display:flex;align-items:center;justify-content:center;z-index:2;touch-action:manipulation}.fall svg{width:72px;height:72px;pointer-events:none}';document.head.appendChild(st)})();
 
 intro();LWBOOT();
 </script></body></html>
