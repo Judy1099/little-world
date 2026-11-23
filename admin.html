@@ -428,7 +428,7 @@ async function vSubs() {
   if (error) return fail(error);
   main(`<h2>المشتركات</h2><div class="card"><p class="mut" style="margin-top:0">عند انتهاء الاشتراك تتحول الأم إلى وضع القراءة فقط: ترى كل ما فتحته سابقاً، ولا تلعب ولا تحفظ تقدماً جديداً ولا ترى الحزم الجديدة. لا يُحذف شيء من تقدمها. عند التجديد يعود كل شيء تلقائياً.</p>
   <div class="tw"><table><tr><th>الجوال</th><th>الحالة الآن</th><th>الاشتراك</th><th>بداية الاشتراك</th><th>نهاية الفترة</th><th></th></tr>
-  ${(data || []).map(s => `<tr><td dir="ltr">${e(s.phone || '—')}</td><td>${subState(s)}</td>
+  ${(data || []).map(s => `<tr><td dir="ltr">${e(s.email || s.phone || '—')}</td><td>${subState(s)}</td>
   <td><select id="s_${s.user_id}"><option value="active" ${s.status === 'active' ? 'selected' : ''}>فعّال</option><option value="inactive" ${s.status === 'inactive' ? 'selected' : ''}>غير فعّال</option><option value="expired" ${s.status === 'expired' ? 'selected' : ''}>منتهي</option></select></td>
   <td><input type="date" id="a_${s.user_id}" value="${d10(s.started_at)}" data-o="${d10(s.started_at)}"></td><td><input type="date" id="b_${s.user_id}" value="${d10(s.current_period_end)}" data-o="${d10(s.current_period_end)}"></td>
   <td style="white-space:nowrap"><button class="btn s" onclick="renewSub('${s.user_id}')">تفعيل / تجديد 30 يوماً</button> <button class="btn g s" onclick="saveSub('${s.user_id}')">حفظ التعديل</button></td></tr>`).join('')}</table></div>

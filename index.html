@@ -487,29 +487,37 @@ window.LWH=function(k){ // called by S() and addArt() after every local save
   if(k==='art'){clearTimeout(lwAT);lwAT=setTimeout(lwArt,2500);return}
   if(LWSYNC.includes(k)){LWT[k]=Date.now();try{localStorage.setItem('lw_t',JSON.stringify(LWT))}catch(e){}clearTimeout(lwPT);lwPT=setTimeout(lwSync,1800)}
 };
-/* ---- phone sign-in ---- */
-function lwLogin(step,err){
-  $('#app').innerHTML=`${LOGO}${earth()}<div class="card"><h2 style="margin:0 0 6px">دخول الأم</h2>`+(step
-   ?`<p style="margin:0 0 10px">اكتبي الرمز المرسل إلى <span dir="ltr">+${lwe(LWPH)}</span></p><input id="lwc" inputmode="numeric" autocomplete="one-time-code" maxlength="8" dir="ltr" placeholder="الرمز"><br><button class="btn" style="margin-top:10px" onclick="lwVerify()">تأكيد</button> <button class="btn w" onclick="lwLogin(0)">تغيير الرقم</button>`
-   :`<p style="margin:0 0 10px">اكتبي رقم جوالك ليبقى تقدّمك محفوظاً</p><div dir="ltr" style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><select id="lwcc" style="max-width:150px">${LWCC.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('')}</select><input id="lwp" type="tel" inputmode="tel" dir="ltr" placeholder="5xxxxxxxx" style="max-width:190px"></div><button class="btn" style="margin-top:10px" onclick="lwSend()">إرسال الرمز</button>`)
-   +`<p id="er" style="color:#b33;margin:6px">${lwe(err||'')}</p></div>`}
-async function lwSend(){
-  const cc=$('#lwcc').value,n=$('#lwp').value.replace(/\D/g,'').replace(/^0+/,'');
-  if(n.length<8||n.length>10)return $('#er').textContent='اكتبي رقم جوال صحيحاً';
-  LWPH=cc+n;$('#er').textContent='';
-  const {error}=await SB.auth.signInWithOtp({phone:'+'+LWPH});
-  if(error)return lwLogin(0,/rate|seconds|limit/i.test(error.message)?'حاولي بعد دقيقة':'تعذّر إرسال الرمز، تأكدي من الرقم والاتصال');
-  lwLogin(1)}
-async function lwVerify(){
-  const t=$('#lwc').value.replace(/\D/g,'');if(t.length<4)return $('#er').textContent='اكتبي الرمز';
-  const {data,error}=await SB.auth.verifyOtp({phone:'+'+LWPH,token:t,type:'sms'});
-  if(error||!data||!data.user)return $('#er').textContent='الرمز غير صحيح أو انتهت صلاحيته';
+/* ---- email + password sign-in ---- */
+function lwLogin(mode,err,msg){
+  mode=mode||0; // 0 sign in, 1 create account, 2 forgot password
+  const em=($('#lwem')&&$('#lwem').value)||'';
+  const T=['دخول الأم','حساب جديد','استعادة كلمة المرور'][mode];
+  const sub0=['اكتبي إيميلك وكلمة المرور ليبقى تقدّمك محفوظاً','استخدمي نفس الإيميل الذي دفعتِ به في سلة','اكتبي إيميلك ونرسل لك رابطاً لتغيير كلمة المرور'][mode];
+  $('#app').innerHTML=`${LOGO}${earth()}<div class="card"><h2 style="margin:0 0 6px">${T}</h2><p style="margin:0 0 10px">${sub0}</p>
+  <input id="lwem" type="email" inputmode="email" autocomplete="email" dir="ltr" placeholder="name@example.com" value="${lwe(em)}" style="max-width:280px"><br>
+  ${mode!==2?'<input id="lwpw" type="password" autocomplete="'+(mode?'new-password':'current-password')+'" dir="ltr" placeholder="كلمة المرور" style="max-width:280px;margin-top:8px"><br>':''}
+  <button class="btn" style="margin-top:10px" onclick="lwAuth(${mode})">${['دخول','إنشاء الحساب','إرسال الرابط'][mode]}</button>
+  <p style="margin:8px 0 0">${mode===0?'<a href="#" onclick="lwLogin(1);return false">حساب جديد</a> &nbsp;|&nbsp; <a href="#" onclick="lwLogin(2);return false">نسيت كلمة المرور</a>':'<a href="#" onclick="lwLogin(0);return false">لدي حساب</a>'}</p>
+  <p id="er" style="color:${msg?'#2a7a3b':'#b33'};margin:6px">${lwe(err||msg||'')}</p></div>`}
+async function lwAuth(mode){
+  const em=$('#lwem').value.trim().toLowerCase(),pw=$('#lwpw')?$('#lwpw').value:'';
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return $('#er').textContent='اكتبي إيميلاً صحيحاً';
+  if(mode!==2&&pw.length<6)return $('#er').textContent='كلمة المرور 6 أحرف على الأقل';
+  $('#er').textContent='';
+  if(mode===2){const {error}=await SB.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+    return lwLogin(0,error?'تعذّر الإرسال، حاولي بعد قليل':'',error?'':'أرسلنا رابط تغيير كلمة المرور إلى إيميلك')}
+  if(mode===1){const {data,error}=await SB.auth.signUp({email:em,password:pw});
+    if(error)return $('#er').textContent=/registered|exists/i.test(error.message)?'هذا الإيميل مسجّل، ادخلي بكلمة المرور':(/rate|seconds/i.test(error.message)?'حاولي بعد دقيقة':'تعذّر إنشاء الحساب');
+    if(!data.session)return lwLogin(0,'','تم إنشاء الحساب. أكدي إيميلك من الرسالة ثم ادخلي');
+    LWU=data.user;return lwEnter()}
+  const {data,error}=await SB.auth.signInWithPassword({email:em,password:pw});
+  if(error||!data||!data.user)return $('#er').textContent=/rate|seconds/i.test((error||{}).message||'')?'حاولي بعد دقيقة':'الإيميل أو كلمة المرور غير صحيحة';
   LWU=data.user;await lwEnter()}
 async function lwEnter(){
   let row=null;
   try{const r=await SB.from('subscribers').select('*').eq('user_id',LWU.id).maybeSingle();row=r.data}catch(e){}
-  if(row){LWSUB=row;try{localStorage.setItem('lw_sub',JSON.stringify(row))}catch(e){}sub={email:LWU.phone||'',phone:'+'+String(LWU.phone||row.phone||'').replace(/\D/g,''),start:Date.parse(row.started_at)||Date.now()};S('sub',sub)}
-  else if(!sub){sub={email:'',phone:'+'+String(LWU.phone||''),start:Date.now()};S('sub',sub)}
+  if(row){LWSUB=row;try{localStorage.setItem('lw_sub',JSON.stringify(row))}catch(e){}sub={email:LWU.email||'',phone:'',start:Date.parse(row.started_at)||Date.now()};S('sub',sub)}
+  else if(!sub){sub={email:LWU.email||'',phone:'',start:Date.now()};S('sub',sub)}
   await lwSync();await lwArt();await lwCms();kid=S('kid');go('who')}
 async function lwOut(force){
   if(!force){const a=await lwSync(),b=await lwArt();if(!a||!b){alert('لا يوجد اتصال الآن. اتصلي بالإنترنت ثم اخرجي حتى لا يضيع التقدم.');return}}
@@ -619,7 +627,7 @@ setInterval(lwBar,1500);
 /* ---- wiring ---- */
 if(LWON){
   landing=function(){lwLogin(0)};
-  subs=function(){$('#app').innerHTML=`${mtop('mom','حسابي')}<div class="card"><p dir="ltr">${lwe(sub?sub.phone:'')}</p><p>بدأ ${new Date(sub?sub.start:Date.now()).toLocaleDateString('ar-SA')}</p><p class="sm">${LWRO()?'اشتراكك منتهي: العرض فقط. كل تقدّم طفلك محفوظ ويعود للعمل عند التجديد.':(LWSUB&&LWSUB.current_period_end?'اشتراكك فعّال حتى '+new Date(LWSUB.current_period_end).toLocaleDateString('ar-SA'):'تقدّم طفلك محفوظ في حسابك.')}</p><button class="btn w" onclick="lwOut()">تسجيل الخروج</button></div>`};
+  subs=function(){$('#app').innerHTML=`${mtop('mom','حسابي')}<div class="card"><p dir="ltr">${lwe(sub?(sub.email||sub.phone):'')}</p><p>بدأ ${new Date(sub?sub.start:Date.now()).toLocaleDateString('ar-SA')}</p><p class="sm">${LWRO()?'اشتراكك منتهي: العرض فقط. كل تقدّم طفلك محفوظ ويعود للعمل عند التجديد.':(LWSUB&&LWSUB.current_period_end?'اشتراكك فعّال حتى '+new Date(LWSUB.current_period_end).toLocaleDateString('ar-SA'):'تقدّم طفلك محفوظ في حسابك.')}</p><button class="btn w" onclick="lwOut()">تسجيل الخروج</button></div>`};
   const _art=art;art=function(){_art();if(LWU)document.querySelectorAll('.sm').forEach(p=>{if(p.textContent.includes('هذا الجهاز'))p.textContent='تُحفظ في حسابك وتتجمع في كتاب الشهر.'})};
   MT.push(['file','ملفات الشهر','lwMonth','#6fb2e6']);
   const _go=go;go=function(v,a,b){if(LWRO()&&LWLOCK.includes(v)){LWBLK();return}return _go(v,a,b)};
@@ -627,9 +635,14 @@ if(LWON){
   const _mom=mom;mom=function(){_mom();lwBanner()};
   const _art2=art;art=function(){_art2();if(LWRO()){document.querySelectorAll('#app input[type=file],#app select,#app .art button').forEach(e=>e.remove())}};
 }
+function lwNewPw(err){$('#app').innerHTML=`${LOGO}${earth()}<div class="card"><h2 style="margin:0 0 6px">كلمة مرور جديدة</h2><input id="lwn" type="password" autocomplete="new-password" dir="ltr" placeholder="كلمة المرور الجديدة" style="max-width:280px"><br><button class="btn" style="margin-top:10px" onclick="lwSetPw()">حفظ</button><p id="er" style="color:#b33;margin:6px">${lwe(err||'')}</p></div>`}
+async function lwSetPw(){const p=$('#lwn').value;if(p.length<6)return $('#er').textContent='6 أحرف على الأقل';
+  const {data,error}=await SB.auth.updateUser({password:p});if(error)return $('#er').textContent='تعذّر الحفظ، حاولي من الرابط مرة ثانية';
+  LWU=data.user;await lwEnter()}
 async function LWBOOT(){
   if(!LWON){go(sub?'who':'landing');return}
   SB=supabase.createClient(LWC.url,LWC.anonKey);
+  SB.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY')setTimeout(lwNewPw,0)});
   let s=null;try{s=(await SB.auth.getSession()).data.session}catch(e){}
   if(s){LWU=s.user;try{await lwEnter()}catch(e){console.warn(e);go('who')}}else go('landing')}
 
