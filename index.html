@@ -49,7 +49,7 @@ a.vid .pl{width:44px;height:44px;border-radius:50%;background:#e5534b;color:#fff
 .mr{display:flex;align-items:center;justify-content:space-between;font-size:32px;margin:14px 10px;border-bottom:2px dotted #bbb;padding-bottom:8px}.cc{width:56px;height:56px;border-radius:50%;display:inline-block}.cc0{border:3px solid #444}.bx{display:inline-block;width:50px;height:50px;border:3px solid #444;border-radius:10px}
 .tb{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:18px}.tb td,.tb th{border:1px solid #e0d2b8;padding:8px;text-align:right}.tb th{background:var(--pk)}.tb input{transform:scale(1.5);margin-left:10px}
 .tb .ti{display:inline-flex;vertical-align:middle;margin-left:6px}
-.stage{position:relative;padding:76px 36px}.obee{position:absolute;left:0;top:0;width:90px;height:90px;pointer-events:none;z-index:6}
+.stage{position:relative;padding:76px 36px}.obee{position:absolute;left:0;top:0;width:90px;height:112px;pointer-events:none;z-index:6}
 .mc{width:104px;height:124px;border:0;border-radius:22px;position:relative;background:linear-gradient(#b9a0e0,#9a7fd0);box-shadow:0 6px 0 #7f66b3,0 10px 16px rgba(0,0,0,.15);cursor:pointer;padding:0}.mc .mb,.mc .mf{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;border-radius:22px;transition:.3s}.mc .mf{background:#fff;opacity:0;transform:scale(.8)}.mc.on .mf{opacity:1;transform:scale(1)}.mc.on .mb{opacity:0}
 .pc{width:140px;height:140px;border:4px solid #fff;background:#fff8ea;border-radius:22px;padding:0;overflow:hidden;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.12)}.pc.sel{outline:5px solid #f2b94b}
 .cw{position:absolute;top:70px;width:100px;transition:left .55s ease;cursor:pointer}.cw .cf{position:absolute;left:22px;top:46px}.cw .cb{display:block;position:relative;transition:transform .4s}
@@ -150,8 +150,8 @@ sun:'<circle cx="50" cy="50" r="22" fill="url(#g_yel)"/><g stroke="#f2cf3a" stro
 match:'<g transform="translate(14 0) scale(.78)">'+APPLE+'</g><circle cx="22" cy="90" r="8" fill="#e5534b"/><circle cx="50" cy="90" r="8" fill="#f5d33f"/><circle cx="78" cy="90" r="8" fill="#4a90d9"/>'};
 const A=(k,s=60)=>`<svg viewBox="0 0 100 100" width="${s}" height="${s}" aria-hidden="true">${ART[k]}</svg>`;
 /* ---------- stage with orbiting bee ---------- */
-const stage=h=>`<div class="stage" id="stg">${h}<div class="obee" id="obee">${bee(90,'t')}</div></div>`;
-function orbit(){const s=$('#stg'),b=$('#obee');if(!s||!b)return;let t=-1.2;const f=()=>{if(!$('#stg'))return;const w=s.clientWidth,h=s.clientHeight,rx=w/2-46,ry=h/2-46;t+=.007;b.style.transform=`translate(${w/2+rx*Math.cos(t)-45}px,${h/2+ry*Math.sin(t)-45}px)`;raf=requestAnimationFrame(f)};f()}
+const stage=h=>`<div class="stage" id="stg">${h}<div class="obee" id="obee">${bee(112,'t')}</div></div>`;
+function orbit(){const s=$('#stg'),b=$('#obee');if(!s||!b)return;let t=-1.2;const f=()=>{if(!$('#stg'))return;const w=s.clientWidth,h=s.clientHeight,rx=w/2-46,ry=h/2-46;t+=.007;b.style.transform=`translate(${w/2+rx*Math.cos(t)-45}px,${h/2+ry*Math.sin(t)-56}px)`;raf=requestAnimationFrame(f)};f()}
 const ctop2=b=>`<div class="top">${ib(`go('${b}')`,b=='who'?'home':'back')}<div id="bub" class="bub"></div><span style="width:50px"></span></div>`;
 const FK=['apple','banana','orange','grapes','strawberry','melon'];
 const shuf=a=>[...a].sort(()=>Math.random()-.5),ri=n=>Math.floor(Math.random()*n);
@@ -1097,7 +1097,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v16';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v17';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
