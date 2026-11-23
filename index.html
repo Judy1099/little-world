@@ -401,10 +401,10 @@ const svgO=k=>`<svg viewBox="0 0 200 200" style="width:100%;max-height:17cm" fil
 const pgH=(t,b)=>`<section class="pg"><div style="font-family:Fredoka,sans-serif;font-size:16px;text-align:center;direction:ltr;color:#b9772b">Me & My Little World</div><h2 style="text-align:center">${t}</h2>${b}</section>`;
 const SH={},SHT={};
 Object.keys(OL).forEach(k=>{SHT[k]='تلوين '+SHN[k];SH[k]=()=>pgH('لوّن '+SHN[k],svgO(k))});
-SHT.matchfruit='وصّلي الفاكهة باسمها';SH.matchfruit=()=>pgH(SHT.matchfruit,['apple','orange','melon','banana','strawberry','grapes'].map((k,i)=>`<div class="mr"><span>${A(k,64)}</span><span>${SHN[['grapes','melon','apple','strawberry','orange','banana'][i]]}</span></div>`).join(''));
+SHT.matchfruit='وصّلي الفاكهة بمثلها';SH.matchfruit=()=>pgH(SHT.matchfruit,['apple','orange','melon','banana','strawberry','grapes'].map((k,i)=>`<div class="mr"><span>${A(k,64)}</span><span>${A(['grapes','melon','apple','strawberry','orange','banana'][i],64)}</span></div>`).join(''));
 SHT.matchcolor='وصّلي الشيء بلونه';SH.matchcolor=()=>pgH(SHT.matchcolor,OB.map((c,i)=>`<div class="mr"><span>${A(c[0],64)}</span><span class="cc" style="background:${OB[[3,0,5,2,4,1][i]][2]}"></span></div>`).join(''));
 SHT.colorcircle='لوّني الدائرة بلون الفاكهة';SH.colorcircle=()=>pgH(SHT.colorcircle,['apple','banana','grapes','orange','strawberry','melon'].map(k=>`<div class="mr"><span>${A(k,64)}</span><span class="cc cc0"></span></div>`).join(''));
-SHT.count='كم عددها؟';SH.count=()=>pgH(SHT.count,[['apple',3],['banana',5],['orange',2],['grapes',4],['strawberry',1]].map(([k,n])=>`<div class="mr"><span>${A(k,44).repeat(n)}</span><span class="bx"></span></div>`).join(''));
+SHT.count='ضعي دائرة على الفاكهة المختلفة';SH.count=()=>pgH(SHT.count,[['apple','orange'],['banana','grapes'],['orange','strawberry'],['grapes','melon'],['strawberry','apple']].map(([a,o],i)=>{const r=[a,a,a];r.splice((i*2+1)%4,0,o);return`<div class="mr" style="justify-content:space-around">${r.map(k=>`<span>${A(k,60)}</span>`).join('')}</div>`}).join(''));
 const SHK=Object.keys(SH);
 function view(back,html){$('#app').innerHTML=`<div class="noprint top">${ib(`go('${back}')`,'back')}<button class="btn" onclick="window.print()">${ic('print',22)} طباعة / PDF</button></div><div id="doc">${html}</div>`}
 function sheets(){$('#app').innerHTML=`${mtop('mom','أوراق الأنشطة')}<div class="card"><button class="btn" onclick="view('sheets',SHK.map(k=>SH[k]()).join(''))">${ic('print',22)} كل الأوراق (${SHK.length})</button><div class="row" style="margin-top:8px">${SHK.map(k=>`<button class="btn w" style="font-size:16px" onclick="view('sheets',SH['${k}']())">${SHT[k]}</button>`).join('')}</div><p class="sm">للحفظ كملف PDF اختاري "حفظ كـ PDF" من نافذة الطباعة.</p></div>`}
@@ -1097,7 +1097,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v13';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v14';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
