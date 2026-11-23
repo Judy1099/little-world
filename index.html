@@ -219,7 +219,7 @@ function who(){$('#app').innerHTML=`${LOGO}<div class="row" style="margin:6px 0"
 <div class="tile" style="background:var(--sky)" onclick="go(kid?'child':'choose')"><div class="ta">${me(96)}</div>الطفل</div></div>`}
 function choose(){$('#app').innerHTML=`${ctop('who')}<h2>من أنت؟ ${spk('من أنت')}</h2><div class="row"><div class="tile" style="background:var(--pk)" onclick="pick('girl')"><div class="ta" style="height:200px">${girl(190)}</div>بنت${spk('بنت')}</div><div class="tile" style="background:var(--sky)" onclick="pick('boy')"><div class="ta" style="height:200px">${boy(190)}</div>ولد${spk('ولد')}</div></div>`;setTimeout(()=>cheer('من أنت؟ بنت أو ولد'),300)}
 function pick(c){kid={c};S('kid',kid);go('child')}
-function child(){let i=0;$('#app').innerHTML=`<div class="top">${ib("go('who')",'home')}<div id="bub" class="bub on">هيا نتعلم ${spk('هيا نتعلم')}</div>${me(78)}</div>${stage(`<div class="row">${T('apple','فواكه',"go('fruits')",'var(--pe)')}${T('pal','ألوان',"go('colors')",'var(--lv)')}${T('qbook','قرآن',"go('quran')",'var(--sage)')}${T('maj','مجلسنا',"go('majlis')",'var(--sky)')}${T('puz','أنشطة',"go('games')",'var(--pk)')}${T('star','نجومي',"go('trophy')",'var(--lv)')}${T('car','نحن في رحلة',"go('trip')",'var(--y)')}${T('brush','هيا نصنع قصة',"go('mkstory')",'var(--pe)')}</div>`)}`;orbit();
+function child(){let i=0;$('#app').innerHTML=`<div class="top">${ib("go('who')",'home')}<div id="bub" class="bub on">هيا نتعلم ${spk('هيا نتعلم')}</div>${me(78)}</div>${stage(`<div class="row">${T('apple','فواكه',"go('fruits')",'var(--pe)')}${T('pal','ألوان',"go('colors')",'var(--lv)')}${T('qbook','قرآن',"go('quran')",'var(--sage)')}${T('maj','مجلسنا',"go('majlis')",'var(--sky)')}${T('puz','أنشطة',"go('games')",'var(--pk)')}${T('star','نجومي',"go('trophy')",'var(--lv)')}${T('car','نحن في رحلة',"go('trip')",'var(--y)')}${T('brush','هيا نصنع قصة',"go('mkstory')",'var(--pe)')}${T('hrf','الحروف',"go('letters')",'var(--lv)')}</div>`)}`;orbit();
 tmr=setInterval(()=>{const u=$('#bub');if(u){u.textContent=MOT[i++%MOT.length];u.classList.add('on')}},5000)}
 const menu=(b,items)=>`${ctop2(b)}${stage(`<div class="row">${items.map(i=>T(...i)).join('')}</div>`)}`;
 function fruits(){$('#app').innerHTML=menu('child',[['strawberry','تعلّم',"go('learn')",'var(--pk)'],['magn','أين الفاكهة؟',"go('pickF')",'var(--pe)'],['shapes','الأشكال',"go('shapes','fruits')",'var(--sky)'],['brush','نلوّن',"go('paint','apple','fruits')",'var(--lv)']]);orbit()}
@@ -465,7 +465,7 @@ $('#app').innerHTML=`<div class="top">${ib("go('who')",'back')}<h2 style="margin
 <div class="row">${MT.map(m=>`<div class="mtile" onclick="go('${m[2]}')"><span class="mi" style="background:${m[3]}">${ic(m[0],32,'#fff')}</span>${m[1]}</div>`).join('')}</div>`}
 /* ===================== LW backend (additive; inactive unless config.js is filled) ===================== */
 const LWC=window.LW_CONFIG||{},LWON=!!(LWC.url&&!/YOUR-/.test(LWC.url)&&LWC.anonKey&&!/YOUR-/.test(LWC.anonKey)&&window.supabase);
-const LWSYNC=['kid','prof','prog','plan','done','trip','maj','st','mys'],LWCC=[['966','السعودية +966'],['971','الإمارات +971'],['965','الكويت +965'],['973','البحرين +973'],['974','قطر +974'],['968','عُمان +968'],['962','الأردن +962'],['20','مصر +20']];
+const LWSYNC=['kid','prof','prog','plan','done','trip','maj','st','mys','lt'],LWCC=[['966','السعودية +966'],['971','الإمارات +971'],['965','الكويت +965'],['973','البحرين +973'],['974','قطر +974'],['968','عُمان +968'],['962','الأردن +962'],['20','مصر +20']];
 let SB=null,LWU=null,LWSUB=null,CMS={st:[],games:[],plans:[]},LWT={},LWPH='',lwBusy=0,lwPT,lwAT;
 try{LWT=JSON.parse(localStorage.getItem('lw_t')||'{}')}catch(e){}
 const lwq=s=>String(s==null?'':s).replace(/['"\\<>&`]/g,'');
@@ -811,6 +811,142 @@ window.stbR=function(d){if(!R)return;R.i=Math.max(0,Math.min(R.b.p.length-1,R.i+
 window.stbRP=function(){if(R&&R.b.p[R.i].a)playClip(R.b.p[R.i].a)};
 window.addEventListener('orientationchange',()=>setTimeout(()=>{if(E&&$('#stbc'))stbDraw();else if(R&&$('#stbc'))stbShow(false)},300));
 MT.splice(4,0,['book','قصص طفلي','momstories','#e58a5a']);
+})();
+
+/* ---- Arabic letters: 4 letters a month, 6 games for every letter ---- */
+(function(){
+const L=[['ا','ألف'],['ب','باء'],['ت','تاء'],['ث','ثاء'],['ج','جيم'],['ح','حاء'],['خ','خاء'],['د','دال'],['ذ','ذال'],['ر','راء'],['ز','زاي'],['س','سين'],['ش','شين'],['ص','صاد'],['ض','ضاد'],['ط','طاء'],['ظ','ظاء'],['ع','عين'],['غ','غين'],['ف','فاء'],['ق','قاف'],['ك','كاف'],['ل','لام'],['م','ميم'],['ن','نون'],['ه','هاء'],['و','واو'],['ي','ياء']];
+const PER=4,GAMES=['learn','trace','find','bub','mem','drag'];
+const COL=['#e5834a','#6fae66','#4a90d9','#9a7fd0','#e58aa0','#d9a521','#4aa8a0'];
+const FONT="'Rubik','Tajawal',sans-serif";
+ART.hrf='<circle cx="50" cy="50" r="43" fill="#fff3d6"/><text x="50" y="70" font-size="62" text-anchor="middle" font-family="Rubik,Tajawal,sans-serif" fill="#e5834a" font-weight="800">أ</text>';
+IC.pen='<path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/>';
+IC.pop='<circle cx="12" cy="12" r="8"/><path d="M8 9a5 5 0 0 1 3-2"/>';
+IC.pair='<rect x="3" y="5" width="8" height="14" rx="2"/><rect x="13" y="5" width="8" height="14" rx="2"/>';
+IC.drag='<path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>';
+IC.find='<circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/>';
+const GI={learn:'ear',trace:'pen',find:'find',bub:'pop',mem:'pair',drag:'drag'};
+const GC={learn:'#6fae66',trace:'#e5834a',find:'#4a90d9',bub:'#e58aa0',mem:'#9a7fd0',drag:'#d9a521'};
+const U=()=>LWON?lwUnlocked():99;
+const grp=i=>Math.floor(i/PER),open=i=>grp(i)<U();
+const PR=()=>S('lt')||{};
+const got=(i,g)=>!!(PR()[L[i][0]]||{})[g];
+const stars=i=>GAMES.filter(g=>got(i,g)).length;
+function mark(i,g){const p=PR(),k=L[i][0];p[k]=p[k]||{};if(!p[k][g]){p[k][g]=1;S('lt',p)}}
+const ri=n=>Math.floor(Math.random()*n);
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const nm=i=>L[i][1];
+const big=(ch,px,col)=>'<span style="font-family:'+FONT+';font-weight:800;font-size:'+px+'px;color:'+(col||'#5a3a24')+';line-height:1.1">'+ch+'</span>';
+const spkL=i=>'<button class="spk" aria-label="استمع" onclick="event.stopPropagation();say(\''+nm(i)+'\')">'+ic('speaker',22)+'</button>';
+const others=(i,n)=>shuf(L.map((_,k)=>k).filter(k=>k!==i)).slice(0,n);
+const near=(i,n)=>{const g=grp(i)*PER,pool=[];for(let k=g;k<g+PER&&k<L.length;k++)if(k!==i)pool.push(k);return shuf(pool.concat(others(i,6))).filter((v,j,a)=>a.indexOf(v)===j).slice(0,n)};
+const finish=(i,g)=>{mark(i,g);win('أحسنت');const t=Date.now();$('#app').insertAdjacentHTML('beforeend','<i id="ltfin" data-t="'+t+'" hidden></i>');setTimeout(()=>{const e=$('#ltfin');if(e&&e.dataset.t==t)go('ltPick',i)},1700)};
+
+/* ---------- hub: months and letters ---------- */
+window.letters=function(){
+  const months=Math.ceil(L.length/PER);let h='';
+  for(let m=0;m<months;m++){const lock=m>=U();
+    h+='<div class="card" style="text-align:center;background:'+(lock?'#efe7d8':'#fffaf0')+'"><div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;align-items:stretch">';
+    for(let i=m*PER;i<Math.min(L.length,(m+1)*PER);i++){
+      h+='<button class="tile" style="background:'+(lock?'#d9cdb8':COL[m%COL.length]+'33')+';flex:0 0 140px;max-width:140px;padding:10px 6px" onclick="'+(lock?"qmsg('قريباً');setTimeout(()=>qmsg(''),1200)":"go('ltPick',"+i+")")+'" aria-label="حرف">'
+       +(lock?'<div style="opacity:.55">'+big(L[i][0],84,'#8a7a6a')+'</div><div style="height:22px">'+ic('lock',22,'#8a7a6a')+'</div>'
+             :big(L[i][0],84,COL[m%COL.length])+'<div style="height:22px;display:flex;justify-content:center;gap:2px">'+GAMES.map(g=>ic('star',12,got(i,g)?'#f2b94b':'#d9cdb0')).join('')+'</div>')
+       +'</button>'}
+    h+='</div></div>'}
+  $('#app').innerHTML=ctop('child')+h;cheer('هيا نتعلم')};
+
+/* ---------- one letter: the six games ---------- */
+window.ltPick=function(i){
+  if(!open(i)){go('letters');return}
+  const c=COL[grp(i)%COL.length];
+  $('#app').innerHTML='<div class="top">'+ib("go('letters')",'back')+'<div style="flex:1"></div>'+bee(64)+'</div>'
+   +'<div class="card" style="text-align:center"><div onclick="say(\''+nm(i)+'\')" style="cursor:pointer">'+big(L[i][0],150,c)+'</div>'+spkL(i)+'</div>'
+   +'<div class="row" style="justify-content:center">'+GAMES.map(g=>'<button class="tile" style="background:'+GC[g]+'33;flex:0 0 150px;padding:14px 6px" onclick="go(\'ltGame\',\''+g+'\','+i+')" aria-label="لعبة"><div style="color:'+GC[g]+'">'+ic(GI[g],64,GC[g])+'</div><div>'+ic('star',22,got(i,g)?'#f2b94b':'#d9cdb0')+'</div></button>').join('')+'</div>';
+  setTimeout(()=>say(nm(i)),300)};
+LWLOCK.push('ltGame');
+window.ltGame=function(g,i){
+  if(!open(i)){go('letters');return}
+  const f={learn,trace,find,bub,mem,drag}[g];if(f)f(i)};
+const shell=(i,body,extra)=>{$('#app').innerHTML='<div class="top">'+ib("go('ltPick',"+i+")",'back')+'<div style="flex:1;text-align:center">'+(extra||'')+'</div>'+bee(64)+'</div>'+body};
+
+/* 1. learn: hear the name */
+function learn(i){
+  const c=COL[grp(i)%COL.length],cs=[c,'#4a90d9','#e58aa0'];
+  shell(i,'<div class="card" style="text-align:center"><div class="row" style="justify-content:center">'+cs.map(k=>'<button class="tile" style="flex:0 0 190px;max-width:190px;background:#fffaf0" onclick="ltLearnTap('+i+')" aria-label="حرف">'+big(L[i][0],150,k)+'</button>').join('')+'</div>'+spkL(i)+'</div>');
+  say(nm(i))}
+window.ltLearnTap=function(i){say(nm(i));const t=(window.__lt=(window.__lt||0)+1);if(t>=3){window.__lt=0;finish(i,'learn')}};
+
+/* 2. trace: follow the letter with a finger */
+function trace(i){
+  const W=Math.min(420,(window.innerWidth||600)-48);
+  shell(i,'<div class="card" style="text-align:center"><div style="position:relative;width:'+W+'px;height:'+W+'px;margin:0 auto;touch-action:none;background:#fffaf0;border-radius:24px;box-shadow:inset 0 0 0 4px #f2e4c4"><canvas id="ltb" width="'+W+'" height="'+W+'" style="position:absolute;inset:0"></canvas><canvas id="ltd" width="'+W+'" height="'+W+'" style="position:absolute;inset:0;touch-action:none"></canvas></div>'
+   +'<div><button class="stbb" style="background:#b8a898" onclick="ltClr('+i+')" aria-label="مسح">'+ic('undo',30,'#fff')+'</button>'+spkL(i)+'</div></div>');
+  const b=$('#ltb'),d=$('#ltd'),bx=b.getContext('2d'),dx=d.getContext('2d'),fs=Math.round(W*.78);
+  const glyph=(x,fill,st)=>{x.font='800 '+fs+'px '+FONT;x.textAlign='center';x.textBaseline='middle';if(fill){x.fillStyle=fill;x.fillText(L[i][0],W/2,W*.54)}if(st){x.lineWidth=3;x.setLineDash([10,9]);x.strokeStyle=st;x.strokeText(L[i][0],W/2,W*.54);x.setLineDash([])}};
+  const mk=document.createElement('canvas');mk.width=mk.height=W;const mx=mk.getContext('2d');
+  const draw=()=>{bx.clearRect(0,0,W,W);glyph(bx,'#f6e8c8','#d9b86a');mx.clearRect(0,0,W,W);glyph(mx,'#000')};
+  draw();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+  let down=0,lx=0,ly=0;const pos=e=>{const r=d.getBoundingClientRect();return[(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*W/r.height]};
+  dx.lineCap=dx.lineJoin='round';dx.lineWidth=Math.round(W*.085);dx.strokeStyle=COL[grp(i)%COL.length];
+  d.addEventListener('pointerdown',e=>{e.preventDefault();down=1;[lx,ly]=pos(e);dx.beginPath();dx.moveTo(lx,ly);dx.lineTo(lx+.1,ly);dx.stroke();try{d.setPointerCapture(e.pointerId)}catch(_){}});
+  d.addEventListener('pointermove',e=>{if(!down)return;const[x,y]=pos(e);dx.beginPath();dx.moveTo(lx,ly);dx.lineTo(x,y);dx.stroke();lx=x;ly=y});
+  const up=()=>{if(!down)return;down=0;check()};d.addEventListener('pointerup',up);d.addEventListener('pointercancel',up);
+  const check=()=>{const a=mx.getImageData(0,0,W,W).data,c=dx.getImageData(0,0,W,W).data;let tot=0,hit=0;
+    for(let p=0;p<a.length;p+=16){if(a[p+3]>128){tot++;if(c[p+3]>40)hit++}}
+    if(tot&&hit/tot>=.5&&!window.__ltDone){window.__ltDone=1;finish(i,'trace')}};
+  window.__ltDone=0}
+window.ltClr=function(i){const d=$('#ltd');if(d){d.getContext('2d').clearRect(0,0,d.width,d.height);window.__ltDone=0}};
+
+/* 3. find: hear the name, pick the letter */
+function find(i){let n=0;const round=()=>{
+  const opts=shuf([i].concat(near(i,2)));
+  shell(i,'<div class="card" style="text-align:center"><div class="row" style="justify-content:center">'+opts.map(k=>'<button class="tile" style="flex:0 0 170px;max-width:170px;background:#fffaf0" onclick="ltFind('+k+')" aria-label="حرف">'+big(L[k][0],120,COL[(k+1)%COL.length])+'</button>').join('')+'</div>'+spkL(i)+'<div style="margin-top:8px">'+[0,1,2,3,4].map(k=>ic('star',22,k<n?'#f2b94b':'#d9cdb0')).join('')+'</div></div>');
+  setTimeout(()=>say(nm(i)),250)};
+  window.ltFind=k=>{if(k===i){n++;if(n>=5)finish(i,'find');else{cheer('أحسنت');setTimeout(round,900)}}else wrong()};
+  round()}
+
+/* 4. bubbles: pop the ones with the letter */
+function bub(i){let n=0;const need=6;
+  const mkb=()=>{const t=Math.random()<.5,k=t?i:near(i,3)[ri(3)];return{k,t}};
+  const B=[...Array(8)].map(mkb);
+  const draw=()=>{shell(i,'<div class="card" style="text-align:center"><div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center">'+B.map((b,x)=>'<button onclick="ltBub('+x+')" aria-label="فقاعة" style="width:112px;height:112px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 32% 30%,#fff,'+COL[(b.k+2)%COL.length]+'55 62%,'+COL[(b.k+2)%COL.length]+'99);box-shadow:inset 0 0 0 3px #ffffffaa;animation:bubf '+(2.4+x%3*.5)+'s ease-in-out infinite">'+big(L[b.k][0],64,'#5a3a24')+'</button>').join('')+'</div><div style="margin-top:10px">'+[...Array(need)].map((_,k)=>ic('star',22,k<n?'#f2b94b':'#d9cdb0')).join('')+spkL(i)+'</div></div>');
+    if(!document.getElementById('bubfs')){const s=document.createElement('style');s.id='bubfs';s.textContent='@keyframes bubf{50%{transform:translateY(-12px)}}';document.head.appendChild(s)}};
+  window.ltBub=x=>{const b=B[x];if(b.t){n++;if(n>=need){finish(i,'bub');return}B[x]=mkb();say(nm(i));draw()}else wrong()};
+  draw();say(nm(i))}
+
+/* 5. memory: find the pairs */
+function mem(i){
+  const g=grp(i)*PER,ks=[];for(let k=g;k<Math.min(L.length,g+PER);k++)ks.push(k);
+  const C=shuf(ks.concat(ks).map((k,x)=>({k,id:x}))),open2=[];let done=0,lock=0;
+  const draw=()=>{shell(i,'<div class="card" style="text-align:center"><div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">'+C.map((c,x)=>'<button onclick="ltMem('+x+')" aria-label="بطاقة" style="width:120px;height:140px;border-radius:20px;border:0;cursor:pointer;background:'+(c.up||c.ok?'#fffaf0':COL[grp(i)%COL.length])+';box-shadow:0 6px 0 rgba(90,58,36,.15)">'+((c.up||c.ok)?big(L[c.k][0],80,COL[(c.k+1)%COL.length]):'')+'</button>').join('')+'</div></div>')};
+  window.ltMem=x=>{const c=C[x];if(lock||c.up||c.ok)return;c.up=1;say(nm(c.k));open2.push(x);draw();
+    if(open2.length===2){lock=1;const[a,b]=open2.splice(0,2);
+      if(C[a].k===C[b].k){C[a].ok=C[b].ok=1;C[a].up=C[b].up=0;done++;lock=0;setTimeout(()=>{draw();if(done>=ks.length)finish(i,'mem');else cheer('أحسنت')},400)}
+      else setTimeout(()=>{C[a].up=C[b].up=0;lock=0;draw()},900)}};
+  draw()}
+
+/* 6. drag: put the letter on its shadow */
+function drag(i){
+  const ks=shuf([i].concat(near(i,2))),slots=shuf(ks.slice());let ok=0;
+  shell(i,'<div class="card" style="text-align:center"><div id="lts" style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap">'+slots.map(k=>'<div data-k="'+k+'" style="width:130px;height:130px;border-radius:24px;border:4px dashed #cbb99a;display:flex;align-items:center;justify-content:center">'+big(L[k][0],90,'#e3d6bb')+'</div>').join('')+'</div>'
+   +'<div id="ltt" style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:30px">'+ks.map(k=>'<div class="ltk" data-k="'+k+'" style="width:110px;height:110px;border-radius:24px;background:'+COL[(k+1)%COL.length]+'33;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;position:relative;z-index:5">'+big(L[k][0],76,COL[(k+1)%COL.length])+'</div>').join('')+'</div></div>');
+  document.querySelectorAll('.ltk').forEach(el=>{
+    el.addEventListener('pointerdown',e=>{e.preventDefault();const k=+el.dataset.k;say(nm(k));const r0=el.getBoundingClientRect(),dx0=e.clientX-r0.left,dy0=e.clientY-r0.top,sx=e.clientX,sy=e.clientY;
+      try{el.setPointerCapture(e.pointerId)}catch(_){}el.style.zIndex=20;
+      const mv=ev=>{el.style.transform='translate('+(ev.clientX-sx)+'px,'+(ev.clientY-sy)+'px)'};
+      const up=ev=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);
+        const sl=[...document.querySelectorAll('#lts div')].find(s=>{const r=s.getBoundingClientRect();return ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom});
+        if(sl&&+sl.dataset.k===k){const r=sl.getBoundingClientRect(),q=el.getBoundingClientRect(),tx=ev.clientX-sx,ty=ev.clientY-sy;el.style.transform='translate('+(tx+r.left+r.width/2-q.left-q.width/2)+'px,'+(ty+r.top+r.height/2-q.top-q.height/2)+'px)';el.style.pointerEvents='none';ok++;cheer('أحسنت');if(ok>=ks.length)finish(i,'drag')}
+        else{if(sl)wrong();el.style.transition='transform .25s';el.style.transform='';setTimeout(()=>{el.style.transition='';el.style.zIndex=5},260)}};
+      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up)})});
+  say(nm(i))}
+
+/* ---------- mother: progress overview ---------- */
+window.momletters=function(){
+  const tot=L.length*GAMES.length,done=L.reduce((a,_,i)=>a+stars(i),0),pct=Math.round(done/tot*100);
+  $('#app').innerHTML=mtop('mom','حروف طفلي')+'<div class="card"><p style="margin:0 0 8px">أنجز طفلك <b dir="ltr">'+done+' / '+tot+'</b> من ألعاب الحروف ('+pct+'%)</p><div style="height:12px;border-radius:8px;background:#eadfca;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:#6fae66"></div></div></div>'
+   +'<div class="card"><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px">'+L.map((l,i)=>'<div style="text-align:center;padding:8px;border-radius:16px;background:'+(i<PER*U()?'#fffaf0':'#efe7d8')+'">'+big(l[0],44,i<PER*U()?COL[grp(i)%COL.length]:'#b9a994')+'<div dir="ltr" style="font-size:14px">'+(i<PER*U()?stars(i)+' / '+GAMES.length:'')+'</div></div>').join('')+'</div></div>'};
+MT.splice(5,0,['star','حروف طفلي','momletters','#4aa8a0']);
 })();
 
 /* recorded voice for the story tile */
