@@ -610,6 +610,12 @@ function lwMonth(){
   $('#app').innerHTML=`${mtop('mom','ملفات الشهر')}`+(ps.length?ps.map(card).join(''):'<div class="card"><p>لا توجد حزم شهرية متاحة بعد.</p></div>')}
 function lwBanner(){if(!LWRO())return;const nv=LWSUB&&LWSUB.ever_active===false;
   $('#app').insertAdjacentHTML('afterbegin',`<div class="card" style="background:#fff4d6;margin:8px 0"><b>${nv?'اشتراكك غير مفعّل بعد':'انتهى اشتراكك: وضع العرض فقط'}</b><p style="margin:4px 0">${nv?'تواصلي معنا لتفعيل الاشتراك.':'تقدرين تراجعين كل ما فتحتِه سابقاً: القصص والحزم الشهرية وتقدّم طفلك ورسوماته وإنجازاته. لا يمكن اللعب أو إضافة تقدّم جديد. عند التجديد يعود كل شيء تلقائياً ويُحفظ تقدّمك كما هو.'}</p></div>`)}
+
+function lwBar(){let b=document.getElementById('lwbar');if(!LWRO()){if(b)b.remove();return}
+  const nv=LWSUB&&LWSUB.ever_active===false,t=nv?'الاشتراك غير مفعّل بعد: العرض فقط':'انتهى الاشتراك: العرض فقط';
+  if(!b){b=document.createElement('div');b.id='lwbar';b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#e8a33d;color:#3b2a14;text-align:center;padding:6px 10px;font-weight:700;font-size:15px';document.body.appendChild(b);document.body.style.paddingTop='34px'}
+  b.textContent=t}
+setInterval(lwBar,1500);
 /* ---- wiring ---- */
 if(LWON){
   landing=function(){lwLogin(0)};
