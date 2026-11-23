@@ -1105,6 +1105,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2)return;setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
+(function(){const d=document.createElement('div');d.textContent='v10';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 
 intro();LWBOOT();
 </script></body></html>
