@@ -1085,6 +1085,7 @@ let CN;
 window.count=function(){const k=FK[ri(6)],n=1+ri(5);CN={n,c:0};
 $('#app').innerHTML=`${ctop('games')}<div class="card"><div class="row" style="min-height:90px">${Array.from({length:n},()=>`<button class="btn" style="background:#fff;padding:6px;margin:4px" onclick="cntT(this)">${A(k,64)}</button>`).join('')}</div></div>`};
 window.cntT=function(b){if(!CN||b.dataset.d)return;b.dataset.d=1;b.style.opacity=.45;b.style.outline='4px solid #f2b94b';CN.c++;say(NM[CN.c]);if(CN.c==CN.n){win(NM[CN.n]);setTimeout(count,2800)}};
+window.pzTap=function(j){if(PZ.s===null)PZ.s=j;else{const a=PZ.s;[PZ.o[a],PZ.o[j]]=[PZ.o[j],PZ.o[a]];PZ.s=null;if(PZ.o.every((v,i)=>v==i)){pz();document.querySelectorAll('.pc').forEach(e=>{e.style.pointerEvents='none'});const c=document.querySelector('.card');if(c)c.style.boxShadow='0 0 0 6px #f2b94b';win('أحسنت');setTimeout(puzzle,3800);return}}pz()};
 
 intro();LWBOOT();
 </script></body></html>
