@@ -506,7 +506,7 @@ async function lwAuth(mode){
   $('#er').textContent='';
   if(mode===2){const {error}=await SB.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
     return lwLogin(0,error?'تعذّر الإرسال، حاولي بعد قليل':'',error?'':'أرسلنا رابط تغيير كلمة المرور إلى إيميلك')}
-  if(mode===1){const {data,error}=await SB.auth.signUp({email:em,password:pw});
+  if(mode===1){const ph=((document.getElementById('lwph')||{}).value||'').replace(/[\s-]/g,'');if(!/^(\+?966|0)?5\d{8}$/.test(ph))return $('#er').textContent='اكتبي رقم جوال صحيحاً مثل 05xxxxxxxx';const {data,error}=await SB.auth.signUp({email:em,password:pw,options:{data:{phone:ph}}});
     if(error)return $('#er').textContent=/registered|exists/i.test(error.message)?'هذا الإيميل مسجّل، ادخلي بكلمة المرور':(/rate|seconds/i.test(error.message)?'حاولي بعد دقيقة':'تعذّر إنشاء الحساب');
     if(!data.session)return lwLogin(0,'','تم إنشاء الحساب. أكدي إيميلك من الرسالة ثم ادخلي');
     LWU=data.user;return lwEnter()}
@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v54';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v55';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1759,6 +1759,8 @@ window.LWBOOT=async function(){await _b.apply(this,arguments);try{if(getP()&&typ
 (function(){
 function fix(n){const f=window[n];if(typeof f!=='function')return;window[n]=function(){const r=f.apply(this,arguments);try{const IA=window.__IA||{},a=document.getElementById('app'),c=a&&a.querySelector('.card');if(c&&IA.logoB){while(c.previousSibling)c.previousSibling.remove();c.insertAdjacentHTML('beforebegin','<div class="row" style="margin-top:6px"><img src="'+IA.logoB+'" alt="" style="width:min(56vw,240px);height:auto"></div>')}}catch(e){}return r}}
 fix('lwLogin');fix('lwNewPw');
+const _l=window.lwLogin;window.lwLogin=function(mode){const r=_l.apply(this,arguments);try{if(mode===1){const pw=document.getElementById('lwpw');if(pw){const st=window.navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+pw.insertAdjacentHTML('afterend','<br><input id="lwph" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="05xxxxxxxx" style="max-width:280px;margin-top:8px"><br>'+(st?'':'<button class="lwi" style="margin:10px auto 0" onclick="lwInstall()">أضيفي الموقع لشاشتك</button>'))}}}catch(e){}return r};
 })();
 
 /* nicer post-purchase welcome page */
