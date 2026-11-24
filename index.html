@@ -1097,7 +1097,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v19';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v20';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1176,6 +1176,8 @@ body.wkon #app{padding-bottom:170px}
 @keyframes wkbkfly{0%,38%{transform:none}55%{transform:translateY(-150px) rotate(300deg)}85%{transform:translateY(-10px) rotate(360deg)}100%{transform:none}}
 #wk .a-jump .bk{animation:wkbkup .55s ease-out 2}
 @keyframes wkbkup{45%{transform:translateY(-34px) rotate(-12deg)}}
+#wk .wbee{position:absolute;left:-74px;bottom:34px;pointer-events:none}
+.obee{display:none!important}
 #wkb{position:absolute;bottom:128px;left:30px;background:#fff;border-radius:18px;padding:5px 14px;font-size:21px;font-weight:700;color:#5a3a24;box-shadow:0 3px 8px rgba(90,58,36,.2);white-space:nowrap;pointer-events:none;opacity:0;transform:scale(.6);transition:.18s;direction:rtl}
 #wkb.on{opacity:1;transform:scale(1)}
 #wkb:after{content:'';position:absolute;left:26px;bottom:-8px;border:8px solid transparent;border-top-color:#fff;border-bottom:0}
@@ -1185,15 +1187,16 @@ body.wkon #app{padding-bottom:170px}
 `;
 document.head.appendChild(st);
 
+window.orbit=function(){};
 const cut=(g,m)=>g.slice(g.indexOf(m));
 function build(c){
   let legs,rest,book;
   if(c==='boy'){
     legs=`<g class="lg" style="transform-origin:66px 214px"><rect x="58" y="212" width="16" height="22" rx="7" fill="#fbd9bb"/><path d="M50 238q12-12 26 0v6H50z" fill="#6f93c9"/></g><g class="lg b" style="transform-origin:94px 214px"><rect x="86" y="212" width="16" height="22" rx="7" fill="#fbd9bb"/><path d="M84 238q12-12 26 0v6H84z" fill="#6f93c9"/></g>`;
-    rest=cut(boyG,'<path d="M114 128');
+    rest=cut(boyG,'<path d="M114 128').replace(/<path d="M46 130Q28 112 40 96"[^>]*\/><circle cx="40" cy="94"[^>]*\/>/,'<path d="M46 130Q26 150 32 174" stroke="#fbd9bb" stroke-width="14" stroke-linecap="round" fill="none"/>');
   }else{
     legs=`<g class="lg" style="transform-origin:64px 192px"><rect x="56" y="190" width="16" height="42" rx="7" fill="#fbd9bb"/><ellipse cx="62" cy="236" rx="18" ry="9" fill="#f2a58c"/></g><g class="lg b" style="transform-origin:96px 192px"><rect x="88" y="190" width="16" height="42" rx="7" fill="#fbd9bb"/><ellipse cx="98" cy="236" rx="18" ry="9" fill="#f2a58c"/></g>`;
-    rest=cut(girlG,'<path d="M112 128');
+    rest=cut(girlG,'<path d="M112 128').replace(/<path d="M48 128Q26 118 28 92"[^>]*\/><circle cx="28" cy="90"[^>]*\/>/,'<path d="M48 128Q26 150 32 174" stroke="#fbd9bb" stroke-width="14" stroke-linecap="round" fill="none"/>');
   }
   const cov=c==='boy'?'#e8825a':'#e86f9a';
   book=`<g class="bk"><path d="M34 150L80 160L126 150L128 196L80 206L32 196Z" fill="${cov}"/><path d="M38 150Q60 146 80 158V202Q60 192 38 196Z" fill="#fffdf6"/><path d="M122 150Q100 146 80 158V202Q100 192 122 196Z" fill="#fffdf6"/><g stroke="#d9cdb8" stroke-width="2.5" stroke-linecap="round"><path d="M46 164Q60 160 72 168M46 176Q60 172 72 180M46 188Q60 184 72 192"/><path d="M114 164Q100 160 88 168M114 176Q100 172 88 180"/></g><path class="pg" d="M80 158Q100 146 122 150V196Q100 192 80 202Z" fill="#fffdf6" stroke="#e6dcc6" stroke-width="2"/><path d="M80 158V202" stroke="#c9bda4" stroke-width="3"/><circle cx="32" cy="176" r="9" fill="#fbd9bb"/><circle cx="128" cy="176" r="9" fill="#fbd9bb"/></g>`;
@@ -1210,7 +1213,7 @@ const ANT={
   look:{cls:'a-look',ms:1800,fly:1,say:'يا سلام'}
 };
 const mute=()=>{try{return (S('set')||{}).v===0}catch(e){return false}};
-function blip(f0,n){ if(mute())return;try{const A=window.__wkc||(window.__wkc=new (window.AudioContext||window.webkitAudioContext)());if(A.state!=='running'){A.resume&&A.resume();return}
+function blip(f0,n){ if(mute())return;try{const A=window.__wkc||(window.__wkc=new (window.AudioContext||window.webkitAudioContext)());if(A.state!=='running'){A.resume&&A.resume()}
   for(let i=0;i<n;i++){const o=A.createOscillator(),g=A.createGain(),t=A.currentTime+i*.11;o.type='sine';o.frequency.setValueAtTime(f0*(1+(i%2)*.35),t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.1);o.connect(g);g.connect(A.destination);o.start(t);o.stop(t+.12)}}catch(e){}}
 function bub(h){const b=W&&W.querySelector('#wkb');if(!b)return;b.innerHTML=h;b.classList.add('on');clearTimeout(tbub);tbub=setTimeout(()=>b.classList.remove('on'),1500)}
 const NOTE='<svg width="22" height="24" viewBox="0 0 22 24"><path d="M8 3v13.5a3.5 3 0 1 1-2-2.7V6l12-2.5v10.3a3.5 3 0 1 1-2-2.7V3z" fill="#e86f9a"/></svg>';
@@ -1239,11 +1242,11 @@ function pickAntic(){const ks=Object.keys(ANT).filter(k=>k!==last);return ks[Mat
 function frame(now){
   if(!W)return;loop=requestAnimationFrame(frame);
   const dt=Math.min(.05,(now-t0)/1000);t0=now;
-  const vw=document.documentElement.clientWidth,wd=W.offsetWidth;
+  const M=78,vw=document.documentElement.clientWidth,wd=W.offsetWidth;
   if(!busy){
     X+=dir*dt*58;
-    if(X>vw-wd-4){X=vw-wd-4;dir=-1}
-    if(X<4){X=4;dir=1}
+    if(X>vw-wd-M){X=vw-wd-M;dir=-1}
+    if(X<M){X=M;dir=1}
     W.querySelector('.wki').classList.toggle('fl',dir<0);
     if(now>nextAt)antic(pickAntic());
   }
@@ -1254,12 +1257,13 @@ window.wkStart=function(){
   wkStop();
   const c=(typeof kid!=='undefined'&&kid&&kid.c==='boy')?'boy':'girl';
   W=document.createElement('div');W.id='wk';
-  W.innerHTML=`<div class="wki"><div class="wb">${build(c)}</div></div><div id="wkb"></div><div id="wkbf"></div>`;
+  W.innerHTML=`<div class="wki"><div class="wb">${build(c)}</div><div class="wbee">${bee(100)}</div></div><div id="wkb"></div><div id="wkbf"></div>`;
   document.body.appendChild(W);document.body.classList.add('wkon');
-  X=Math.random()*60+10;dir=1;busy=false;last='';nextAt=performance.now()+3500;t0=performance.now();
+  X=90+Math.random()*60;dir=1;busy=false;last='';nextAt=performance.now()+3500;t0=performance.now();
   W.querySelector('.wki').addEventListener('click',e=>{e.stopPropagation();if(busy)return;blip(700,4);antic(pickAntic())});
   loop=requestAnimationFrame(frame);
 };
+document.addEventListener('click',e=>{try{const t=e.target.closest&&e.target.closest('.tile,.btn,.ib,.qb');if(!t||t.closest('#wk'))return;blip(520+Math.random()*260,2)}catch(x){}},true);
 const _child=window.child;
 window.child=function(){const r=_child.apply(this,arguments);try{wkStart()}catch(e){console.log('wk',e)}return r};
 const _go=window.go;
