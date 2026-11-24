@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v44';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v45';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1366,12 +1366,12 @@ const st2=document.createElement('style');st2.textContent='.pc{touch-action:none
 /* puzzle v2: pieces wait in a tray at the bottom, child drags them up into the board */
 (function(){
 const st=document.createElement('style');
-st.textContent=`.pb{display:grid;grid-template-columns:repeat(2,var(--B));gap:8px;justify-content:center;margin:4px auto 18px}
+st.textContent=`.pb{direction:ltr;display:grid;grid-template-columns:repeat(2,var(--B));gap:8px;justify-content:center;margin:4px auto 18px}
 .ps{width:var(--B);height:var(--B);border-radius:20px;border:3px dashed #d8c39a;background:rgba(255,255,255,.55);position:relative;overflow:hidden;transition:background .2s,border-color .2s}
 .ps.hv{background:rgba(242,185,75,.28);border-color:#f2b94b}
 .ps .gh{position:absolute;inset:0;opacity:.16}
 .ps.ok{border:3px solid #fff;box-shadow:0 6px 14px rgba(90,58,36,.16);background:#fff8ea}
-.pt{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:14px 10px;border-radius:26px;background:rgba(207,227,184,.55);min-height:calc(var(--B) + 28px)}
+.pt{direction:ltr;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:14px 10px;border-radius:26px;background:rgba(207,227,184,.55);min-height:calc(var(--B) + 28px)}
 .pp{width:var(--B);height:var(--B);border-radius:20px;background:#fff8ea;border:3px solid #fff;box-shadow:0 8px 18px rgba(90,58,36,.22);touch-action:none;cursor:grab;position:relative;-webkit-user-select:none;user-select:none;transition:transform .15s}
 .pp svg{width:100%;height:100%;display:block;border-radius:17px;pointer-events:none}
 .pp.sel{transform:scale(1.06);box-shadow:0 0 0 5px #f2b94b,0 10px 20px rgba(90,58,36,.25)}
