@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v52';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v53';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1753,6 +1753,51 @@ window.lwWelcome=function(){const c=getP(),IA=window.__IA||{};
 /* boot: show the welcome page when opened from a purchase link */
 const _b=window.LWBOOT;
 window.LWBOOT=async function(){await _b.apply(this,arguments);try{if(getP()&&typeof LWON!=='undefined'&&LWON&&!(typeof LWU!=='undefined'&&LWU&&typeof LWRO==='function'&&!LWRO()))go('lwWelcome')}catch(e){}};
+})();
+
+/* nicer post-purchase welcome page */
+(function(){
+const css=document.createElement('style');css.textContent=`
+.wv{position:relative}
+.wconf{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.wconf i{position:absolute;top:-30px;width:14px;height:14px;border-radius:4px;opacity:.9;animation:wfall linear infinite}
+@keyframes wfall{to{transform:translateY(112vh) rotate(540deg)}}
+.wlogo{animation:wpop .8s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes wpop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.wcard{position:relative;z-index:2;background:linear-gradient(#fffaf0,#fff3da);border-radius:32px;border:3px solid #f2d79a;padding:22px 18px 20px;text-align:center;box-shadow:0 14px 34px rgba(120,80,30,.18);animation:wup .6s .15s ease both}
+@keyframes wup{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.wthx{margin:0;font-size:30px;color:#5a3a24}
+.wsub{margin:4px 0 0;font-size:19px;font-weight:700;color:#8a6a48}
+.wtk{position:relative;margin:18px 4px 6px;background:#fff;border-radius:22px;padding:14px 10px 12px;border:3px dashed #f2b94b}
+.wtk:before,.wtk:after{content:"";position:absolute;top:50%;width:26px;height:26px;margin-top:-13px;border-radius:50%;background:#fff3da;border:3px solid #f2d79a}
+.wtk:before{right:-16px;border-left-color:transparent;border-bottom-color:transparent;transform:rotate(45deg)}
+.wtk:after{left:-16px;border-right-color:transparent;border-top-color:transparent;transform:rotate(45deg)}
+.wtk small{display:block;font-size:16px;font-weight:700;color:#8a6a48;margin-bottom:4px}
+.wtk .wcode{border:0;margin:0;padding:6px 4px;background:none}
+.wcp{margin-top:12px;display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:18px;border:0;background:#fff;color:#5a3a24;font-weight:800;font-size:20px;font-family:inherit;box-shadow:0 4px 0 #e8d3a6,0 8px 16px rgba(120,80,30,.12);cursor:pointer}
+.wcp:active{transform:translateY(3px);box-shadow:0 1px 0 #e8d3a6}
+.wgo{margin-top:16px;display:block;width:100%;max-width:340px;margin-inline:auto;font-size:30px;font-weight:800;font-family:inherit;color:#5a3a24;border:0;border-radius:26px;padding:16px 20px;background:linear-gradient(#ffd45e,#f2a93b);box-shadow:0 6px 0 #c98a22,0 12px 22px rgba(201,138,34,.35);cursor:pointer;position:relative;overflow:hidden;animation:wpulse 2.2s ease-in-out infinite}
+.wgo:active{transform:translateY(4px);box-shadow:0 2px 0 #c98a22}
+.wgo:after{content:"";position:absolute;top:0;bottom:0;width:60px;left:-80px;background:rgba(255,255,255,.55);transform:skewX(-20deg);animation:wshine 3s ease-in-out infinite}
+@keyframes wshine{0%,60%{left:-80px}100%{left:120%}}
+@keyframes wpulse{50%{transform:scale(1.03)}}
+.wsteps{display:flex;gap:8px;margin-top:20px}
+.wsteps>div{flex:1;background:#fff;border-radius:18px;padding:10px 6px;font-size:15px;font-weight:700;color:#6a4a30;line-height:1.5}
+.wsteps b{display:flex;margin:0 auto 6px;width:30px;height:30px;border-radius:50%;background:#f2b94b;align-items:center;justify-content:center;color:#5a3a24}
+`;document.head.appendChild(css);
+const origCopy=window.lwCopyCode;
+window.lwCopyCode=async function(){await origCopy.apply(this,arguments);const b=document.getElementById('wcpb');if(b){b.firstChild.nodeValue='تم النسخ ';setTimeout(()=>{try{b.firstChild.nodeValue='نسخ الكود '}catch(e){}},1800)}};
+window.lwWelcome=function(){
+  const c=(function(){try{return localStorage.getItem('lw_pc')||''}catch(e){return ''}})(),IA=window.__IA||{};
+  const cols=['#f2b94b','#7cc25a','#f08aa5','#6ab7e8','#c9a3e8'];
+  let cf='';for(let i=0;i<22;i++)cf+=`<i style="left:${Math.random()*100}%;background:${cols[i%5]};animation-duration:${5+Math.random()*5}s;animation-delay:${-Math.random()*8}s;${i%3?'':'border-radius:50%'}"></i>`;
+  $('#app').innerHTML=`<div class="wv"><div class="wconf">${cf}</div>
+  <div class="row" style="margin-top:6px"><img class="wlogo" src="${IA.logoB||''}" alt="" style="width:min(52vw,230px);height:auto"></div>
+  <div class="wcard"><h2 class="wthx">أهلاً بك في عالمي الصغير</h2><p class="wsub">شكراً لشرائك، هذا كود التفعيل الخاص بك</p>
+  <div class="wtk"><small>كود التفعيل</small><div class="wcode" id="wcode">${c}</div></div>
+  <button class="wcp" id="wcpb" onclick="lwCopyCode()">نسخ الكود ${ic('file',22)}</button><p id="wcm" class="sm" style="min-height:22px;font-weight:700;margin:6px 0 0"></p>
+  <button class="wgo" onclick="lwStartFromCode()">هيا بنا</button>
+  <div class="wsteps"><div><b>1</b>انسخي الكود واحتفظي به</div><div><b>2</b>اضغطي "هيا بنا"</div><div><b>3</b>أنشئي حسابك والكود يتفعّل تلقائياً</div></div></div></div>`};
 })();
 
 /* add-to-home-screen helper (mother side, silent) */
