@@ -1097,7 +1097,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v18';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v19';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1139,6 +1139,132 @@ rows.forEach(([y,xs])=>xs.forEach(x=>{const f=k++%2?'zz_gp2':'zz_gp1';bs+=`<circ
 ART.grapes=`<defs>${rg('zz_gp1',[[0,'#cba3ee'],[.45,'#8a4fc0'],[1,'#4a2a78']])}${rg('zz_gp2',[[0,'#b9a8f0'],[.45,'#6f55bd'],[1,'#3b2a78']])}${gr('zz_gl','#8ccf63','#4b8a3c')}</defs>${sh(24)}<g transform="translate(5 9) scale(.9)"><path d="M22 40C22 28 40 22 50 22C62 22 80 28 78 42C76 58 62 66 56 80C54 88 46 88 44 80C38 66 22 58 22 40Z" fill="#2c1550" opacity=".28"/>${bs}</g><path d="M50 31C50 21 54 12 62 8" stroke="#6b4328" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M60 11C68 6 76 10 74 16C72 21 66 18 68 14" stroke="#6b9a3c" stroke-width="1.8" fill="none" stroke-linecap="round"/><g transform="translate(8 -3) scale(.8)">${leaf('M20 22C16 14 22 7 29 9C31 3 41 3 43 9C49 7 55 13 51 20C55 25 50 31 43 29C40 34 31 33 28 29C22 31 17 27 20 22Z','zz_gl','M35 28L35 12M35 24L25 14M35 24L45 14')}</g>`;
 })();
 ART.car='<defs><linearGradient id="zz_car" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f06a5f"/><stop offset="1" stop-color="#c93a32"/></linearGradient></defs><ellipse cx="50" cy="90" rx="42" ry="4" fill="#000" opacity=".15"/><path d="M6 64L15 41Q19 31 31 31H69Q81 31 85 41L94 64V76H6Z" fill="url(#zz_car)" stroke="#8f241f" stroke-width="2.5" stroke-linejoin="round"/><path d="M22 40H46V56H15Z" fill="#d6ecf8" stroke="#8f241f" stroke-width="2"/><path d="M54 40H76L85 56H54Z" fill="#d6ecf8" stroke="#8f241f" stroke-width="2"/><path d="M50 40V66" stroke="#8f241f" stroke-width="2"/><path d="M12 62H90" stroke="#fff" stroke-width="2.4" opacity=".4"/><circle cx="90" cy="62" r="4.5" fill="#fff6b0" stroke="#c9a022" stroke-width="1.4"/><rect x="6" y="70" width="10" height="5" rx="2" fill="#8f241f"/><circle cx="28" cy="78" r="11.5" fill="#33241a"/><circle cx="28" cy="78" r="5.5" fill="#d9d9d9"/><circle cx="72" cy="78" r="11.5" fill="#33241a"/><circle cx="72" cy="78" r="5.5" fill="#d9d9d9"/>';
+
+/* WALKER: the child's character walks along the bottom reading a book, with funny antics */
+(function(){
+const st=document.createElement('style');
+st.textContent=`
+body.wkon #app{padding-bottom:170px}
+#wk{position:fixed;left:0;bottom:2px;height:150px;width:100px;z-index:8;pointer-events:none;direction:ltr;will-change:transform}
+#wk .wki{position:absolute;left:0;bottom:0;pointer-events:auto;cursor:pointer;transform-origin:50% 100%;-webkit-tap-highlight-color:transparent}
+#wk .wki.fl{transform:scaleX(-1)}
+#wk .wb{display:block;transform-origin:50% 100%;animation:wkbob .42s ease-in-out infinite alternate}
+#wk.stop .wb{animation:none}
+@keyframes wkbob{from{transform:translateY(0) rotate(-2.5deg)}to{transform:translateY(-6px) rotate(2.5deg)}}
+#wk .lg{transform-box:view-box;animation:wklg .42s ease-in-out infinite alternate}
+#wk .lg.b{animation-direction:alternate-reverse}
+#wk.stop .lg{animation:none}
+@keyframes wklg{from{transform:rotate(-20deg)}to{transform:rotate(20deg)}}
+#wk .bk{transform-box:view-box;transform-origin:80px 176px}
+#wk .pg{transform-box:view-box;transform-origin:80px 168px;animation:wkpg 1.6s ease-in-out infinite}
+#wk.stop .pg{animation:none}
+@keyframes wkpg{0%,45%{transform:scaleX(1)}60%{transform:scaleX(.05)}75%,100%{transform:scaleX(-1)}}
+#wk .wb.a-jump{animation:wkjump .55s ease-out 2}
+@keyframes wkjump{0%,100%{transform:translateY(0)}45%{transform:translateY(-70px) rotate(-6deg)}}
+#wk .wb.a-trip{animation:wktrip 2.6s ease-in-out 1 forwards}
+@keyframes wktrip{0%{transform:none}22%{transform:rotate(14deg) translateX(8px)}42%,70%{transform:rotate(84deg) translate(-4px,10px)}90%{transform:rotate(-6deg) scale(1.06,.94)}100%{transform:none}}
+#wk .wb.a-dance{animation:wkdance .38s ease-in-out 8 alternate}
+@keyframes wkdance{from{transform:rotate(-13deg) translateY(0)}to{transform:rotate(13deg) translateY(-12px)}}
+#wk .wb.a-peek{animation:wkpeek 2.8s ease-in-out 1}
+@keyframes wkpeek{0%,62%{transform:none}70%{transform:translateY(-62px) scale(1.04)}80%{transform:none}88%{transform:translateY(-40px)}100%{transform:none}}
+#wk .wb.a-sneeze{animation:wksn 2.2s ease-in-out 1}
+@keyframes wksn{0%{transform:none}30%{transform:rotate(-14deg) translateY(-6px)}45%{transform:rotate(18deg) scale(1.08,.9)}60%{transform:rotate(4deg)}100%{transform:none}}
+#wk .wb.a-look{animation:wkjump .55s ease-out 3}
+#wk .a-peek .bk{animation:wkbkpeek 2.8s ease-in-out 1}
+@keyframes wkbkpeek{0%,15%{transform:none}35%,60%{transform:translateY(-92px) scale(1.5)}75%,100%{transform:none}}
+#wk .a-sneeze .bk,#wk .a-trip .bk{animation:wkbkfly 2.2s ease-in-out 1}
+@keyframes wkbkfly{0%,38%{transform:none}55%{transform:translateY(-150px) rotate(300deg)}85%{transform:translateY(-10px) rotate(360deg)}100%{transform:none}}
+#wk .a-jump .bk{animation:wkbkup .55s ease-out 2}
+@keyframes wkbkup{45%{transform:translateY(-34px) rotate(-12deg)}}
+#wkb{position:absolute;bottom:128px;left:30px;background:#fff;border-radius:18px;padding:5px 14px;font-size:21px;font-weight:700;color:#5a3a24;box-shadow:0 3px 8px rgba(90,58,36,.2);white-space:nowrap;pointer-events:none;opacity:0;transform:scale(.6);transition:.18s;direction:rtl}
+#wkb.on{opacity:1;transform:scale(1)}
+#wkb:after{content:'';position:absolute;left:26px;bottom:-8px;border:8px solid transparent;border-top-color:#fff;border-bottom:0}
+#wkbf{position:absolute;left:0;top:0;width:54px;height:54px;pointer-events:none;z-index:9;display:none}
+#wkbf svg{width:100%;height:100%;animation:wkfl .25s ease-in-out infinite alternate}
+@keyframes wkfl{from{transform:scaleX(1)}to{transform:scaleX(.45)}}
+`;
+document.head.appendChild(st);
+
+const cut=(g,m)=>g.slice(g.indexOf(m));
+function build(c){
+  let legs,rest,book;
+  if(c==='boy'){
+    legs=`<g class="lg" style="transform-origin:66px 214px"><rect x="58" y="212" width="16" height="22" rx="7" fill="#fbd9bb"/><path d="M50 238q12-12 26 0v6H50z" fill="#6f93c9"/></g><g class="lg b" style="transform-origin:94px 214px"><rect x="86" y="212" width="16" height="22" rx="7" fill="#fbd9bb"/><path d="M84 238q12-12 26 0v6H84z" fill="#6f93c9"/></g>`;
+    rest=cut(boyG,'<path d="M114 128');
+  }else{
+    legs=`<g class="lg" style="transform-origin:64px 192px"><rect x="56" y="190" width="16" height="42" rx="7" fill="#fbd9bb"/><ellipse cx="62" cy="236" rx="18" ry="9" fill="#f2a58c"/></g><g class="lg b" style="transform-origin:96px 192px"><rect x="88" y="190" width="16" height="42" rx="7" fill="#fbd9bb"/><ellipse cx="98" cy="236" rx="18" ry="9" fill="#f2a58c"/></g>`;
+    rest=cut(girlG,'<path d="M112 128');
+  }
+  const cov=c==='boy'?'#e8825a':'#e86f9a';
+  book=`<g class="bk"><path d="M34 150L80 160L126 150L128 196L80 206L32 196Z" fill="${cov}"/><path d="M38 150Q60 146 80 158V202Q60 192 38 196Z" fill="#fffdf6"/><path d="M122 150Q100 146 80 158V202Q100 192 122 196Z" fill="#fffdf6"/><g stroke="#d9cdb8" stroke-width="2.5" stroke-linecap="round"><path d="M46 164Q60 160 72 168M46 176Q60 172 72 180M46 188Q60 184 72 192"/><path d="M114 164Q100 160 88 168M114 176Q100 172 88 180"/></g><path class="pg" d="M80 158Q100 146 122 150V196Q100 192 80 202Z" fill="#fffdf6" stroke="#e6dcc6" stroke-width="2"/><path d="M80 158V202" stroke="#c9bda4" stroke-width="3"/><circle cx="32" cy="176" r="9" fill="#fbd9bb"/><circle cx="128" cy="176" r="9" fill="#fbd9bb"/></g>`;
+  return `<svg viewBox="0 0 160 245" style="height:140px;width:auto;display:block;overflow:visible" aria-hidden="true">${legs}${rest}${book}</svg>`;
+}
+
+let W=null,X=0,dir=1,busy=false,last='',nextAt=0,t0=0,loop=0,tbub=0,tant=0;
+const ANT={
+  jump:{cls:'a-jump',ms:1200,say:'هيييه'},
+  trip:{cls:'a-trip',ms:2700,say:'أوه!',after:'هاهاها'},
+  dance:{cls:'a-dance',ms:3200,say:null,note:1},
+  peek:{cls:'a-peek',ms:2900,after:'بووو!'},
+  sneeze:{cls:'a-sneeze',ms:2300,say:null,mid:'هاتشي!'},
+  look:{cls:'a-look',ms:1800,fly:1,say:'يا سلام'}
+};
+const mute=()=>{try{return (S('set')||{}).v===0}catch(e){return false}};
+function blip(f0,n){ if(mute())return;try{const A=window.__wkc||(window.__wkc=new (window.AudioContext||window.webkitAudioContext)());if(A.state!=='running'){A.resume&&A.resume();return}
+  for(let i=0;i<n;i++){const o=A.createOscillator(),g=A.createGain(),t=A.currentTime+i*.11;o.type='sine';o.frequency.setValueAtTime(f0*(1+(i%2)*.35),t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.09,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.1);o.connect(g);g.connect(A.destination);o.start(t);o.stop(t+.12)}}catch(e){}}
+function bub(h){const b=W&&W.querySelector('#wkb');if(!b)return;b.innerHTML=h;b.classList.add('on');clearTimeout(tbub);tbub=setTimeout(()=>b.classList.remove('on'),1500)}
+const NOTE='<svg width="22" height="24" viewBox="0 0 22 24"><path d="M8 3v13.5a3.5 3 0 1 1-2-2.7V6l12-2.5v10.3a3.5 3 0 1 1-2-2.7V3z" fill="#e86f9a"/></svg>';
+function antic(name){
+  if(!W||busy)return;const a=ANT[name],wb=W.querySelector('.wb');
+  busy=true;last=name;W.classList.add('stop');
+  wb.className='wb';void wb.offsetWidth;wb.classList.add(a.cls);
+  if(a.say)bub(a.say);
+  if(a.note)bub(NOTE+' '+NOTE);
+  if(a.mid)setTimeout(()=>{bub(a.mid);blip(260,2)},650);
+  if(a.fly)flyButterfly();
+  if(name==='trip'||name==='jump')blip(name==='jump'?520:300,name==='jump'?3:2);
+  if(name==='dance')blip(440,6);
+  if(a.after)setTimeout(()=>{bub(a.after);blip(620,4)},a.ms-900);
+  clearTimeout(tant);
+  tant=setTimeout(()=>{if(!W)return;wb.className='wb';W.classList.remove('stop');busy=false;nextAt=performance.now()+4500+Math.random()*4500},a.ms);
+}
+function flyButterfly(){
+  const f=W.querySelector('#wkbf');if(!f)return;f.style.display='block';const t=performance.now();
+  const col=['#f08aa9','#7fb7e6','#f5cf5a'][Math.floor(Math.random()*3)];
+  f.innerHTML=`<svg viewBox="0 0 54 54"><ellipse cx="17" cy="20" rx="14" ry="11" fill="${col}" transform="rotate(-25 17 20)"/><ellipse cx="37" cy="20" rx="14" ry="11" fill="${col}" transform="rotate(25 37 20)"/><ellipse cx="19" cy="36" rx="9" ry="8" fill="${col}" opacity=".85"/><ellipse cx="35" cy="36" rx="9" ry="8" fill="${col}" opacity=".85"/><rect x="25" y="14" width="4" height="30" rx="2" fill="#5a3a24"/></svg>`;
+  const go2=()=>{const k=(performance.now()-t)/1800;if(k>=1||!W){f.style.display='none';return}
+    f.style.transform=`translate(${-20+k*190}px,${40+Math.sin(k*9)*26-k*10}px)`;requestAnimationFrame(go2)};go2();
+}
+function pickAntic(){const ks=Object.keys(ANT).filter(k=>k!==last);return ks[Math.floor(Math.random()*ks.length)]}
+function frame(now){
+  if(!W)return;loop=requestAnimationFrame(frame);
+  const dt=Math.min(.05,(now-t0)/1000);t0=now;
+  const vw=document.documentElement.clientWidth,wd=W.offsetWidth;
+  if(!busy){
+    X+=dir*dt*58;
+    if(X>vw-wd-4){X=vw-wd-4;dir=-1}
+    if(X<4){X=4;dir=1}
+    W.querySelector('.wki').classList.toggle('fl',dir<0);
+    if(now>nextAt)antic(pickAntic());
+  }
+  W.style.transform=`translateX(${X}px)`;
+}
+window.wkStop=function(){cancelAnimationFrame(loop);clearTimeout(tant);clearTimeout(tbub);if(W){W.remove();W=null}busy=false;document.body.classList.remove('wkon')};
+window.wkStart=function(){
+  wkStop();
+  const c=(typeof kid!=='undefined'&&kid&&kid.c==='boy')?'boy':'girl';
+  W=document.createElement('div');W.id='wk';
+  W.innerHTML=`<div class="wki"><div class="wb">${build(c)}</div></div><div id="wkb"></div><div id="wkbf"></div>`;
+  document.body.appendChild(W);document.body.classList.add('wkon');
+  X=Math.random()*60+10;dir=1;busy=false;last='';nextAt=performance.now()+3500;t0=performance.now();
+  W.querySelector('.wki').addEventListener('click',e=>{e.stopPropagation();if(busy)return;blip(700,4);antic(pickAntic())});
+  loop=requestAnimationFrame(frame);
+};
+const _child=window.child;
+window.child=function(){const r=_child.apply(this,arguments);try{wkStart()}catch(e){console.log('wk',e)}return r};
+const _go=window.go;
+window.go=function(v){if(v!=='child')try{wkStop()}catch(e){}return _go.apply(this,arguments)};
+})();
 
 intro();LWBOOT();
 </script></body></html>
