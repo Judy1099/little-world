@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8">
-<meta name="theme-color" content="#bfe0f2"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#bfe0f2"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="عالمي الصغير"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" type="image/png" href="icon-192.png"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Me & My Little World</title>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Fredoka:wght@500;700&family=Amiri:wght@400;700&family=Tajawal:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v35';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v36';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1470,6 +1470,111 @@ window.drop=function(i){if(sel===null)return;
   else{wrong();setTimeout(()=>{if(document.querySelector('.hole'))shapes(SB,false)},1100)}};
 })();
 
+/* ===== App feel + mother dashboard (silent) ===== */
+(function(){
+const st=document.createElement('style');st.textContent=`
+html{overscroll-behavior-y:none}
+body{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;padding-top:env(safe-area-inset-top,0px)}
+input,textarea,select{-webkit-user-select:text;user-select:text}
+*{touch-action:manipulation}
+body.mtab{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
+.mh{position:relative;overflow:hidden;border-radius:34px;padding:20px 18px 18px;margin:8px 0 14px;color:#4a2d1a;background:linear-gradient(135deg,#fbe3a4 0%,#f6c862 55%,#efae45 100%);box-shadow:0 16px 34px rgba(150,98,20,.28)}
+.mh:before,.mh:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.28)}
+.mh:before{width:170px;height:170px;left:-50px;top:-60px}.mh:after{width:110px;height:110px;right:-30px;bottom:-40px}
+.mh>*{position:relative;z-index:1}
+.mh .hi{font-size:15px;font-weight:700;opacity:.8}.mh h1{margin:2px 0 4px;font-size:30px;font-family:'Rubik',sans-serif}
+.mh .dt{font-size:14px;font-weight:500;opacity:.8}
+.mh .pill{display:inline-block;margin-top:10px;background:rgba(255,255,255,.55);border-radius:99px;padding:6px 14px;font-weight:700;font-size:14px}
+.mh .av{background:rgba(255,255,255,.5);border-radius:50%;padding:6px;line-height:0}
+.stk{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.stk .fl{font-size:44px;font-weight:800;color:#e0702a;font-family:'Rubik',sans-serif;line-height:1}
+.dots{display:flex;gap:8px;margin-top:8px}
+.dots i{width:30px;height:30px;border-radius:50%;background:#eadcc0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:700;color:#8a6a4a}
+.dots i.on{background:linear-gradient(135deg,#f6c862,#e8892e);color:#fff;box-shadow:0 4px 10px rgba(232,137,46,.4)}
+.dots i.td{outline:2px dashed #c8942a;outline-offset:2px}
+.tipc{background:linear-gradient(135deg,#e6f3d6,#d3e8f4);position:relative}
+.tipc .tl{font-size:13px;font-weight:800;color:#4f8a3c;letter-spacing:0}
+.tipc p{font-size:19px;line-height:1.7;margin:6px 0 10px;font-weight:500}
+.tipc button{border:0;background:rgba(255,255,255,.7);border-radius:99px;padding:8px 16px;font-family:inherit;font-weight:700;color:#5a3a24;font-size:14px}
+.bdg{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:12px;margin-top:10px}
+.bd{text-align:center;font-size:12.5px;font-weight:700;line-height:1.35}
+.bd svg{display:block;margin:0 auto 4px}
+.bd.lk{opacity:.55;filter:grayscale(.85)}
+.mpol{background:#fff;padding:10px 10px 30px;border-radius:6px;box-shadow:0 10px 22px rgba(90,58,36,.22);transform:rotate(-2deg);max-width:300px;margin:8px auto 0;text-align:center;font-weight:700}
+.mpol img{width:100%;display:block;border-radius:3px;background:#f3ead6}
+.mmore{position:fixed;inset:0;z-index:9990;background:rgba(60,38,20,.35);display:flex;align-items:flex-end;animation:mfade .2s ease}
+.mmore>div{width:100%;max-height:82vh;overflow:auto;background:#fff8ea;border-radius:30px 30px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));animation:mup .3s cubic-bezier(.2,.9,.3,1)}
+.mmore .gr{width:46px;height:5px;border-radius:9px;background:#d9c8a6;margin:0 auto 12px}
+@keyframes mup{from{transform:translateY(100%)}}@keyframes mfade{from{opacity:0}}
+#mtb{position:fixed;left:0;right:0;bottom:0;z-index:9980;display:flex;justify-content:space-around;background:rgba(255,248,234,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:26px 26px 0 0;padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 26px rgba(90,58,36,.16)}
+#mtb button{flex:1;border:0;background:none;font-family:'Rubik',sans-serif;font-weight:700;font-size:12px;color:#8a6a4a;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;max-width:110px}
+#mtb button span{display:flex;width:52px;height:30px;border-radius:16px;align-items:center;justify-content:center;transition:background .25s,transform .25s}
+#mtb button.on{color:#b27a1c}#mtb button.on span{background:#f6d27c;transform:translateY(-2px)}
+.inst{background:#fff4d6}.inst ol{margin:6px 0 8px;padding-inline-start:22px;line-height:1.9;font-size:16px}
+@media print{#mtb,.mmore{display:none!important}body.mtab{padding-bottom:0}}
+`;document.head.appendChild(st);
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol)){window.addEventListener('load',()=>{try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}})}
+
+const TIPS=['اقرئي له قصة قصيرة قبل النوم كل يوم، حتى خمس دقائق تصنع فرقاً في لغته.','عندما يخطئ، قولي: "جرّب مرة ثانية"، وصفّقي عند المحاولة وليس فقط عند الصواب.','اجعلي له ركناً صغيراً ثابتاً للّعب، فالمكان المألوف يمنحه هدوءاً وتركيزاً.','اسأليه عن لون الأشياء أثناء المشي أو في المطبخ، فالتعلّم أسهل داخل الحياة اليومية.','أوقفي الشاشات قبل النوم بساعة، وضعي مكانها حكاية أو أغنية هادئة.','دعيه يساعدك في أعمال صغيرة: ترتيب الملاعق، أو سقاية نبتة. هذا يبني ثقته.','العدّ في الحياة أمتع: عدّي الدرجات، وحبّات التمر، وأصابع اليد.','اتركي له وقتاً ليُكمل جملته دون مقاطعة، حتى لو طال الصمت قليلاً.','سمّي مشاعره بصوت هادئ: "أنت زعلان لأن اللعبة انكسرت". هذا يعلّمه التعبير.','التلوين خارج الخطوط ليس خطأ، هو طفل يتعلم حرية الحركة.','كرّري الكلمة الجديدة ثلاث مرات في أوقات مختلفة من اليوم، فهكذا تثبت.','أعطيه خيارين فقط ليختار بينهما، فالخيارات الكثيرة تُربك الصغار.','اجلسي على مستواه عندما تكلميه، والتقي بعينيه ثم قولي ما تريدين.','الروتين البسيط يطمئنه: استيقاظ، فطور، لعب، قصة، نوم، بالترتيب نفسه.','دعيه يسمع القرآن بصوت منخفض أثناء اللعب الهادئ، فالأذن تتعلّم دون جهد.','امدحي الجهد: "أعجبني أنك لم تستسلم" أقوى من "أنت ذكي".','العجين واللعب بالرمل والماء يقوّون أصابعه استعداداً للكتابة لاحقاً.','اطلبي منه أن يعلّمك شيئاً تعلّمه اليوم، فشرحه لك يرسّخه في ذهنه.','الملل ليس عدواً، قليل منه يوقظ الخيال والابتكار.','غنّي له أغنية بسيطة وأنتما تلبسان الحذاء، فتتحول الفوضى إلى لعبة.','اجعلي وقت الأكل هادئاً بلا شاشات، فيتعلّم الانتباه لجسده وشبعه.','عندما يرفض شيئاً، أعطيه دقيقة ثم كرّري الطلب بلطف قبل أي حل آخر.','اكتبي له اسمه بخط جميل وعلّقيه في غرفته، فالطفل يفرح برؤية اسمه.','اطلبي منه وصف الصورة في الكتاب: ماذا ترى؟ ماذا سيحدث بعد ذلك؟','الحضن الطويل بعد يوم متعب يعدل ما لا تعدله الكلمات.','لا تقارني تقدّمه بغيره، فلكل طفل إيقاعه الخاص في التعلم.','دعيه يختار قصة اليوم بنفسه، فهذا يحبّب إليه الكتب.','حرّكي جسمه قبل الجلوس للنشاط: قفزات صغيرة وتمطّط، ثم يصبح تركيزه أفضل.','ضعي ألعابه في سلال بصور لتسهل عليه إرجاعها بنفسه.','قبل النوم اسألي: ما أجمل شيء حصل اليوم؟ وأجيبي أنتِ أيضاً.','كوني قدوة: يراكِ تقرئين فيتعلّم أن القراءة شيء جميل.'];
+const BD=[
+['first','أول نجمة',c=>c.n>=1,'star','#f2b94b'],
+['s25','٢٥ نجمة',c=>c.n>=25,'star','#e8892e'],
+['s100','١٠٠ نجمة',c=>c.n>=100,'star','#d9534f'],
+['d3','٣ أيام متتالية',c=>c.st>=3,'calendar','#4a90d9'],
+['d7','أسبوع كامل',c=>c.st>=7,'calendar','#9a7fd0'],
+['q1','أول سورة',c=>c.q>=1,'ear','#6fae66'],
+['q3','٣ سور',c=>c.q>=3,'book','#3f9a7a'],
+['maj','درس المجلس',c=>c.maj>=1,'speaker','#c8942a'],
+['art','أول تلوين',c=>c.art>=1,'camera','#e58aa0'],
+['stk','٣ ملصقات',c=>c.u>=3,'file','#e5667a'],
+['fr','فواكه ممتازة',c=>c.f>=80,'check','#7cc25a'],
+['col','ألوان ممتازة',c=>c.c>=80,'check','#4aa6d9']];
+const iso=d=>d.toISOString().slice(0,10);
+function streak(d){let n=0;const t=new Date();if(!(d[iso(t)]>0))t.setDate(t.getDate()-1);while(d[iso(t)]>0){n++;t.setDate(t.getDate()-1)}return n}
+function medal(c,ic_,on){const id='m'+Math.random().toString(36).slice(2,7);return `<svg width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${on?'#fff3c4':'#e6e0d2'}"/><stop offset="1" stop-color="${on?c:'#bdb4a2'}"/></linearGradient></defs><path d="M20 2h8l4 14h-8zM44 2h-8l-4 14h8z" fill="${on?c:'#bdb4a2'}" opacity=".7"/><circle cx="32" cy="38" r="22" fill="url(#${id})" stroke="${on?c:'#bdb4a2'}" stroke-width="3"/><circle cx="32" cy="38" r="16" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"/><g transform="translate(20 26)">${ic(on?ic_:'lock',24,on?'#fff':'#9a8f7c')}</g></svg>`}
+function count(){document.querySelectorAll('[data-n]').forEach(e=>{const t=+e.dataset.n,t0=performance.now();(function f(n){const p=Math.min(1,(n-t0)/800);e.textContent=Math.round(t*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)})(t0)})}
+let tipI=-1;
+window.mmTip=function(){tipI=(tipI+1)%TIPS.length;const e=document.getElementById('tipt');if(e)e.textContent=TIPS[tipI]};
+window.mmIns=function(){try{localStorage.setItem('lw_ins','1')}catch(e){}const e=document.getElementById('inst');if(e)e.remove()};
+const standalone=()=>window.navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+const insDone=()=>{try{return localStorage.getItem('lw_ins')==='1'}catch(e){return false}};
+window.mom=function(){
+  const s=S('st')||{n:0,d:{}},pf=PROF(),pr=P(),dn=S('done')||{},days=planDaysNow(),tk=new Date();tk.setHours(0,0,0,0);
+  const pc=Math.round(Object.keys(dn).length/ORD.length*100),u=Math.min(STK.length,Math.floor(s.n/5)),td=days.find(x=>x.d>=tk)||days[days.length-1];
+  const left=Math.max(0,30-Math.floor((Date.now()-(sub?sub.start:Date.now()))/864e5));
+  const sk=streak(s.d||{}),SD=['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+  const wk=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return[SD[d.getDay()],(s.d||{})[iso(d)]||0,i==6]}),mx=Math.max(3,...wk.map(x=>x[1]));
+  const h=new Date().getHours(),hi=h<12?'صباح الخير':h<18?'مساء الخير':'مساء النور';
+  const art=getArt(),ctx={n:s.n,st:sk,q:Object.keys(pr.q).length,maj:S('maj')||0,art:art.length,u,f:pr.f[1]?Math.round(pr.f[0]/pr.f[1]*100):0,c:pr.c[1]?Math.round(pr.c[0]/pr.c[1]*100):0};
+  const earned=BD.filter(b=>b[2](ctx)).length;
+  const withImg=art.filter(a=>a&&a.s&&String(a.s).indexOf('data:')==0),mem=withImg.length?withImg[Math.floor(Math.random()*withImg.length)]:null;
+  tipI=Math.floor(Date.now()/864e5)%TIPS.length;
+  const today=new Date().toLocaleDateString('ar-SA',{weekday:'long',day:'numeric',month:'long'});
+  $('#app').innerHTML=`<div class="mh"><div class="top" style="margin:0"><div style="width:44px">${ib("go('who')",'back')}</div><div style="flex:1"></div>${bee(60)}</div>
+<div class="row" style="justify-content:space-between;align-items:center;gap:10px;flex-wrap:nowrap"><div class="av">${me(96)}</div><div style="text-align:right;flex:1;min-width:0"><div class="hi">${hi}</div><h1>${pf.name||'طفلي'}</h1><div class="dt">${today}</div><span class="pill">${left?'متبقي '+left+' يوماً في الاشتراك':'انتهى الشهر'}</span></div></div></div>
+<div class="row" style="gap:10px;align-items:stretch;margin:0 0 4px"><div class="sc"><b data-n="${s.n}">0</b>نجمة</div><div class="sc"><b data-n="${u}">0</b>ملصق</div><div class="sc"><b data-n="${ctx.q}">0</b>سورة</div><div class="sc"><b data-n="${ctx.maj}">0</b>درس مجلس</div></div>
+<div class="card"><div class="stk"><div class="fl"><span data-n="${sk}">0</span></div><div style="flex:1;min-width:140px"><h3 style="margin:0">${sk?'أيام متتالية من التعلم':'ابدئي سلسلة جديدة اليوم'}</h3><div class="sm">${sk>=3?'استمرار رائع، حافظي عليه':'يوم واحد في كل مرة يصنع عادة جميلة'}</div></div><div style="text-align:center;line-height:1.2">${ringSvg(pc)}<div class="sm" style="margin-top:-2px">إنجاز الخطة</div></div></div><div class="dots">${wk.map(x=>`<i class="${x[1]?'on':''} ${x[2]?'td':''}">${x[0].slice(0,2)}</i>`).join('')}</div></div>
+<div class="card tipc"><div class="tl">فكرة اليوم</div><p id="tipt">${TIPS[tipI]}</p><button onclick="mmTip()">فكرة أخرى</button></div>
+<div class="card"><h3 style="margin:0 0 6px">نشاط الأسبوع</h3><svg viewBox="0 0 320 130" width="100%" style="max-width:420px"><defs><linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c862"/><stop offset="1" stop-color="#e8892e"/></linearGradient></defs>${wk.map((x,i)=>{const hh=x[1]/mx*80;return`<rect x="${i*44+8}" y="${96-hh}" width="28" height="${Math.max(hh,4)}" rx="11" fill="${x[1]?'url(#bg1)':'#eadcc0'}"/>${x[1]?`<text x="${i*44+22}" y="${90-hh}" text-anchor="middle" font-size="11" font-weight="700" fill="#b27a1c" font-family="Rubik">${x[1]}</text>`:''}<text x="${i*44+22}" y="116" text-anchor="middle" font-size="10" fill="#5a3a24" font-family="Rubik">${x[0]}</text>`}).join('')}</svg></div>
+<div class="card"><h3 style="margin:0 0 6px">أنشطة اليوم</h3>${td?td.t.map((id,j)=>{const k=id+(td.i0+j),l=plabel(id);return`<label style="display:flex;align-items:center;gap:8px;margin:8px 0;font-size:18px"><input type="checkbox" style="transform:scale(1.4)" ${dn[k]?'checked':''} onchange="tgM('${k}')"><span class="ti" style="display:inline-flex">${l[0]}</span>${l[1]}</label>`}).join(''):'<p>تم إنجاز كل الأنشطة</p>'}<button class="btn w" onclick="go('plan')">${ic('calendar',22)} كل الجدول</button></div>
+<div class="card"><div class="row" style="justify-content:space-between;align-items:baseline"><h3 style="margin:0">الأوسمة</h3><span class="sm">${earned} من ${BD.length}</span></div><div class="bdg">${BD.map(b=>{const on=b[2](ctx);return`<div class="bd ${on?'':'lk'}">${medal(b[4],b[3],on)}${b[0]=='fr'&&!on?'فواكه ٨٠٪':b[0]=='col'&&!on?'ألوان ٨٠٪':b[1]}</div>`}).join('')}</div></div>
+${mem?`<div class="card"><h3 style="margin:0">ذكرى من كتابنا</h3><div class="mpol"><img src="${mem.s}" alt="">${mem.l?`<div style="margin-top:10px">${String(mem.l).replace(/[<>&]/g,'')}</div>`:''}</div></div>`:''}
+${!standalone()&&!insDone()?`<div class="card inst" id="inst"><h3 style="margin:0">ثبّتيه كتطبيق</h3><ol><li>اضغطي زر المشاركة في سفاري</li><li>اختاري "إضافة إلى الشاشة الرئيسية"</li><li>افتحيه من الأيقونة وسيظهر بملء الشاشة</li></ol><button class="btn w" onclick="mmIns()">تم، لا تُظهريه</button></div>`:''}`;
+  count();try{lwBanner()}catch(e){}
+};
+/* bottom tab bar */
+const MV=['mom','report','plan','sheets','art','book','prof','subs','settings','momstories','momsheets','momletters','lwMonth'];
+const TABS=[['home','الرئيسية','mom'],['chart','التقرير','report'],['calendar','الجدول','plan'],['book','الكتاب','book'],['gear','المزيد','more']];
+window.mmMore=function(){if(document.querySelector('.mmore'))return;const o=document.createElement('div');o.className='mmore';o.onclick=e=>{if(e.target===o)o.remove()};
+  o.innerHTML=`<div><div class="gr"></div><h3 style="margin:0 0 10px;text-align:center">كل الأقسام</h3><div class="row">${MT.map(m=>`<div class="mtile" onclick="document.querySelector('.mmore').remove();go('${m[2]}')"><span class="mi" style="background:${m[3]}">${ic(m[0],32,'#fff')}</span>${m[1]}</div>`).join('')}</div></div>`;document.body.appendChild(o)};
+function bar(v){const on=MV.indexOf(v)>=0;document.body.classList.toggle('mtab',on);let b=document.getElementById('mtb');
+  if(!on){if(b)b.remove();return}
+  const act=['mom'].includes(v)?'mom':v==='report'?'report':v==='plan'?'plan':v==='book'?'book':'more';
+  if(!b){b=document.createElement('div');b.id='mtb';b.className='noprint';document.body.appendChild(b)}
+  b.innerHTML=TABS.map(t=>`<button class="${t[2]===act?'on':''}" onclick="${t[2]==='more'?'mmMore()':`go('${t[2]}')`}"><span>${t[0]==='home'?`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg>`:ic(t[0],24)}</span>${t[1]}</button>`).join('')}
+const _g=window.go;window.go=function(v){const r=_g.apply(this,arguments);try{bar(v)}catch(e){}return r};
+})();
+
 /* ---- visual polish: depth, sheen, softer motion (no new content) ---- */
 (function(){
 const st=document.createElement('style');
@@ -1524,7 +1629,7 @@ function musicStop(){if(!M)return;const m=M;M=null;clearInterval(m.id);try{const
 window.lwMusicStop=musicStop;
 let first=true;const _go=window.go;
 window.go=function(v){const prev=window.__lwv;window.__lwv=v;const r=_go.apply(this,arguments);
-  if(!first&&prev!==v)SFX.whoosh();first=false;
+  if(!first&&prev!==v&&!/^(mom|report|plan|sheets|art|book|prof|subs|settings|momstories|momsheets|momletters|lwMonth|gate|who|landing)$/.test(v))SFX.whoosh();first=false;
   if(v==='majlis'&&prev!=='lesson'&&prev!=='majlis'){SFX.enter();setTimeout(musicStart,1300)}
   else if(v!=='majlis'&&v!=='lesson')musicStop();
   return r};
