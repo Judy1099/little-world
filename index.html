@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v53';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v54';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1755,6 +1755,12 @@ const _b=window.LWBOOT;
 window.LWBOOT=async function(){await _b.apply(this,arguments);try{if(getP()&&typeof LWON!=='undefined'&&LWON&&!(typeof LWU!=='undefined'&&LWU&&typeof LWRO==='function'&&!LWRO()))go('lwWelcome')}catch(e){}};
 })();
 
+/* new round logo badge instead of old title + earth art on login pages */
+(function(){
+function fix(n){const f=window[n];if(typeof f!=='function')return;window[n]=function(){const r=f.apply(this,arguments);try{const IA=window.__IA||{},a=document.getElementById('app'),c=a&&a.querySelector('.card');if(c&&IA.logoB){while(c.previousSibling)c.previousSibling.remove();c.insertAdjacentHTML('beforebegin','<div class="row" style="margin-top:6px"><img src="'+IA.logoB+'" alt="" style="width:min(56vw,240px);height:auto"></div>')}}catch(e){}return r}}
+fix('lwLogin');fix('lwNewPw');
+})();
+
 /* nicer post-purchase welcome page */
 (function(){
 const css=document.createElement('style');css.textContent=`
@@ -1814,7 +1820,7 @@ window.lwInstall=async function(){
   document.body.appendChild(o)};
 const btn=()=>st()?'':'<div style="text-align:center"><button class="lwi" onclick="lwInstall()">أضيفي الموقع لشاشتك</button></div>';
 function wrap(n){const f=window[n];if(typeof f!=='function')return;window[n]=function(){const r=f.apply(this,arguments);try{const a=document.querySelector('#app .card')||document.querySelector('#app');const b=btn();if(b&&a)a.insertAdjacentHTML(n==='mom'?'afterbegin':'beforeend',b)}catch(e){}return r}}
-wrap('lwWelcome');wrap('mom');
+wrap('lwWelcome');wrap('mom');wrap('lwLogin');wrap('landing');
 })();
 
 /* ---- visual polish: depth, sheen, softer motion (no new content) ---- */
