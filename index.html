@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v37';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v38';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1343,6 +1343,22 @@ window.pzTap=function(j){if(!PZ||PZ.cel)return;
   pz();celebrate()};
 const _pz=window.pz;window.pz=function(){const r=_pz.apply(this,arguments);setTimeout(celebrate,0);return r};
 setInterval(celebrate,400); // safety net
+
+/* drag a piece onto another piece to swap */
+(function(){let dr=null;
+const idx=e=>{const l=[...document.querySelectorAll('.pc')];return l.indexOf(e)};
+document.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('.pc');if(!b||typeof PZ==='undefined'||!PZ||PZ.cel)return;dr={b,j:idx(b),x:e.clientX,y:e.clientY,g:null,id:e.pointerId}},true);
+document.addEventListener('pointermove',e=>{if(!dr||e.pointerId!==dr.id)return;const dx=e.clientX-dr.x,dy=e.clientY-dr.y;
+ if(!dr.g&&Math.hypot(dx,dy)>12){const r=dr.b.getBoundingClientRect(),g=dr.b.cloneNode(true);g.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;z-index:99999;pointer-events:none;opacity:.92;transform:scale(1.08);box-shadow:0 14px 28px rgba(90,58,36,.35)';document.body.appendChild(g);dr.g=g;dr.r=r;dr.b.style.opacity='.35'}
+ if(dr.g){dr.g.style.left=dr.r.left+dx+'px';dr.g.style.top=dr.r.top+dy+'px';e.preventDefault()}},true);
+function end(e){if(!dr||e.pointerId!==dr.id)return;const d=dr;dr=null;if(!d.g)return;d.g.remove();d.b.style.opacity='';
+ const t=document.elementFromPoint(e.clientX,e.clientY),pc=t&&t.closest&&t.closest('.pc'),j=pc?idx(pc):-1;
+ window.__pzNoClick=Date.now();
+ if(j>=0&&j!==d.j&&typeof PZ!=='undefined'&&PZ&&!PZ.cel){PZ.s=null;[PZ.o[d.j],PZ.o[j]]=[PZ.o[j],PZ.o[d.j]];pz();celebrate()}}
+document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
+document.addEventListener('click',e=>{if(window.__pzNoClick&&Date.now()-window.__pzNoClick<400&&e.target.closest&&e.target.closest('.pc')){e.stopPropagation();e.preventDefault()}},true);
+const st2=document.createElement('style');st2.textContent='.pc{touch-action:none}';document.head.appendChild(st2);
+})();
 })();
 
 /* ---- save the month book as a video with turning pages ---- */
