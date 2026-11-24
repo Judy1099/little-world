@@ -313,7 +313,7 @@ function tick(){const t=S('trip');if(!t||!$('#car'))return;if(t.end<=Date.now())
 function tStart(m){if(!(m>0))return;S('trip',{end:Date.now()+m*60000,total:m*60000});go('trip')}
 function tEnd(){S('trip',null);go('trip')}
 /* ---------- activities hub ---------- */
-function games(){$('#app').innerHTML=`${ctop2('child')}${stage(`<div class="row">${[['mem','ذاكرة',"go('memory')",'var(--lv)'],['shd','أين ظلي؟',"go('shadowg')",'var(--pk)'],['odd','من المختلف؟',"go('odd')",'var(--pe)'],['cups','أين الفاكهة؟',"go('cups')",'var(--y)'],['bask','سلة الألوان',"go('basket')",'var(--sage)'],['pat','أكمل النمط',"go('pattern')",'var(--lv)'],['catch','التقط الفاكهة',"go('catchg')",'var(--pk)'],['bub','فقاعات',"go('bubbles')",'var(--sky)'],['shapes','الأشكال',"go('shapes','games')",'var(--pe)'],['balloon','بالونات',"go('balloons','games')",'var(--pk)'],['brush','سبورة رسم',"go('paint','free','games')",'var(--lv)']].map(x=>T(...x)).join('')}</div>`)}`;orbit()}
+function games(){$('#app').innerHTML=`${ctop2('child')}${stage(`<div class="row">${[['mem','ذاكرة',"go('memory')",'var(--lv)'],['shd','أين ظلي؟',"go('shadowg')",'var(--pk)'],['odd','من المختلف؟',"go('odd')",'var(--pe)'],['cups','أين الفاكهة؟',"go('cups')",'var(--y)'],['bask','سلة الألوان',"go('basket')",'var(--sage)'],['pat','أكمل النمط',"go('pattern')",'var(--lv)'],['catch','التقط الفاكهة',"go('catchg')",'var(--pk)'],['bub','فقاعات',"go('bubbles')",'var(--sky)'],['shapes','الأشكال',"go('shapes','games')",'var(--pe)'],['mus','آلات موسيقية',"go('instr')",'var(--y)'],['balloon','بالونات',"go('balloons','games')",'var(--pk)'],['brush','سبورة رسم',"go('paint','free','games')",'var(--lv)']].map(x=>T(...x)).join('')}</div>`)}`;orbit()}
 let MM;
 function memory(){const ks=shuf(FK).slice(0,3),cards=shuf([...ks,...ks]);MM={o:[],d:0,l:0};
 $('#app').innerHTML=`${ctop('games')}<div class="card"><div class="row" style="max-width:360px;margin:auto">${cards.map((k,i)=>`<button class="mc" id="mc${i}" onclick="flip(${i},'${k}')"><span class="mb"><svg viewBox="0 0 60 60" width="56" height="56"><path d="M30 8l6 14 15 1-11 10 4 15-14-8-14 8 4-15L9 23l15-1z" fill="#fff" opacity=".85"/></svg></span><span class="mf">${A(k,76)}</span></button>`).join('')}</div></div>`}
@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v43';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v44';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1428,6 +1428,50 @@ window.shadowg=function(){const my=++tok;lock=0;const t=FK[ri(FK.length)],o=shuf
   document.querySelectorAll('.shc').forEach(e=>e.onclick=()=>{if(lock||my!==tok)return;
     if(e.dataset.k===t){lock=1;const s=document.getElementById('shs');s.innerHTML=A(t,150);s.classList.add('rv');win();setTimeout(()=>{if(my===tok&&document.getElementById('shs'))shadowg()},2200)}
     else{cheer('حاول مرة أخرى');e.classList.remove('bad');void e.offsetWidth;e.classList.add('bad')}})};
+})();
+
+/* activity: musical instruments (free play: xylophone, drum, tambourine, bell) */
+(function(){
+ART.mus='<rect x="8" y="30" width="84" height="8" rx="4" fill="#b98a58"/><rect x="8" y="66" width="84" height="8" rx="4" fill="#b98a58"/><rect x="14" y="22" width="12" height="62" rx="6" fill="#e5534b"/><rect x="30" y="26" width="12" height="54" rx="6" fill="#f08a3c"/><rect x="46" y="30" width="12" height="46" rx="6" fill="#f2b94b"/><rect x="62" y="34" width="12" height="38" rx="6" fill="#6fae66"/><rect x="78" y="38" width="12" height="30" rx="6" fill="#4a90d9"/>';
+let C=null;const ctx=()=>{if(!C){const AC=window.AudioContext||window.webkitAudioContext;C=new AC()}if(C.state==='suspended')C.resume();return C};
+const out=A=>{const g=A.createGain();g.gain.value=.9;g.connect(A.destination);return g};
+function tone(f,dur,vol,type){const A=ctx(),t=A.currentTime,g=A.createGain(),o=A.createOscillator(),o2=A.createOscillator();o.type=type||'sine';o.frequency.value=f;o2.type='sine';o2.frequency.value=f*2.76;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur);const g2=A.createGain();g2.gain.value=.18;
+  o.connect(g);o2.connect(g2);g2.connect(g);g.connect(A.destination);o.start(t);o2.start(t);o.stop(t+dur+.05);o2.stop(t+dur+.05)}
+function noise(dur,vol,hp,lp){const A=ctx(),t=A.currentTime,n=Math.floor(A.sampleRate*dur),b=A.createBuffer(1,n,A.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2);
+  const s=A.createBufferSource(),h=A.createBiquadFilter(),l=A.createBiquadFilter(),g=A.createGain();s.buffer=b;h.type='highpass';h.frequency.value=hp;l.type='lowpass';l.frequency.value=lp;g.gain.value=vol;s.connect(h);h.connect(l);l.connect(g);g.connect(A.destination);s.start(t)}
+const NOTES=[523.25,587.33,659.25,698.46,783.99,880,987.77,1046.5],COL=['#e5534b','#f08a3c','#f2b94b','#9bc95a','#6fae66','#4aa6d9','#4a6fd9','#9a7fd0'];
+const play={
+ bar:i=>tone(NOTES[i],1.1,.34),
+ drum:()=>{const A=ctx(),t=A.currentTime,o=A.createOscillator(),g=A.createGain();o.frequency.setValueAtTime(190,t);o.frequency.exponentialRampToValueAtTime(55,t+.22);g.gain.setValueAtTime(.7,t);g.gain.exponentialRampToValueAtTime(.001,t+.35);o.connect(g);g.connect(A.destination);o.start(t);o.stop(t+.4);noise(.05,.25,800,5000)},
+ tam:()=>{noise(.18,.22,5000,12000);[0,.03,.07,.11].forEach(d=>setTimeout(()=>tone(3200+Math.random()*1800,.12,.05,'square'),d*1000))},
+ bell:()=>{tone(1318.5,1.6,.22,'triangle');setTimeout(()=>tone(1976,1.2,.1,'triangle'),30)}};
+const pop=el=>{if(!el)return;el.classList.remove('ipop');void el.offsetWidth;el.classList.add('ipop')};
+const st=document.createElement('style');st.textContent=`.xyl{display:flex;justify-content:center;align-items:flex-start;gap:7px;margin:6px auto 16px;direction:ltr;touch-action:none}
+.xb{width:min(10.5vw,72px);border-radius:16px;box-shadow:0 8px 0 rgba(0,0,0,.16),inset 0 -6px 0 rgba(0,0,0,.1);cursor:pointer;position:relative;-webkit-user-select:none;user-select:none;transition:transform .08s}
+.xb:after{content:"";position:absolute;top:10px;left:50%;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.6);transform:translateX(-50%)}
+.xb.hit{transform:translateY(6px);filter:brightness(1.18)}
+.ins{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.ib2{background:none;border:0;padding:0;touch-action:manipulation;cursor:pointer;-webkit-user-select:none;user-select:none}
+.ipop{animation:ipop .35s ease}@keyframes ipop{30%{transform:scale(.88) rotate(-3deg)}65%{transform:scale(1.06) rotate(2deg)}}
+.sg{display:inline-flex;align-items:center;gap:8px;border:0;background:#fff;border-radius:99px;padding:8px 18px;box-shadow:0 5px 0 rgba(0,0,0,.12);font-family:inherit;font-weight:700;color:#5a3a24;margin:0 auto 8px}`;
+document.head.appendChild(st);
+let song=0;
+window.instr=function(){song++;const my=song;
+  const hs=[210,190,170,150,135,120,105,90];
+  $('#app').innerHTML=`${ctop('games')}<div class="card" style="text-align:center"><div style="margin-bottom:6px"><button class="sg" id="sgb">${ic('play',24)}</button></div><div class="xyl" id="xyl">${NOTES.map((n,i)=>`<div class="xb" data-i="${i}" style="height:${hs[i]}px;background:${COL[i]}"></div>`).join('')}</div>
+  <div class="ins"><button class="ib2" id="idr" aria-label="drum"><svg width="150" height="130" viewBox="0 0 150 130"><ellipse cx="75" cy="40" rx="62" ry="22" fill="#f6e3b8" stroke="#c9a15a" stroke-width="5"/><path d="M13 40v50c0 14 28 26 62 26s62-12 62-26V40c0 14-28 24-62 24S13 54 13 40z" fill="#e5534b"/><path d="M13 40v50c0 14 28 26 62 26s62-12 62-26V40" fill="none" stroke="#b83a33" stroke-width="5"/><path d="M30 62l14 44M60 68l8 46M90 68l-8 46M120 62l-14 44" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/></svg></button>
+  <button class="ib2" id="itm" aria-label="tambourine"><svg width="130" height="130" viewBox="0 0 130 130"><circle cx="65" cy="65" r="56" fill="#f2b94b" stroke="#c98d1f" stroke-width="6"/><circle cx="65" cy="65" r="38" fill="#fff4d0" stroke="#e0b24c" stroke-width="4"/><g fill="#c0c7d0" stroke="#8a929c" stroke-width="2"><circle cx="65" cy="14" r="9"/><circle cx="116" cy="65" r="9"/><circle cx="65" cy="116" r="9"/><circle cx="14" cy="65" r="9"/><circle cx="29" cy="29" r="8"/><circle cx="101" cy="29" r="8"/><circle cx="29" cy="101" r="8"/><circle cx="101" cy="101" r="8"/></g></svg></button>
+  <button class="ib2" id="ibl" aria-label="bell"><svg width="110" height="130" viewBox="0 0 110 130"><path d="M55 14c-22 0-34 18-34 42v22L10 98h90L89 78V56c0-24-12-42-34-42z" fill="#f2c84b" stroke="#c98d1f" stroke-width="5"/><circle cx="55" cy="108" r="10" fill="#c98d1f"/><rect x="48" y="4" width="14" height="14" rx="6" fill="#c98d1f"/></svg></button></div></div>`;
+  const xyl=document.getElementById('xyl'),bars=[...xyl.children];let last=-1,down=false;
+  const hit=i=>{if(i===last)return;last=i;const b=bars[i];play.bar(i);b.classList.add('hit');setTimeout(()=>b.classList.remove('hit'),150)};
+  const at=e=>{const t=document.elementFromPoint(e.clientX,e.clientY);const b=t&&t.closest&&t.closest('.xb');return b?+b.dataset.i:-1};
+  xyl.addEventListener('pointerdown',e=>{down=true;last=-1;const i=at(e);if(i>=0)hit(i);e.preventDefault()});
+  xyl.addEventListener('pointermove',e=>{if(!down)return;const i=at(e);if(i>=0)hit(i)});
+  const up=()=>{down=false;last=-1};window.addEventListener('pointerup',up);xyl.addEventListener('pointercancel',up);
+  [['idr','drum'],['itm','tam'],['ibl','bell']].forEach(([id,k])=>{const e=document.getElementById(id);e.addEventListener('pointerdown',ev=>{ev.preventDefault();play[k]();pop(e.firstElementChild)})});
+  document.getElementById('sgb').onclick=()=>{const seq=[0,0,4,4,5,5,4,3,3,2,2,1,1,0];seq.forEach((n,j)=>setTimeout(()=>{if(my!==song||!document.getElementById('xyl'))return;last=-1;hit(n)},j*480+200))};
+};
 })();
 
 /* ---- save the month book as a video with turning pages ---- */
