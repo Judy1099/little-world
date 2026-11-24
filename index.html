@@ -313,7 +313,7 @@ function tick(){const t=S('trip');if(!t||!$('#car'))return;if(t.end<=Date.now())
 function tStart(m){if(!(m>0))return;S('trip',{end:Date.now()+m*60000,total:m*60000});go('trip')}
 function tEnd(){S('trip',null);go('trip')}
 /* ---------- activities hub ---------- */
-function games(){$('#app').innerHTML=`${ctop2('child')}${stage(`<div class="row">${[['mem','ذاكرة',"go('memory')",'var(--lv)'],['puz','تركيب',"go('puzzle')",'var(--pk)'],['odd','من المختلف؟',"go('odd')",'var(--pe)'],['cups','أين الفاكهة؟',"go('cups')",'var(--y)'],['bask','سلة الألوان',"go('basket')",'var(--sage)'],['pat','أكمل النمط',"go('pattern')",'var(--lv)'],['catch','التقط الفاكهة',"go('catchg')",'var(--pk)'],['bub','فقاعات',"go('bubbles')",'var(--sky)'],['shapes','الأشكال',"go('shapes','games')",'var(--pe)'],['balloon','بالونات',"go('balloons','games')",'var(--pk)'],['brush','سبورة رسم',"go('paint','free','games')",'var(--lv)']].map(x=>T(...x)).join('')}</div>`)}`;orbit()}
+function games(){$('#app').innerHTML=`${ctop2('child')}${stage(`<div class="row">${[['mem','ذاكرة',"go('memory')",'var(--lv)'],['shd','أين ظلي؟',"go('shadowg')",'var(--pk)'],['odd','من المختلف؟',"go('odd')",'var(--pe)'],['cups','أين الفاكهة؟',"go('cups')",'var(--y)'],['bask','سلة الألوان',"go('basket')",'var(--sage)'],['pat','أكمل النمط',"go('pattern')",'var(--lv)'],['catch','التقط الفاكهة',"go('catchg')",'var(--pk)'],['bub','فقاعات',"go('bubbles')",'var(--sky)'],['shapes','الأشكال',"go('shapes','games')",'var(--pe)'],['balloon','بالونات',"go('balloons','games')",'var(--pk)'],['brush','سبورة رسم',"go('paint','free','games')",'var(--lv)']].map(x=>T(...x)).join('')}</div>`)}`;orbit()}
 let MM;
 function memory(){const ks=shuf(FK).slice(0,3),cards=shuf([...ks,...ks]);MM={o:[],d:0,l:0};
 $('#app').innerHTML=`${ctop('games')}<div class="card"><div class="row" style="max-width:360px;margin:auto">${cards.map((k,i)=>`<button class="mc" id="mc${i}" onclick="flip(${i},'${k}')"><span class="mb"><svg viewBox="0 0 60 60" width="56" height="56"><path d="M30 8l6 14 15 1-11 10 4 15-14-8-14 8 4-15L9 23l15-1z" fill="#fff" opacity=".85"/></svg></span><span class="mf">${A(k,76)}</span></button>`).join('')}</div></div>`}
@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v42';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v43';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1413,6 +1413,21 @@ window.puzzle=function(){
   card.addEventListener('pointerup',end);card.addEventListener('pointercancel',end);
   slots.forEach(s=>s.addEventListener('click',()=>{if(!sel||s.classList.contains('ok'))return;const p=sel;if(!place(p,s)){p.classList.remove('sel');sel=null;p.classList.add('back');setTimeout(()=>p.classList.remove('back'),400)}}));
 };
+})();
+
+/* new game: match the shadow to the fruit (replaces the puzzle tile) */
+(function(){
+const F='<defs><filter id="shf" color-interpolation-filters="sRGB" x="-5%" y="-5%" width="110%" height="110%"><feColorMatrix type="matrix" values="0 0 0 0 .42  0 0 0 0 .36  0 0 0 0 .32  0 0 0 1 0"/></filter></defs>';
+FK.forEach(k=>{ART['sh_'+k]=F+'<g filter="url(#shf)">'+ART[k]+'</g>'});
+ART.shd=ART.sh_apple;
+const st=document.createElement('style');st.textContent='.shs{display:flex;justify-content:center;align-items:center;margin:6px auto 10px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,#fff8ea,#f3e6c8);box-shadow:inset 0 6px 14px rgba(90,58,36,.12)}.shs svg{animation:shin .5s ease both}@keyframes shin{from{transform:scale(.7);opacity:0}}.shs.rv svg{animation:shrv .6s ease both}@keyframes shrv{from{transform:scale(.85)}60%{transform:scale(1.12)}}.shc{background:#fff!important;flex-basis:130px;animation:shin .45s ease both}.shc.bad{animation:shk .4s ease}@keyframes shk{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}';
+document.head.appendChild(st);
+let tok=0,lock=0;
+window.shadowg=function(){const my=++tok;lock=0;const t=FK[ri(FK.length)],o=shuf([t,...shuf(FK.filter(x=>x!==t)).slice(0,2)]);
+  $('#app').innerHTML=`${ctop('games')}<div class="card" style="text-align:center"><div class="shs" id="shs">${A('sh_'+t,150)}</div><div class="row" style="gap:12px">${o.map(k=>`<div class="tile shc" data-k="${k}"><div class="ta" style="margin:0;height:100px">${A(k,92)}</div></div>`).join('')}</div></div>`;
+  document.querySelectorAll('.shc').forEach(e=>e.onclick=()=>{if(lock||my!==tok)return;
+    if(e.dataset.k===t){lock=1;const s=document.getElementById('shs');s.innerHTML=A(t,150);s.classList.add('rv');win();setTimeout(()=>{if(my===tok&&document.getElementById('shs'))shadowg()},2200)}
+    else{cheer('حاول مرة أخرى');e.classList.remove('bad');void e.offsetWidth;e.classList.add('bad')}})};
 })();
 
 /* ---- save the month book as a video with turning pages ---- */
