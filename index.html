@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v62';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v63';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1908,7 +1908,7 @@ function intro(){
   #intro .ixc{position:absolute;inset:0;transform-origin:right center;transform-style:preserve-3d;animation:ixop 1.5s cubic-bezier(.65,0,.25,1) 1.5s forwards}
   #intro .ixc>div{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
   #intro .ixf{direction:ltr;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 90% at 40% 30%,#fff3cf,#fbe3a0 60%,#f5d27c);box-shadow:inset 0 0 0 10px #f2c45a,inset 0 0 0 13px #fff8e2}
-  #intro .ixf:before{content:"";position:absolute;inset:26px;border:3px dashed rgba(255,255,255,.9);border-radius:26px}
+  #intro .ixf:before{content:"";position:absolute;inset:26px;border:3px dashed #8a5320;border-radius:26px}
   #intro .ixf:after{content:"";position:absolute;top:0;bottom:0;right:0;width:34px;background:linear-gradient(270deg,rgba(170,120,40,.35),rgba(170,120,40,0))}
   #intro .ixm{position:relative;width:min(70vw,60vh,430px);aspect-ratio:1;border-radius:50%;background:#fffaf0;box-shadow:0 0 0 8px #fff3cf,0 0 0 11px #f2c45a,0 14px 30px rgba(170,120,40,.3);display:flex;align-items:center;justify-content:center;animation:ixin .8s cubic-bezier(.2,1.3,.4,1) both}
   #intro .ixm img{width:92%;height:auto;border-radius:50%}
