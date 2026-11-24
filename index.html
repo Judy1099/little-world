@@ -1136,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v36';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v37';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1559,7 +1559,7 @@ window.mom=function(){
 <div class="card"><h3 style="margin:0 0 6px">أنشطة اليوم</h3>${td?td.t.map((id,j)=>{const k=id+(td.i0+j),l=plabel(id);return`<label style="display:flex;align-items:center;gap:8px;margin:8px 0;font-size:18px"><input type="checkbox" style="transform:scale(1.4)" ${dn[k]?'checked':''} onchange="tgM('${k}')"><span class="ti" style="display:inline-flex">${l[0]}</span>${l[1]}</label>`}).join(''):'<p>تم إنجاز كل الأنشطة</p>'}<button class="btn w" onclick="go('plan')">${ic('calendar',22)} كل الجدول</button></div>
 <div class="card"><div class="row" style="justify-content:space-between;align-items:baseline"><h3 style="margin:0">الأوسمة</h3><span class="sm">${earned} من ${BD.length}</span></div><div class="bdg">${BD.map(b=>{const on=b[2](ctx);return`<div class="bd ${on?'':'lk'}">${medal(b[4],b[3],on)}${b[0]=='fr'&&!on?'فواكه ٨٠٪':b[0]=='col'&&!on?'ألوان ٨٠٪':b[1]}</div>`}).join('')}</div></div>
 ${mem?`<div class="card"><h3 style="margin:0">ذكرى من كتابنا</h3><div class="mpol"><img src="${mem.s}" alt="">${mem.l?`<div style="margin-top:10px">${String(mem.l).replace(/[<>&]/g,'')}</div>`:''}</div></div>`:''}
-${!standalone()&&!insDone()?`<div class="card inst" id="inst"><h3 style="margin:0">ثبّتيه كتطبيق</h3><ol><li>اضغطي زر المشاركة في سفاري</li><li>اختاري "إضافة إلى الشاشة الرئيسية"</li><li>افتحيه من الأيقونة وسيظهر بملء الشاشة</li></ol><button class="btn w" onclick="mmIns()">تم، لا تُظهريه</button></div>`:''}`;
+`;
   count();try{lwBanner()}catch(e){}
 };
 /* bottom tab bar */
