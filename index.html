@@ -658,7 +658,7 @@ async function lwRedeem(){const i=document.getElementById('lwcode'),m=document.g
     else if(v==='used')m.textContent='هذا الكود استُخدم من قبل';
     else if(v==='locked')m.textContent='محاولات كثيرة. حاولي بعد ساعة';
     else m.textContent='الكود غير صحيح. تأكدي منه وحاولي مرة ثانية'}
-  catch(e){m.textContent='تعذّر الاتصال. حاولي مرة ثانية'}}
+  catch(e){m.textContent='تعذّر الاتصال. حاولي مرة ثانية'+(e&&e.message?' ['+String(e.message).slice(0,90)+']':'')}}
 
 /* ---- story builder: pages = scene + characters + the child's own voice ---- */
 (function(){
@@ -1110,7 +1110,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v25';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v26';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
