@@ -358,7 +358,7 @@ const FD=[['apple','التفاحة'],['banana','الموزة'],['orange','الب
 const LES=[{art:'hand',q:'السلام عليكم',a:()=>'وعليكم السلام'},{art:'smile',q:'كيف حالك؟',a:()=>'الحمد لله، أنا بخير'},{art:'tag',q:'ما اسمك؟',need:'name',a:p=>'اسمي '+p.name},{art:'cake',q:'كم عمرك؟',need:'age',a:p=>'عمري '+AGE[p.age]},{art:'pal',q:'ما لونك المفضل؟',pick:'color',a:(p,v)=>'لوني المفضل ال'+v},{art:'apple',q:'ما فاكهتك المفضلة؟',pick:'fruit',a:(p,v)=>'فاكهتي المفضلة '+v},{art:'heart',q:'شكراً لك',a:()=>'عفواً'},{art:'hand',q:'مع السلامة',a:()=>'في أمان الله'}];
 const sayC=t=>say(t,1.6,.75);
 const kg=()=>kid&&kid.c==='boy'?boyG:girlG;
-const majScene=()=>`<svg viewBox="0 0 640 320" style="width:100%;border-radius:24px;display:block;margin-top:10px" aria-hidden="true"><rect width="640" height="320" fill="#f6e3c8"/><path d="M200 300V120Q200 40 320 40T440 120V300Z" fill="#cfe6f2" stroke="#c9a06a" stroke-width="8"/><path d="M320 40V300M200 150H440" stroke="#c9a06a" stroke-width="4"/><g stroke="#b5803f" stroke-width="3"><path d="M90 0V36M550 0V36"/></g><g fill="#f2b94b" stroke="#c99a3a" stroke-width="3"><path d="M68 36h44l10 24q-32 14-64 0z"/><path d="M528 36h44l10 24q-32 14-64 0z"/></g><rect y="262" width="640" height="58" fill="#c96f5a"/><path d="M0 262H640" stroke="#a9503f" stroke-width="6"/><rect x="24" y="232" width="110" height="50" rx="22" fill="#9a7fd0"/><rect x="506" y="232" width="110" height="50" rx="22" fill="#6fae66"/><g class="bw t"><svg x="400" y="70" width="140" height="175" viewBox="0 0 200 250">${beeG}</svg></g><g class="bw" style="animation-delay:.6s"><svg x="112" y="62" width="128" height="196" viewBox="0 0 160 245">${kg()}</svg></g></svg>`;
+const majScene=()=>`<svg viewBox="0 0 640 320" style="width:100%;border-radius:24px;display:block;margin-top:10px" aria-hidden="true"><defs><linearGradient id="zz_mw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbeed6"/><stop offset="1" stop-color="#f0d6ae"/></linearGradient><linearGradient id="zz_mf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d98468"/><stop offset="1" stop-color="#b9604c"/></linearGradient><linearGradient id="zz_msk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d6ee"/><stop offset="1" stop-color="#e3f3fa"/></linearGradient><linearGradient id="zz_mc1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b69be3"/><stop offset="1" stop-color="#8767c4"/></linearGradient><linearGradient id="zz_mc2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#88c97c"/><stop offset="1" stop-color="#5a9d52"/></linearGradient><radialGradient id="zz_lg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".75"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient><linearGradient id="zz_ray" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6d6" stop-opacity=".55"/><stop offset="1" stop-color="#fff6d6" stop-opacity="0"/></linearGradient></defs><rect width="640" height="320" fill="url(#zz_mw)"/><rect y="200" width="640" height="62" fill="#e9c995" opacity=".45"/><path d="M0 200H640" stroke="#d4ac74" stroke-width="3"/><path d="M200 300V120Q200 40 320 40T440 120V300Z" fill="url(#zz_msk)" stroke="#c9a06a" stroke-width="8"/><path d="M262 300 L470 300 L430 120 L300 60 Z" fill="url(#zz_ray)" opacity=".7"/><path d="M168 40Q196 120 176 262H214Q226 130 204 52Z" fill="#e9a9a0" opacity=".85"/><path d="M472 40Q444 120 464 262H426Q414 130 436 52Z" fill="#e9a9a0" opacity=".85"/><path d="M320 40V300M200 150H440" stroke="#c9a06a" stroke-width="4"/><g stroke="#b5803f" stroke-width="3"><path d="M90 0V36M550 0V36"/></g><circle cx="90" cy="64" r="58" fill="url(#zz_lg)"/><circle cx="550" cy="64" r="58" fill="url(#zz_lg)"/><g fill="#f2b94b" stroke="#c99a3a" stroke-width="3"><path d="M68 36h44l10 24q-32 14-64 0z"/><path d="M528 36h44l10 24q-32 14-64 0z"/></g><rect y="262" width="640" height="58" fill="url(#zz_mf)"/><g stroke="#a9503f" stroke-width="1.5" opacity=".35"><path d="M0 290H640M0 308H640M120 262V290M300 262V290M480 262V290M60 290V308M220 290V308M400 290V308M560 290V308"/></g><ellipse cx="320" cy="296" rx="250" ry="14" fill="#f4dcae" opacity=".8"/><ellipse cx="320" cy="296" rx="210" ry="9" fill="none" stroke="#e0b878" stroke-width="3" stroke-dasharray="10 8"/><path d="M0 262H640" stroke="#a9503f" stroke-width="6"/><ellipse cx="79" cy="286" rx="62" ry="8" fill="#000" opacity=".16"/><ellipse cx="561" cy="286" rx="62" ry="8" fill="#000" opacity=".16"/><rect x="24" y="232" width="110" height="50" rx="24" fill="url(#zz_mc1)"/><rect x="506" y="232" width="110" height="50" rx="24" fill="url(#zz_mc2)"/><path d="M40 244Q79 236 118 244" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".4" fill="none"/><path d="M522 244Q561 236 600 244" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".4" fill="none"/><g class="bw t"><svg x="400" y="70" width="140" height="175" viewBox="0 0 200 250">${beeG}</svg></g><g class="bw" style="animation-delay:.6s"><svg x="112" y="62" width="128" height="196" viewBox="0 0 160 245">${kg()}</svg></g></svg>`;
 function majlis(){const n=S('maj')||0;$('#app').innerHTML=`${ctop2('child')}${stage(`<div class="row">${LES.map((L,i)=>`<div class="tile" style="background:${i<=n?'#fff':'#efe6d6'};flex-basis:120px;opacity:${i<=n?1:.6}" onclick="${i<=n?`go('lesson',${i})`:''}"><div class="ta" style="height:80px">${A(L.art,76)}</div>${i<n?ic('check',26,'#6fae66'):i>n?ic('lock',24):''}</div>`).join('')}</div>`)}`;orbit()}
 let LV;
 function lesson(i){const L=LES[i],p=PROF();if((L.need=='name'&&!p.name)||(L.need=='age'&&!p.age)){$('#app').innerHTML=`${ctop2('majlis')}<div class="card"><h3>للأم</h3><p>أضيفي ${L.need=='name'?'اسم طفلك':'عمر طفلك'} ليتعلم الجواب.</p><button class="btn" onclick="go('prof')">${ic('user',22)} ملف طفلي</button></div>`;return}
@@ -1042,15 +1042,41 @@ function failed(msg){QL.said=0;QL.fail=(QL.fail||0)+1;qlDraw();cheer(msg||'حا�
 let MS=null,MAC=null;
 function micRelease(){try{MS&&MS.getTracks().forEach(t=>t.stop())}catch(e){}MS=null;try{MAC&&MAC.close()}catch(e){}MAC=null}
 window.micRelease=micRelease;
+/* pure decision logic: feed(r) every 50ms with RMS, returns '' | 'ok' | 'none' | 'toolong' */
+function Listener(words){
+  const W=Math.max(1,words),needV=Math.min(3600,Math.max(1000,W*230)),needP=Math.min(6,Math.max(2,Math.round(W*.9)));
+  const o={t:0,floor:0,nf:0,thr:.03,e:0,seg:0,voiced:0,peaks:0,cmax:0,quiet:0,any:0,done:0};
+  o.feed=function(r){o.t+=50;
+    if(o.t<=350){o.floor+=r;o.nf++;if(o.t==350)o.thr=Math.max(.03,o.floor/o.nf*2.6+.012);return ''}
+    o.e=o.e*.5+r*.5;const on=o.e>o.thr;
+    if(on){o.quiet=0;o.seg+=50;o.any=1;if(o.e>o.cmax)o.cmax=o.e}
+    else{o.quiet+=50;
+      if(o.seg>=150)o.voiced+=o.seg;      // only real stretches of voice count (claps and taps do not)
+      o.seg=0;if(o.cmax>o.thr*1.3){o.peaks++}o.cmax=0}
+    if(on&&o.cmax>o.thr*1.3&&o.e<o.cmax*.62){o.peaks++;o.cmax=o.e}  // dip inside a long stretch = new syllable
+    const vtot=o.voiced+(o.seg>=150?o.seg:0);
+    if(vtot>=needV&&o.peaks>=needP&&!on&&o.quiet>=700)return 'ok';   // finished speaking: wait for a real pause
+    if(vtot>=needV*3.2)return 'ok';                                  // very long, continuous
+    if(!o.any&&o.t>8000)return 'none';
+    if(o.any&&o.quiet>=3500)return 'none';                           // made a sound but not enough: stop waiting
+    if(o.t>22000)return vtot>=needV*.7&&o.peaks>=needP?'ok':'none';
+    return ''};
+  return o}
+window.LWListener=Listener;
 async function volume(text,ok){
-  try{if(!MS||!MS.active)MS=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){failed('اسمحي للمتصفح باستخدام المايكروفون');return}
-  const AC=window.AudioContext||window.webkitAudioContext;try{if(!MAC||MAC.state=='closed')MAC=new AC();if(MAC.state=='suspended')await MAC.resume()}catch(e){}
+  const to=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error('timeout')),ms))]);
+  try{if(!MS||!MS.active||MS.getAudioTracks().every(t=>t.readyState!='live'))MS=await to(navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:false}}),9000)}
+  catch(e){failed(e&&e.name=='NotAllowedError'?'اسمحي للمتصفح باستخدام المايكروفون':'تعذّر تشغيل المايكروفون، حاول مرة أخرى');return}
+  const AC=window.AudioContext||window.webkitAudioContext;
+  try{if(!MAC||MAC.state=='closed')MAC=new AC();if(MAC.state=='suspended')await to(MAC.resume(),2500)}catch(e){}
   const src=MAC.createMediaStreamSource(MS),an=MAC.createAnalyser();an.fftSize=1024;src.connect(an);
-  const buf=new Uint8Array(an.fftSize),need=Math.min(2200,Math.max(900,String(text).split(/\s+/).length*180));let voiced=0,t0=Date.now(),alive=1;
+  const buf=new Uint8Array(an.fftSize),L=Listener(String(text).trim().split(/\s+/).length);let alive=1;
   const fin=()=>{if(!alive)return;alive=0;clearInterval(tick);try{src.disconnect()}catch(e){}ctl=null;level(0)};
   const tick=setInterval(()=>{if(!document.querySelector('.ayb')){fin();micRelease();return}
-    an.getByteTimeDomainData(buf);let s=0;for(const x of buf){const d=(x-128)/128;s+=d*d}const r=Math.sqrt(s/buf.length);level(Math.min(1,r*6));if(r>.03)voiced+=100;
-    if(voiced>=need){fin();ok()}else if(Date.now()-t0>12000){fin();failed('لم أسمعك جيداً، حاول مرة أخرى')}},100);
+    an.getByteTimeDomainData(buf);let s=0;for(const x of buf){const d=(x-128)/128;s+=d*d}const r=Math.sqrt(s/buf.length);
+    level(L.t<350?0:Math.min(1,r*6));
+    const v=L.feed(r);
+    if(v=='ok'){fin();ok()}else if(v=='none'){fin();failed('لم أسمعك جيداً، حاول مرة أخرى')}},50);
   ctl={stop:()=>{fin()}}}
 window.listenFor=function(text,ok){stopAll();try{aud&&aud.pause()}catch(e){}volume(text,ok)};
 window.qlSay=function(){
@@ -1110,7 +1136,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v26';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v27';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1281,6 +1307,78 @@ const _child=window.child;
 window.child=function(){const r=_child.apply(this,arguments);try{wkStart()}catch(e){console.log('wk',e)}return r};
 const _go=window.go;
 window.go=function(v){if(v!=='child')try{wkStop()}catch(e){}return _go.apply(this,arguments)};
+})();
+
+/* ---- visual polish: depth, sheen, softer motion (no new content) ---- */
+(function(){
+const st=document.createElement('style');
+st.textContent=`
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.tile{box-shadow:0 8px 0 rgba(90,58,36,.12),0 18px 28px rgba(90,58,36,.13),inset 0 3px 0 rgba(255,255,255,.75),inset 0 -5px 0 rgba(90,58,36,.05);overflow:visible;transition:transform .22s cubic-bezier(.3,1.5,.5,1),box-shadow .2s}
+.tile::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(170deg,rgba(255,255,255,.5),rgba(255,255,255,0) 48%);pointer-events:none}
+.tile>*{position:relative}.tile .spk{position:absolute}
+.tile:active{transform:translateY(6px) scale(.96);box-shadow:0 2px 0 rgba(90,58,36,.12),0 6px 12px rgba(90,58,36,.12),inset 0 3px 0 rgba(255,255,255,.6)}
+.tile .ta svg,.tile .ta img{filter:drop-shadow(0 5px 5px rgba(90,58,36,.2))}
+.btn{background:linear-gradient(#ffe39a,#f2b94b 60%,#eaa93a);box-shadow:0 6px 0 #c99a3a,0 12px 20px rgba(90,58,36,.2),inset 0 3px 0 rgba(255,255,255,.65);transition:transform .2s cubic-bezier(.3,1.5,.5,1),box-shadow .2s}
+.btn.w{background:linear-gradient(#ffffff,#f6ead0);box-shadow:0 6px 0 #dccaa0,0 12px 20px rgba(90,58,36,.12),inset 0 3px 0 #fff}
+.btn:active{transform:translateY(5px) scale(.97);box-shadow:0 1px 0 #c99a3a,0 4px 8px rgba(90,58,36,.18)}
+.ib{box-shadow:0 4px 0 #dccaa0,0 10px 16px rgba(90,58,36,.16),inset 0 2px 0 #fff;transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.ib:active{transform:translateY(3px) scale(.92)}
+.card{background:linear-gradient(180deg,rgba(255,252,243,.96),rgba(255,246,228,.92));border:2px solid rgba(255,255,255,.75);box-shadow:0 14px 30px rgba(90,58,36,.14),inset 0 2px 0 #fff}
+.bub{box-shadow:0 8px 18px rgba(90,58,36,.16),inset 0 2px 0 #fff;border:2px solid rgba(240,224,190,.7)}
+.dot{box-shadow:0 6px 12px rgba(0,0,0,.2),inset 0 4px 6px rgba(255,255,255,.45);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}.dot:active{transform:scale(.88)}
+.in{animation:pin .55s cubic-bezier(.2,.85,.25,1) both}@keyframes pin{from{opacity:0;transform:translateY(20px) scale(.985)}}
+.row>.tile{animation:tp .6s cubic-bezier(.2,.9,.3,1.3) both}
+.stage{filter:none}
+@media (prefers-reduced-motion:reduce){.in,.row>.tile{animation:none}}
+`;
+document.head.appendChild(st);
+})();
+
+/* ---- sound design: soft effects, majlis music, speech that never overlaps ---- */
+(function(){
+const mute=()=>{try{return (S('set')||{}).v===0}catch(e){return false}};
+const ctx=()=>{const A=window.__wkc||(window.__wkc=new (window.AudioContext||window.webkitAudioContext)());if(A.state!=='running'&&A.resume)A.resume();return A};
+function tone(f,t0,d,vol,type,A,out){const o=A.createOscillator(),g=A.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0);g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+.015);g.gain.exponentialRampToValueAtTime(.0001,t0+d);o.connect(g);g.connect(out||A.destination);o.start(t0);o.stop(t0+d+.05)}
+function bell(f,t0,d,vol,A,out){tone(f,t0,d,vol,'sine',A,out);tone(f*2.01,t0,d*.5,vol*.35,'sine',A,out);tone(f*3.02,t0,d*.25,vol*.12,'sine',A,out)}
+const N={C4:261.6,D4:293.7,E4:329.6,G4:392,A4:440,C5:523.3,D5:587.3,E5:659.3,G5:784,A5:880,C6:1046.5};
+const SFX={
+ ok(){if(mute())return;try{const A=ctx(),t=A.currentTime;bell(N.G5,t,.45,.07,A);bell(N.C6,t+.09,.6,.07,A);bell(N.E5*2,t+.2,.7,.05,A)}catch(e){}},
+ no(){if(mute())return;try{const A=ctx(),t=A.currentTime;tone(330,t,.22,.06,'triangle',A);tone(262,t+.16,.3,.06,'triangle',A)}catch(e){}},
+ win(){if(mute())return;try{const A=ctx(),t=A.currentTime;[N.C5,N.E5,N.G5,N.C6,N.E5*2].forEach((f,i)=>bell(f,t+i*.1,.7,.07,A))}catch(e){}},
+ whoosh(){if(mute())return;try{const A=ctx(),t=A.currentTime,n=A.sampleRate*.35,b=A.createBuffer(1,n,A.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+   const s=A.createBufferSource(),f=A.createBiquadFilter(),g=A.createGain();s.buffer=b;f.type='bandpass';f.Q.value=.8;f.frequency.setValueAtTime(500,t);f.frequency.exponentialRampToValueAtTime(2200,t+.3);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.05,t+.08);g.gain.exponentialRampToValueAtTime(.0001,t+.34);s.connect(f);f.connect(g);g.connect(A.destination);s.start(t)}catch(e){}},
+ enter(){if(mute())return;try{const A=ctx(),t=A.currentTime;[N.C5,N.E5,N.G5,N.A5,N.C6].forEach((f,i)=>bell(f,t+i*.14,.9,.06,A));bell(N.C4,t,1.6,.05,A)}catch(e){}}
+};
+window.SFX=SFX;
+/* gentle music box loop while in the majlis */
+let M=null;
+const TUNE=[N.E5,N.G5,N.A5,N.G5,N.E5,N.D5,N.C5,N.D5,N.E5,N.G5,N.E5,N.D5,N.C5,N.D5,N.G4,N.C5];
+function busy(){try{return (typeof VA!=='undefined'&&VA&&!VA.paused&&!VA.ended)||(window.speechSynthesis&&speechSynthesis.speaking)||(typeof QA!=='undefined'&&QA&&!QA.paused&&!QA.ended)}catch(e){return false}}
+function musicStart(){if(M||mute())return;try{const A=ctx(),g=A.createGain();g.gain.value=.0001;g.connect(A.destination);g.gain.exponentialRampToValueAtTime(.5,A.currentTime+1.2);let i=0;
+  const id=setInterval(()=>{if(mute()){musicStop();return}const t=A.currentTime,quiet=busy();g.gain.cancelScheduledValues(t);g.gain.setTargetAtTime(quiet?.12:.5,t,.25);
+    const f=TUNE[i%TUNE.length];bell(f,t,1.1,.045,A,g);if(i%4==0)bell(f/2,t,1.6,.03,A,g);i++},520);
+  M={A,g,id}}catch(e){}}
+function musicStop(){if(!M)return;const m=M;M=null;clearInterval(m.id);try{const t=m.A.currentTime;m.g.gain.cancelScheduledValues(t);m.g.gain.setTargetAtTime(.0001,t,.2);setTimeout(()=>{try{m.g.disconnect()}catch(e){}},900)}catch(e){}}
+window.lwMusicStop=musicStop;
+let first=true;const _go=window.go;
+window.go=function(v){const prev=window.__lwv;window.__lwv=v;const r=_go.apply(this,arguments);
+  if(!first&&prev!==v)SFX.whoosh();first=false;
+  if(v==='majlis'&&prev!=='lesson'&&prev!=='majlis'){SFX.enter();setTimeout(musicStart,1300)}
+  else if(v!=='majlis'&&v!=='lesson')musicStop();
+  return r};
+/* praise / try-again sounds */
+const _ch=window.cheer;
+window.cheer=function(m,q){
+  if(m==='حاول مرة أخرى')SFX.no();else if(!m||(window.CH&&CH.indexOf(m)>=0)||/أحسنت|ما شاء الله|وصلنا/.test(m))SFX.ok();
+  return _ch.apply(this,arguments)};
+/* speech: never overlap, never cut a sentence that is still playing */
+const _say=window.say;let lastT='',lastAt=0,pend=null,wt=null;
+function flush(n){clearTimeout(wt);if(!pend)return;if(busy()&&n<35){wt=setTimeout(()=>flush(n+1),150);return}const p=pend;pend=null;lastT=p[0];lastAt=Date.now();_say.apply(null,p)}
+window.say=function(t){const user=!!(window.event&&window.event.isTrusted);
+  if(user){pend=null;clearTimeout(wt);lastT=t;lastAt=Date.now();return _say.apply(this,arguments)}
+  if(t===lastT&&Date.now()-lastAt<1500)return;
+  pend=Array.prototype.slice.call(arguments);flush(0)};
 })();
 
 intro();LWBOOT();
