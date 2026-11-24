@@ -1819,7 +1819,7 @@ window.lwInstall=async function(){
   o.innerHTML='<div><h3 style="margin:0 0 6px">أضيفي الموقع لشاشتك</h3>'+steps.map((t,i)=>'<div class="s"><i>'+(i+1)+'</i>'+t+'</div>').join('')+'<button class="btn" style="margin-top:8px" onclick="this.closest(\'.lwis\').remove()">تمام</button></div>';
   document.body.appendChild(o)};
 const btn=()=>st()?'':'<div style="text-align:center"><button class="lwi" onclick="lwInstall()">أضيفي الموقع لشاشتك</button></div>';
-function wrap(n){const f=window[n];if(typeof f!=='function')return;window[n]=function(){const r=f.apply(this,arguments);try{const a=document.querySelector('#app .card')||document.querySelector('#app');const b=btn();if(b&&a)a.insertAdjacentHTML(n==='mom'?'afterbegin':'beforeend',b)}catch(e){}return r}}
+function wrap(n){const f=window[n];if(typeof f!=='function')return;window[n]=function(){const r=f.apply(this,arguments);try{const a=document.querySelector('#app .card')||document.querySelector('#app');const b=document.querySelector('#app .lwi')?'':btn();if(b&&a)a.insertAdjacentHTML(n==='mom'?'afterbegin':'beforeend',b)}catch(e){}return r}}
 wrap('lwWelcome');wrap('mom');wrap('lwLogin');wrap('landing');
 })();
 
