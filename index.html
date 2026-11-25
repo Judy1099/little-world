@@ -113,7 +113,7 @@ window.lwBU=function(u){try{if(u.slice(0,5)!=='data:')return u;const c=lwBU.c||(
 const VA=new Audio();let VO=[],gA;function lvo(){try{VO=speechSynthesis.getVoices()}catch(e){}}lvo();try{speechSynthesis.onvoiceschanged=lvo}catch(e){}
 const arV=()=>{lvo();return VO.filter(x=>/^ar/i.test(x.lang))};
 function gtts(t){}
-function say(t,pt,rt){if((S('set')||{}).v===0)return;const vv=VOICE[t]||vn(t);if(vv){try{speechSynthesis.cancel()}catch(e){}try{VA.pause()}catch(e){}VA.src=lwBU(vv[ri(vv.length)]);const pr=VA.play();if(pr&&pr.catch)pr.catch(()=>{});return}try{const ss=window.speechSynthesis,v=arV();const cv=(S('set')||{}).vo;if(!ss||!v.length)return;let ok=0;ss.cancel();ss.resume();setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=rt||(S('set')||{}).r||.8;u.pitch=pt?Math.max(pt,(S('set')||{}).p||0):((S('set')||{}).p||1.25);u.voice=v.find(x=>x.name===cv&&cv!=='net')||v.find(x=>/female|Laila|Zariyah|Salma|Hoda|Noura/i.test(x.name))||v[0];u.onstart=()=>{ok=1};u.onerror=()=>{if(!ok){ok=1;gtts(t)}};ss.speak(u);setTimeout(()=>{if(!ok&&!ss.speaking){ok=1;gtts(t)}},1500)},80)}catch(e){gtts(t)}}
+function say(t,pt,rt){if((S('set')||{}).v===0)return;const vv=VOICE[t]||vn(t);if(vv){try{speechSynthesis.cancel()}catch(e){}try{VA.pause()}catch(e){}VA.src=lwBU(vv[ri(vv.length)]);const pr=VA.play();if(pr&&pr.catch)pr.catch(()=>{});return}if(window.lwNoTTS&&window.lwNoTTS())return;try{const ss=window.speechSynthesis,v=arV();const cv=(S('set')||{}).vo;if(!ss||!v.length)return;let ok=0;ss.cancel();ss.resume();setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=rt||(S('set')||{}).r||.8;u.pitch=pt?Math.max(pt,(S('set')||{}).p||0):((S('set')||{}).p||1.25);u.voice=v.find(x=>x.name===cv&&cv!=='net')||v.find(x=>/female|Laila|Zariyah|Salma|Hoda|Noura/i.test(x.name))||v[0];u.onstart=()=>{ok=1};u.onerror=()=>{if(!ok){ok=1;gtts(t)}};ss.speak(u);setTimeout(()=>{if(!ok&&!ss.speaking){ok=1;gtts(t)}},1500)},80)}catch(e){gtts(t)}}
 function sndTest(){const ss=window.speechSynthesis,v=arV();const e=document.getElementById('sd');const a=new Audio();a.src=qsrc(1,1)[2];let r='';const show=()=>{if(e)e.innerHTML=`<p>محرك النطق: ${ss?'موجود':'غير موجود'}</p><p>أصوات عربية في الجهاز: ${v.length}</p><p>الصوت الخارجي: ${r}</p>`};r='جارٍ الفحص';show();a.oncanplay=()=>{r='يعمل';show();a.pause()};a.onerror=()=>{r='لا يعمل';show()};try{a.load()}catch(x){r='لا يعمل';show()}say('مرحباً')}
 /* ---------- svg library ---------- */
 const GR={red:['#ff9a8a','#e5534b'],org:['#ffc872','#f28c38'],yel:['#fff3a8','#f2cf3a'],grn:['#c4e69a','#6fb26a'],pur:['#d3b4f2','#9a6bc4'],blu:['#a8d6f7','#4a90d9'],pnk:['#ffc9d4','#f4879f']};
@@ -2655,4 +2655,7 @@ body.isl .cl{animation:none!important}
 .kch{position:relative}
 .otr img{display:block;width:100%;height:auto}.ofr{will-change:transform}.ofr img{width:100%!important;height:auto!important;display:block;pointer-events:none}.owant img,.osl img{display:inline-block}
 .pgrid{grid-template-columns:repeat(3,1fr)!important;width:min(86vw,720px);margin:0 auto}.pgrid .pbig{width:100%!important;height:auto!important;aspect-ratio:1/1}
-</style></body></html>
+</style><script>
+/* games: no device (iPad) robotic voice - only the recorded clips play */
+window.lwNoTTS=function(){return /^(games|memory|shadowg|odd|cups|basket|pattern|catchg|bubbles|shapes|instr|balloons|paint|match|puzzle)$/.test(window.__lwv||'')};
+</script></body></html>
