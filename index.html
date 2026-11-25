@@ -251,7 +251,7 @@ $('#app').innerHTML=`${ctop(back||'fruits')}<div class="row">${o.map(x=>`<button
 <div class="row"><button class="btn w" onclick="sz=sz>20?10:30">${ic('size',26)}</button><button class="btn w" onclick="undo()">${ic('undo',26)}</button><button class="btn w" onclick="outline(pk)">${ic('trash',26)}</button></div>`;
 const cv=$('#cv'),x=cv.getContext('2d');outline(k);let d=0;
 const p=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]};
-cv.onpointerdown=e=>{hist.push(cv.toDataURL());if(hist.length>15)hist.shift();d=1;x.beginPath();x.moveTo(...p(e));x.lineCap=x.lineJoin='round';x.strokeStyle=col;x.lineWidth=sz;x.lineTo(...p(e));x.stroke()};
+cv.onpointerdown=e=>{try{hist.push(x.getImageData(0,0,cv.width,cv.height))}catch(_){}if(hist.length>15)hist.shift();d=1;x.beginPath();x.moveTo(...p(e));x.lineCap=x.lineJoin='round';x.strokeStyle=col;x.lineWidth=sz;x.lineTo(...p(e));x.stroke()};
 cv.onpointermove=e=>{if(d){x.lineTo(...p(e));x.stroke()}};cv.onpointerup=cv.onpointerleave=()=>d=0}
 function outline(k){pk=k;const x=$('#cv').getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,560,460);x.strokeStyle='#5a3a24';x.lineWidth=6;x.lineCap='round';hist=[];x.beginPath();
 if(k=='apple'){x.arc(280,255,135,0,7);x.moveTo(280,120);x.quadraticCurveTo(280,80,300,60);x.moveTo(290,100);x.quadraticCurveTo(350,40,390,90);x.quadraticCurveTo(340,120,290,100)}
@@ -259,7 +259,7 @@ if(k=='orange'){x.arc(280,250,140,0,7);x.moveTo(280,110);x.quadraticCurveTo(330,
 if(k=='melon'){x.arc(280,150,200,0,Math.PI);x.closePath();x.moveTo(120,150);x.arc(280,150,160,Math.PI,0,true);for(const[a,b]of[[220,230],[280,260],[340,230]]){x.moveTo(a+14,b);x.ellipse(a,b,14,22,.3,0,7)}}
 if(k=='sun'){x.arc(280,230,90,0,7);for(let i=0;i<10;i++){const a=i*.628;x.moveTo(280+110*Math.cos(a),230+110*Math.sin(a));x.lineTo(280+160*Math.cos(a),230+160*Math.sin(a))}}
 x.stroke()}
-function undo(){const u=hist.pop();if(!u)return;const i=new Image();i.onload=()=>$('#cv').getContext('2d').drawImage(i,0,0);i.src=u}
+function undo(){const u=hist.pop();if(!u)return;$('#cv').getContext('2d').putImageData(u,0,0)}
 /* quran */
 const SN={1:'الفاتحة',103:'العصر',105:'الفيل',106:'قريش',107:'الماعون',108:'الكوثر',109:'الكافرون',110:'النصر',111:'المسد',112:'الإخلاص',113:'الفلق',114:'الناس'};
 const SM=[[[1,7],[103,3]],[[105,5],[106,4]],[[107,7],[108,3]],[[109,6],[110,3]],[[111,5],[112,4]],[[113,5],[114,6]]];
@@ -1138,7 +1138,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v69';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v70';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
@@ -1346,7 +1346,7 @@ window.pzTap=function(j){if(!PZ||PZ.cel)return;
   else{const a=PZ.s;[PZ.o[a],PZ.o[j]]=[PZ.o[j],PZ.o[a]];PZ.s=null}
   pz();celebrate()};
 const _pz=window.pz;window.pz=function(){const r=_pz.apply(this,arguments);setTimeout(celebrate,0);return r};
-setInterval(celebrate,400); // safety net
+setInterval(()=>{if(!document.hidden&&onPuzzle())celebrate()},500); // safety net
 
 /* drag a piece onto another piece to swap */
 (function(){let dr=null;
@@ -1652,7 +1652,7 @@ body.mtab{padding-bottom:calc(98px + env(safe-area-inset-bottom,0px))}
 .mmore>div{width:100%;max-height:82vh;overflow:auto;background:#fff8ea;border-radius:30px 30px 0 0;padding:14px 16px calc(24px + env(safe-area-inset-bottom,0px));animation:mup .3s cubic-bezier(.2,.9,.3,1)}
 .mmore .gr{width:46px;height:5px;border-radius:9px;background:#d9c8a6;margin:0 auto 12px}
 @keyframes mup{from{transform:translateY(100%)}}@keyframes mfade{from{opacity:0}}
-#mtb{position:fixed;left:0;right:0;bottom:0;z-index:9980;display:flex;justify-content:space-around;background:rgba(255,248,234,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:26px 26px 0 0;padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 26px rgba(90,58,36,.16)}
+#mtb{position:fixed;left:0;right:0;bottom:0;z-index:9980;display:flex;justify-content:space-around;background:#fff8ea;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:26px 26px 0 0;padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 26px rgba(90,58,36,.16)}
 #mtb button{flex:1;border:0;background:none;font-family:'Rubik',sans-serif;font-weight:700;font-size:12px;color:#8a6a4a;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;max-width:110px}
 #mtb button span{display:flex;width:52px;height:30px;border-radius:16px;align-items:center;justify-content:center;transition:background .25s,transform .25s}
 #mtb button.on{color:#b27a1c}#mtb button.on span{background:#f6d27c;transform:translateY(-2px)}
