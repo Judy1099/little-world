@@ -2170,6 +2170,7 @@ const sfx={tap(){tone(660,0,.09,'sine',.1)},pop(){tone(520,0,.07,'triangle',.18)
 const say=t=>{try{window.say(t,1.6,.75)}catch(e){}};
 const ri=n=>Math.floor(Math.random()*n);
 function confetti(n=46){const C=['#f59b8b','#f7c75a','#9fddc5','#86b9ea','#c9b8ee','#f8b6c6'];for(let i=0;i<n;i++){const e=document.createElement('i');const s=8+ri(9);e.style.cssText=`position:fixed;pointer-events:none;z-index:95;left:${Math.random()*100}vw;top:-20px;width:${s}px;height:${s*1.4}px;background:${C[i%6]};border-radius:2px`;document.body.appendChild(e);const a=e.animate([{transform:'translateY(0) rotate(0)'},{transform:`translateY(${innerHeight+40}px) rotate(${360+ri(300)}deg)`}],{duration:1600+ri(1200),easing:'ease-in'});a.onfinish=()=>e.remove()}}
+window.sfx=sfx;
 /* ===== art kit ===== */
 const DEFS=`<defs>
 <linearGradient id="gGr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2e88a"/><stop offset="1" stop-color="#8ccb5c"/></linearGradient>
@@ -2247,6 +2248,10 @@ const c0=window.child;
 window.child=function(){const r=c0.apply(this,arguments);try{const row=document.querySelector('#app .row');if(row)row.insertAdjacentHTML('afterbegin',`<div class="tile" style="background:var(--sky)" onclick="go('island')"><div class="ta">${AN('ele',110,'width:88px!important')}</div>الجزيرة${spk('الجزيرة')}</div>`)}catch(e){}return r};
 const ISLRX=/^(island|kitchen|school|orchard|boat|theatre|post)$/;
 const gg=window.go;window.go=function(v){const on=ISLRX.test(v);document.body.classList.toggle('isl',on);if(!on)OV.style.display='none';const r=gg.apply(this,arguments);if(on)$('#app').innerHTML='';return r};
+
+/* auto-lite: if the device drops frames, switch off decorative animation */
+(function(){let lite=/[?&]lite=1/.test(location.search);const on=()=>{lite=true;document.documentElement.classList.add('lite')};if(lite)on();
+let n=0,t=performance.now(),bad=0;(function l(now){n++;if(now-t>1500){const f=n*1000/(now-t);n=0;t=now;if(!lite&&document.body.classList.contains('isl')&&!document.hidden){bad=f<40?bad+1:0;if(bad>=2)on()}}requestAnimationFrame(l)})(t)})();
 /* ===== shared small art ===== */
 const FRC={apple:['#ff6b5e','#d13d33'],orange:['#ffb347','#f08a1c'],lemon:['#fff07a','#f2d12a'],grape:['#a98be8','#7a58c8']};
 const fruitSvg=(k,s=60)=>{const c=FRC[k];return `<svg viewBox="0 0 60 60" width="${s}" height="${s}"><defs><radialGradient id="fg${k}" cx=".35" cy=".3"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></radialGradient></defs>${k==='grape'?`<g fill="url(#fg${k})"><circle cx="20" cy="26" r="10"/><circle cx="40" cy="26" r="10"/><circle cx="30" cy="38" r="10"/><circle cx="20" cy="40" r="0"/><circle cx="30" cy="22" r="10"/></g><path d="M30 12q2-7 10-8" stroke="#4a7a3a" stroke-width="4" fill="none" stroke-linecap="round"/>`:`<ellipse cx="30" cy="34" rx="${k==='lemon'?24:22}" ry="${k==='lemon'?18:21}" fill="url(#fg${k})"/><ellipse cx="22" cy="26" rx="6" ry="4" fill="#fff" opacity=".5"/><path d="M30 14q1-7 8-9" stroke="#5a8a3a" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M32 14q8-8 14-2q-8 4-14 2z" fill="#6cc66d"/>`}</svg>`};
@@ -2291,7 +2296,9 @@ window.kitchen=function(k0){
   let ph=0,last=null,grid=new Set(),cells=0,tsel='pep',tn=0,dist=0,drag=0;
   for(let i=0;i<10;i++)for(let j=0;j<10;j++)if(Math.hypot(i*30+15-150,j*30+15-150)<100)cells++;
   const mark=p=>{for(let a=0;a<10;a++)for(let b=0;b<10;b++){const cx=a*30+15,cy=b*30+15;if(Math.hypot(cx-150,cy-150)<100&&Math.hypot(cx-p[0],cy-p[1])<24)grid.add(a+','+b)}};
-  const setTools=()=>{T.innerHTML='';if(ph<2)hint();else Object.keys(TOP).forEach(k=>{const b=chipB(`<svg viewBox="0 0 60 60" width="62" height="62"><circle cx="30" cy="30" r="23" fill="${TOP[k]}"/>${k==='pep'?'<circle cx="23" cy="26" r="3.5" fill="#a82229"/><circle cx="36" cy="35" r="3.5" fill="#a82229"/>':k==='olive'?'<circle cx="30" cy="30" r="8" fill="#f8dca0"/>':'<circle cx="24" cy="26" r="3.5" fill="#c9a57a"/><circle cx="36" cy="33" r="3.5" fill="#c9a57a"/>'}</svg>`);if(k===tsel)b.classList.add('on');b.onclick=()=>{tsel=k;sfx.tap();setTools()};T.appendChild(b)})};
+  const STP=[['sauce','<path d="M18 40q-2-16 12-20 14 4 12 20 0 8-12 8t-12-8z" fill="#e23a30"/><ellipse cx="25" cy="30" rx="3" ry="5" fill="#fff" opacity=".4"/>','k_pizza_sauce','افرد الصوص على العجينة بإصبعك'],['cheese','<path d="M8 38l42-18v22H8z" fill="#ffd23f" stroke="#eeb400" stroke-width="2.5" stroke-linejoin="round"/><circle cx="22" cy="38" r="3" fill="#eeb400"/><circle cx="38" cy="33" r="2.5" fill="#eeb400"/>','k_pizza_cheese','الحين انثر الجبن'],['top','<circle cx="30" cy="30" r="18" fill="#d9363e"/><circle cx="24" cy="26" r="3.5" fill="#a82229"/><circle cx="36" cy="35" r="3.5" fill="#a82229"/>','k_pizza_top','اختر واحدة وانثرها فوق']];
+  const setTools=()=>{T.innerHTML='';STP.forEach((st,n)=>{const b=chipB(`<svg viewBox="0 0 60 60" width="52" height="52">${st[1]}</svg>${n<ph?'<svg class="ck" viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="12" r="12" fill="#4fae5b"/><path d="M6 12l4 4 8-8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}`);b.classList.add('sm','stp');if(n===ph)b.classList.add('on','pls');else if(n>ph)b.classList.add('dim');b.onclick=()=>{sfx.tap();if(n===ph)vox(st[2],st[3]);else{b.animate([{transform:'translateX(0)'},{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'translateX(0)'}],{duration:280})}};T.appendChild(b)});
+   if(ph===2){const sp=document.createElement('span');sp.className='stsp';T.appendChild(sp);Object.keys(TOP).forEach(k=>{const b=chipB(`<svg viewBox="0 0 60 60" width="62" height="62"><circle cx="30" cy="30" r="23" fill="${TOP[k]}"/>${k==='pep'?'<circle cx="23" cy="26" r="3.5" fill="#a82229"/><circle cx="36" cy="35" r="3.5" fill="#a82229"/>':k==='olive'?'<circle cx="30" cy="30" r="8" fill="#f8dca0"/>':'<circle cx="24" cy="26" r="3.5" fill="#c9a57a"/><circle cx="36" cy="33" r="3.5" fill="#c9a57a"/>'}</svg>`);if(k===tsel)b.classList.add('on');b.onclick=()=>{tsel=k;sfx.tap();setTools()};T.appendChild(b)})}};
   setTools();setTimeout(()=>vox('k_pizza_sauce','افرد الصوص على العجينة بإصبعك'),1700);
   const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*300,(e.clientY-r.top)/r.height*300]};
   const clip=f=>{x.save();x.beginPath();x.arc(150,150,112,0,7);x.clip();f();x.restore()};
@@ -2388,11 +2395,11 @@ const LETS=[['ا','الألف'],['ب','الباء'],['ت','التاء'],['ث','�
 const ANN={ele:'الفيل',owl:'البومة',panda:'الباندا',bunny:'الأرنوبة',bear:'الدبدوب',fox:'الثعلب'};
 const NUMN=['','واحد','اثنين','ثلاثة','أربعة'];
 const SCQ=[
- ()=>{const ks=shuf(Object.keys(SHP)).slice(0,3),a=ks[0];return{id:'shape_'+a,say:'وين '+SHP[a][0]+'؟',o:shuf(ks).map(k=>[`<svg viewBox="0 0 100 100" width="100%" fill="#5aa6e0">${SHP[k][1]}</svg>`,k===a])}},
- ()=>{const ks=shuf(Object.keys(COLS)).slice(0,3),a=ks[0];return{id:'color_'+a,say:'وين البالون '+COLS[a][0]+'؟',o:shuf(ks).map(k=>[`<svg viewBox="0 0 100 120" width="100%"><ellipse cx="50" cy="48" rx="36" ry="42" fill="${COLS[k][1]}"/><ellipse cx="36" cy="30" rx="9" ry="14" fill="#fff" opacity=".4"/><path d="M50 90l-6 10h12z" fill="${COLS[k][1]}"/><path d="M50 100q-8 10 0 20" stroke="#8a7a6e" stroke-width="3" fill="none"/></svg>`,k===a])}},
- ()=>{const ks=shuf(ACT).slice(0,3),a=ks[0];return{id:'animal_'+a,say:'وين '+ANN[a]+'؟',o:shuf(ks).map(k=>[`<div class="sca">${AN(k,150,'width:100%!important')}</div>`,k===a])}},
- ()=>{const ks=shuf(LETS).slice(0,3),a=ks[0];return{id:'letter_'+a[1],say:'وين حرف '+a[1]+'؟',o:shuf(ks).map(k=>[`<span class="scl">${k[0]}</span>`,k===a])}},
- ()=>{const big=Math.random()<.5;return{id:big?'big':'small',say:big?'وين الكبير؟':'وين الصغير؟',o:shuf([0,1]).map(i=>[`<svg viewBox="0 0 100 100" width="100%"><circle cx="50" cy="50" r="${i?44:20}" fill="#f48fb1"/><ellipse cx="${i?36:42}" cy="${i?34:44}" rx="${i?10:5}" ry="${i?6:3}" fill="#fff" opacity=".4"/></svg>`,big?i===1:i===0])}}
+ ()=>{const ks=shuf(Object.keys(SHP)).slice(0,3),a=ks[0];return{id:'shape_'+a,say:'أين '+SHP[a][0]+'؟',o:shuf(ks).map(k=>[`<svg viewBox="0 0 100 100" width="100%" fill="#5aa6e0">${SHP[k][1]}</svg>`,k===a])}},
+ ()=>{const ks=shuf(Object.keys(COLS)).slice(0,3),a=ks[0];return{id:'color_'+a,say:'أين البالون '+COLS[a][0]+'؟',o:shuf(ks).map(k=>[`<svg viewBox="0 0 100 120" width="100%"><ellipse cx="50" cy="48" rx="36" ry="42" fill="${COLS[k][1]}"/><ellipse cx="36" cy="30" rx="9" ry="14" fill="#fff" opacity=".4"/><path d="M50 90l-6 10h12z" fill="${COLS[k][1]}"/><path d="M50 100q-8 10 0 20" stroke="#8a7a6e" stroke-width="3" fill="none"/></svg>`,k===a])}},
+ ()=>{const ks=shuf(ACT).slice(0,3),a=ks[0];return{id:'animal_'+a,say:'أين '+ANN[a]+'؟',o:shuf(ks).map(k=>[`<div class="sca">${AN(k,150,'width:100%!important')}</div>`,k===a])}},
+ ()=>{const ks=shuf(LETS).slice(0,3),a=ks[0];return{id:'letter_'+a[1],say:'أين حرف '+a[1]+'؟',o:shuf(ks).map(k=>[`<span class="scl">${k[0]}</span>`,k===a])}},
+ ()=>{const big=Math.random()<.5;return{id:big?'big':'small',say:big?'أين الكبير؟':'أين الصغير؟',o:shuf([0,1]).map(i=>[`<svg viewBox="0 0 100 100" width="100%"><circle cx="50" cy="50" r="${i?44:20}" fill="#f48fb1"/><ellipse cx="${i?36:42}" cy="${i?34:44}" rx="${i?10:5}" ry="${i?6:3}" fill="#fff" opacity=".4"/></svg>`,big?i===1:i===0])}}
 ];
 window.school=function(){
  let n=0,ok=0,cur;const TOT=8;
@@ -2556,4 +2563,7 @@ body.isl .cl{animation:none!important}
 #isl .an{will-change:transform}
 #isl .cloud img{display:block}
 .pgrid .pbig{padding:12%}
+.kch.stp{position:relative}.kch.dim{opacity:.45;filter:grayscale(.6)}.kch.pls{animation:stpp 1.1s ease-in-out infinite}@keyframes stpp{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.kch .ck{position:absolute;right:-6px;top:-6px}.stsp{width:4px;height:60px;border-radius:2px;background:rgba(90,70,50,.25);margin:0 6px}
+.lite #isl .cloud,.lite #isl .cld{animation:none!important}.lite #isl .an *,.lite #isl .an{animation:none!important}.lite #isl .kch.pls,.lite #isl .hnd{animation:none!important}.lite #isl{transition:none!important}.lite #isl .stg{transition:none!important;animation:none!important}
 </style></body></html>
