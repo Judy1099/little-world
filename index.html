@@ -831,7 +831,7 @@ MT.splice(4,0,['book','قصص طفلي','momstories','#e58a5a']);
 /* ---- Arabic letters: 4 letters a month, 6 games for every letter ---- */
 (function(){
 const L=[['ا','ألف'],['ب','باء'],['ت','تاء'],['ث','ثاء'],['ج','جيم'],['ح','حاء'],['خ','خاء'],['د','دال'],['ذ','ذال'],['ر','راء'],['ز','زاي'],['س','سين'],['ش','شين'],['ص','صاد'],['ض','ضاد'],['ط','طاء'],['ظ','ظاء'],['ع','عين'],['غ','غين'],['ف','فاء'],['ق','قاف'],['ك','كاف'],['ل','لام'],['م','ميم'],['ن','نون'],['ه','هاء'],['و','واو'],['ي','ياء']];
-const PER=4,GAMES=['learn','trace','find','bub','mem','drag','pic','first'];
+const PER=4,GAMES=['learn','trace','find','bub','mem','drag','pic','first','hunt','echo','stamp'];
 const COL=['#e5834a','#6fae66','#4a90d9','#9a7fd0','#e58aa0','#d9a521','#4aa8a0'];
 const FONT="'Rubik','Tajawal',sans-serif";
 ART.hrf='<circle cx="50" cy="50" r="43" fill="#fff3d6"/><text x="50" y="70" font-size="62" text-anchor="middle" font-family="Rubik,Tajawal,sans-serif" fill="#e5834a" font-weight="800">أ</text>';
@@ -839,9 +839,9 @@ IC.pen='<path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/>';
 IC.pop='<circle cx="12" cy="12" r="8"/><path d="M8 9a5 5 0 0 1 3-2"/>';
 IC.pair='<rect x="3" y="5" width="8" height="14" rx="2"/><rect x="13" y="5" width="8" height="14" rx="2"/>';
 IC.drag='<path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>';
-IC.find='<circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/>';
-const GI={learn:'ear',trace:'pen',find:'find',bub:'pop',mem:'pair',drag:'drag',pic:'camera',first:'star'};
-const GC={learn:'#6fae66',trace:'#e5834a',find:'#4a90d9',bub:'#e58aa0',mem:'#9a7fd0',drag:'#d9a521',pic:'#4aa8a0',first:'#d9754a'};
+IC.hunt='<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>';IC.stamp='<circle cx="12" cy="8" r="4.5"/><path d="M9 12.5h6l1 4H8zM6 20h12"/>';IC.find='<circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/>';
+const GI={learn:'ear',trace:'pen',find:'find',bub:'pop',mem:'pair',drag:'drag',pic:'camera',first:'star',hunt:'hunt',echo:'mic',stamp:'stamp'};
+const GC={learn:'#6fae66',trace:'#e5834a',find:'#4a90d9',bub:'#e58aa0',mem:'#9a7fd0',drag:'#d9a521',pic:'#4aa8a0',first:'#d9754a',hunt:'#5a9ad0',echo:'#e5534b',stamp:'#8a6fc4'};
 
 /* ---- word pictures (flat, simple) ---- */
 Object.assign(ART,{
@@ -912,7 +912,7 @@ window.ltPick=function(i){
 LWLOCK.push('ltGame');
 window.ltGame=function(g,i){
   if(!open(i)){go('letters');return}
-  const f={learn,trace,find,bub,mem,drag,pic:gPic,first:gFirst}[g];if(f)f(i)};
+  const f={learn,trace,find,bub,mem,drag,pic:gPic,first:gFirst,hunt,echo,stamp}[g];if(f)f(i)};
 const shell=(i,body,extra)=>{$('#app').innerHTML='<div class="top">'+ib("go('ltPick',"+i+")",'back')+'<div style="flex:1;text-align:center">'+(extra||'')+'</div>'+bee(64)+'</div>'+body};
 
 /* 1. learn: hear the letter and its word */
@@ -961,6 +961,46 @@ function bub(i){let n=0;const need=6;
     if(!document.getElementById('bubfs')){const s=document.createElement('style');s.id='bubfs';s.textContent='@keyframes bubf{50%{transform:translateY(-12px)}}';document.head.appendChild(s)}};
   window.ltBub=x=>{const b=B[x];if(b.t){n++;if(n>=need){finish(i,'bub');return}B[x]=mkb();say(nm(i));draw()}else wrong()};
   draw();say(nm(i))}
+
+
+/* 9. hunt: tap every copy of the letter in the grid */
+function hunt(i){
+  const d=near(i,4),cells=shuf([i,i,i,i,d[0],d[1],d[2],d[3],d[0]]);let f=0;
+  shell(i,'<div class="card" style="text-align:center"><div style="display:grid;grid-template-columns:repeat(3,120px);gap:14px;justify-content:center">'
+   +cells.map((k,x)=>'<button id="lh'+x+'" data-k="'+k+'" onclick="ltHunt('+x+')" aria-label="حرف" style="width:120px;height:120px;border-radius:26px;border:0;cursor:pointer;background:#fffaf0;box-shadow:0 5px 0 #eadcbc">'+big(L[k][0],84,COL[(k+1)%COL.length])+'</button>').join('')+'</div>'+spkL(i)+'</div>');
+  window.ltHunt=x=>{const b=$('#lh'+x);if(!b||b.dataset.on)return;if(+b.dataset.k===i){b.dataset.on=1;b.style.background='#d9f0d0';b.style.boxShadow='0 0 0 5px #6fae66';f++;say(nm(i));if(f>=4)finish(i,'hunt')}else wrong()};
+  setTimeout(()=>say(nm(i)),250)}
+
+/* 10. echo: say the letter, hear yourself */
+function echo(i){
+  window.__ltE=0;
+  shell(i,'<div class="card" style="text-align:center">'+big(L[i][0],170,COL[grp(i)%COL.length])+'<div style="margin:10px 0">'+spkL(i)+'</div>'
+   +'<button id="lte" class="stbb" style="background:#e5834a;width:110px;height:110px" onclick="ltEcho('+i+')" aria-label="تسجيل">'+ic('mic',56,'#fff')+'</button></div>');
+  window.ltEcho=async i=>{if(window.__ltE)return;window.__ltE=1;const b=$('#lte');
+    try{try{VA.pause()}catch(e){}try{speechSynthesis.cancel()}catch(e){}
+      const s=await navigator.mediaDevices.getUserMedia({audio:true});
+      const mt=['audio/mp4','audio/webm;codecs=opus','audio/webm'].find(t=>{try{return MediaRecorder.isTypeSupported(t)}catch(e){return false}})||'';
+      const mr=new MediaRecorder(s,mt?{mimeType:mt}:undefined),ch=[];
+      mr.ondataavailable=e=>{if(e.data&&e.data.size)ch.push(e.data)};
+      mr.onstop=()=>{try{s.getTracks().forEach(t=>t.stop())}catch(e){}
+        const fin=()=>{window.__ltE=0;if(b){b.style.background='#e5834a'}finish(i,'echo')};
+        try{const a=new Audio(URL.createObjectURL(new Blob(ch,{type:(mr.mimeType||mt||'audio/mp4').split(';')[0]})));a.onended=fin;a.play().catch(fin)}catch(e){fin()}};
+      if(b){b.style.background='#d94a4a';b.style.boxShadow='0 0 0 12px rgba(220,60,60,.25)'}
+      mr.start();setTimeout(()=>{try{mr.stop()}catch(e){}if(b)b.style.boxShadow=''},2500)
+    }catch(e){window.__ltE=0;cheer('اسمحي للمتصفح باستخدام المايكروفون')}}}
+
+/* 11. stamp: tap anywhere to stamp the letter */
+function stamp(i){
+  const c=COL[grp(i)%COL.length];let n=0,done=0;
+  if(!document.getElementById('stmpcss')){const s=document.createElement('style');s.id='stmpcss';s.textContent='@keyframes stmp{from{transform:translate(-50%,-50%) scale(.2) rotate(var(--r));opacity:0}to{transform:translate(-50%,-50%) scale(1) rotate(var(--r));opacity:1}}';document.head.appendChild(s)}
+  shell(i,'<div class="card" style="text-align:center"><div id="lts2" style="position:relative;height:420px;border-radius:24px;background:#fffaf0;box-shadow:inset 0 0 0 4px #f2e4c4;touch-action:manipulation;overflow:hidden"></div>'+spkL(i)+'</div>');
+  const a=$('#lts2');
+  a.addEventListener('pointerdown',e=>{const r=a.getBoundingClientRect();if(n>=40)return;n++;
+    const el=document.createElement('span');const col=COL[ri(COL.length)];
+    el.style.cssText='position:absolute;left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px;font:800 '+(70+ri(60))+'px '+FONT+';color:'+col+';--r:'+(ri(50)-25)+'deg;transform:translate(-50%,-50%);animation:stmp .35s cubic-bezier(.2,1.5,.4,1) both;pointer-events:none;line-height:1';
+    el.textContent=L[i][0];a.appendChild(el);say(nm(i));
+    if(n>=6&&!done){done=1;setTimeout(()=>finish(i,'stamp'),600)}});
+  setTimeout(()=>say(nm(i)),250)}
 
 /* 5. memory: find the pairs */
 function mem(i){
@@ -1141,7 +1181,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v70';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v71';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
