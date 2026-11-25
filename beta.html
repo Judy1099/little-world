@@ -2305,7 +2305,7 @@ window.kitchen=function(k0){
   else{const t=to&&to();if(!t){gclear();return}const q=t.getBoundingClientRect(),tx=q.left+q.width/2-o.left,ty=q.top+q.height*.55-o.top;gh.animate([{transform:tr(cx,cy),opacity:0},{transform:tr(cx,cy),opacity:1,offset:.12},{transform:tr(cx,cy,.85),opacity:1,offset:.22},{transform:tr(tx,ty,.85),opacity:1,offset:.7},{transform:tr(tx,ty,1),opacity:1,offset:.8},{transform:tr(tx,ty),opacity:0}],{duration:2400,iterations:Infinity})}};
   gt=setTimeout(gfn,700)};
  window.__kg=()=>{gclear();if(gfn)gt=setTimeout(gfn,6000)};
- window.kWish=()=>vox('k_wish_'+KE.wish,{pizza:'أبغى بيتزا',burger:'أبغى برجر',juice:'أبغى عصير',ice:'أبغى آيس كريم',cake:'أبغى كيك'}[KE.wish],1);
+ window.kWish=()=>vox('k_wish_'+KE.wish,{pizza:'أريد بيتزا',burger:'أريد برجر',juice:'أريد عصير',ice:'أريد آيس كريم',cake:'أريد كيك'}[KE.wish],1);
  const hint=()=>{T.innerHTML='<div class="hnd"><svg viewBox="0 0 64 64" width="72" height="72"><path d="M24 30V12q0-6 6-6t6 6v18l10 4q8 3 6 12l-3 12q-1 4-6 4H30q-5 0-8-4L10 40q-3-5 2-8t9 4z" fill="#ffe0b8" stroke="#e0a56a" stroke-width="3" stroke-linejoin="round"/></svg></div>'};
  const chipB=(inner,d)=>{const b=document.createElement('button');b.className='kch';b.innerHTML=inner;b.dataset.d=d||inner;return b};
  const serve=async(node)=>{if(busy)return;busy=1;const a=node.getBoundingClientRect(),b=EL().getBoundingClientRect();const dx=b.left+b.width/2-(a.left+a.width/2),dy=b.top+b.height*.5-(a.top+a.height/2);
@@ -2412,7 +2412,7 @@ window.orchard=function(){
   fr.forEach((f,i)=>{const b=document.createElement('button');b.className='ofr';b.dataset.k=f.k;b.style.cssText=`left:${pos[i%4][0]}%;top:${pos[i%4][1]}%`;b.innerHTML=fruitSvg(f.k,100);trees[f.t].appendChild(b)});
   $('#owant').innerHTML=Array.from({length:need},()=>fruitSvg(want,62)).join('');
   $('#osl').innerHTML=Array.from({length:need},(_,i)=>`<span class="osl" id="osl${i}"></span>`).join('');
-  window.oSay=()=>voxSeq(['o_want','n'+need,'f_'+want],'أبغى '+need+' '+{apple:'تفاح',orange:'برتقال',lemon:'ليمون',grape:'عنب'}[want],1);
+  window.oSay=()=>voxSeq(['o_want','n'+need,'f_'+want],'أريد '+need+' '+{apple:'تفاح',orange:'برتقال',lemon:'ليمون',grape:'عنب'}[want],1);
   OV.querySelectorAll('.ofr').forEach(b=>b.onclick=()=>{if(b.dataset.x)return;b.dataset.x=1;const k=b.dataset.k;const sl=$('#osl'+Math.min(got,need-1)),r=b.getBoundingClientRect(),q=sl.getBoundingClientRect();
    b.style.pointerEvents='none';b.style.zIndex=30;b.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${q.left+q.width/2-r.left-r.width/2}px,${q.top+q.height/2-r.top-r.height/2}px) scale(.62)`}],{duration:520,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'}).finished.then(()=>{
     if(k===want){got++;sfx.pop();sl.innerHTML=fruitSvg(k,58);b.style.display='none';anSet($('#pn .an'),'hop',500);if(got>=need){mailAuto('قطف '+need+' فواكه للباندا في البستان');sfx.win();confetti(30);anSet($('#pn .an'),'dance',2200);praise();setTimeout(newRound,2600)}}
@@ -2513,7 +2513,7 @@ window.post=function(){
   $('#pmc').onclick=async()=>{if(recing){rec.stop();return}let st;try{st=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){sfx.no();return}
    rec=new MediaRecorder(st);chunks=[];rec.ondataavailable=e=>chunks.push(e.data);recing=1;$('#pmc').classList.add('rec');rec.onstop=()=>{recing=0;$('#pmc').classList.remove('rec');st.getTracks().forEach(t=>t.stop());const b=new Blob(chunks,{type:rec.mimeType});const fr=new FileReader();fr.onload=()=>{audio=fr.result;$('#pmc').classList.add('okk');sfx.ok()};fr.readAsDataURL(b)};rec.start();setTimeout(()=>{if(recing)rec.stop()},15000)};
   $('#psn').onclick=()=>{if(!audio){sfx.no();return}deliver({k:'voice',au:audio,t:'رسالة صوتية لك'})}};
- const loveUI=()=>{const L=[['heart','أحبك ماما'],['hug','أبغى حضن'],['kiss','شكرا ماما'],['flower','هدية لك']];$('#pst').innerHTML=`<div class="pgrid">${L.map((x,i)=>`<button class="pbig sticker" data-i="${i}">${stkSvg(x[0],200)}</button>`).join('')}</div>${sendBtn()}`;sticker='';
+ const loveUI=()=>{const L=[['heart','أحبك ماما'],['hug','أريد حضن'],['kiss','شكرا ماما'],['flower','هدية لك']];$('#pst').innerHTML=`<div class="pgrid">${L.map((x,i)=>`<button class="pbig sticker" data-i="${i}">${stkSvg(x[0],200)}</button>`).join('')}</div>${sendBtn()}`;sticker='';
   OV.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{sticker=L[b.dataset.i];OV.querySelectorAll('[data-i]').forEach(x=>x.classList.remove('on'));b.classList.add('on');sfx.pop()});
   $('#psn').onclick=()=>{if(!sticker){sfx.no();return}deliver({k:'love',e:sticker[0],t:sticker[1]})}};
  const deliver=m=>{$('#psn').disabled=true;const a=mailGet();m.d=Date.now();m.r=0;a.push(m);mailPut(a);sfx.ok();
