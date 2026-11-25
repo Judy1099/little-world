@@ -873,10 +873,11 @@ const pic=k=>A(W[k][1],118);
 const spkW=k=>'<button class="spk" aria-label="استمع" onclick="event.stopPropagation();say(\''+W[k][0]+'\')">'+ic('speaker',22)+'</button>';
 const U=()=>LWON?lwUnlocked():99;
 const grp=i=>Math.floor(i/PER),open=i=>grp(i)<U();
-const PR=()=>S('lt')||{};
+let _pc=null,_pt=0;const PR=()=>{const n=Date.now();if(_pc&&n-_pt<400)return _pc;_pc=S('lt')||{};_pt=n;return _pc};
 const got=(i,g)=>!!(PR()[L[i][0]]||{})[g];
+const starRow=i=>{const N=GAMES.length;return '<svg width="'+Math.round(N*28*9/24)+'" height="9" viewBox="0 0 '+N*28+' 24" fill="none" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true">'+GAMES.map((g,k)=>'<g transform="translate('+k*28+' 0)" style="color:'+(got(i,g)?'#f2b94b':'#d9cdb0')+'" stroke="'+(got(i,g)?'#f2b94b':'#d9cdb0')+'">'+IC.star+'</g>').join('')+'</svg>'};
 const stars=i=>GAMES.filter(g=>got(i,g)).length;
-function mark(i,g){const p=PR(),k=L[i][0];p[k]=p[k]||{};if(!p[k][g]){p[k][g]=1;S('lt',p)}}
+function mark(i,g){const p=PR(),k=L[i][0];p[k]=p[k]||{};if(!p[k][g]){p[k][g]=1;S('lt',p);_pc=p;_pt=Date.now()}}
 const ri=n=>Math.floor(Math.random()*n);
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 const nm=i=>L[i][1];
@@ -896,7 +897,7 @@ window.letters=function(){
     for(let i=m*PER;i<Math.min(L.length,(m+1)*PER);i++){
       h+='<button class="tile" style="background:'+(lock?'#e4d9c4':COL[m%COL.length]+'33')+';flex:0 0 140px;max-width:140px;padding:10px 6px" onclick="'+(lock?"say('قريباً')":"go('ltPick',"+i+")")+'" aria-label="حرف">'
        +(lock?'<div style="opacity:.6">'+big('؟',84,'#a89878')+'</div><div style="height:22px"></div>'
-             :big(L[i][0],84,COL[m%COL.length])+'<div style="height:22px;display:flex;justify-content:center;gap:2px">'+GAMES.map(g=>ic('star',10,got(i,g)?'#f2b94b':'#d9cdb0')).join('')+'</div>')
+             :big(L[i][0],84,COL[m%COL.length])+'<div style="height:22px;display:flex;justify-content:center;gap:2px">'+starRow(i)+'</div>')
        +'</button>'}
     h+='</div></div>'}
   $('#app').innerHTML=ctop('child')+h;cheer('هيا نتعلم')};
@@ -1181,7 +1182,7 @@ const oldNext=window.qlNext;
 window.qlNext=function(){QL.tok=Date.now();QL.fail=0;oldNext();if(QL.ph=='play'){const t=QL.tok;setTimeout(()=>{if(alive(t))run(2)},700)}};
 window.qlFail=function(){const t=QL.tok;if(QL.fail>=2){setTimeout(()=>{if(alive(t)&&!QL.said)qlNext()},1200);return}setTimeout(()=>{if(alive(t)&&!QL.said)run(1)},1400)};
 })();
-(function(){const d=document.createElement('div');d.textContent='v71';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
+(function(){const d=document.createElement('div');d.textContent='v72';d.style.cssText='position:fixed;left:6px;bottom:4px;font:11px sans-serif;color:#5a3a24;opacity:.4;z-index:5;pointer-events:none;direction:ltr';document.body.appendChild(d)})();
 window.quran=function(){$('#app').innerHTML=`${ctop('child')}<h2>سورتا هذا الشهر ${spk('سورتا هذا الشهر')}</h2><div class="row">${SM[qm()].map(([n,c])=>`<div class="tile" style="background:#fff;flex-basis:220px" onclick="${QT[n]?`go('qlearn',${n})`:`cheer('قريباً')`}"><div class="ta">${ic('book',84,'#5a3a24')}</div>${SN[n]}${spk(SN[n])}</div>`).join('')}</div>`};
 
 /* no iPad voice inside the Quran; reliable ayah playback */
