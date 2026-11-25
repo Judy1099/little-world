@@ -2254,7 +2254,7 @@ window.islSay=i=>{vox('p_'+PL[i][0],PL[i][4],1);const b=OV.querySelectorAll('.is
 window.islGo=i=>{const b=OV.querySelectorAll('.ipl')[i],st=$('#stg');anSet(b.querySelector('.an'),'cheer',900);sfx.ok();
  const r=b.getBoundingClientRect(),s=st.getBoundingClientRect();st.style.transformOrigin=`${r.left+r.width/2-s.left}px ${r.top+r.height/2-s.top-60}px`;st.classList.add('zoom');setTimeout(()=>go(PL[i][0]),520)};
 const c0=window.child;
-window.child=function(){const r=c0.apply(this,arguments);try{const row=document.querySelector('#app .row');if(row)row.insertAdjacentHTML('afterbegin',`<div class="tile" style="background:var(--sky)" onclick="vox('i_tile','الجزيرة');go('island')"><div class="ta">${AN('ele',110,'width:88px!important')}</div>الجزيرة${spk('الجزيرة')}</div>`)}catch(e){}return r};
+window.child=function(){const r=c0.apply(this,arguments);try{const row=document.querySelector('#app .row');if(row)row.insertAdjacentHTML('afterbegin',`<div class="tile" style="background:var(--sky)" onclick="vox('i_tile','الجزيرة');go('island')"><div class="ta">${AN('ele',110,'width:88px!important')}</div>الجزيرة${spk('الجزيرة').replace(/onclick="[^"]*"/,'onclick="event.stopPropagation();vox(\'i_tile\',\'الجزيرة\',1)"')}</div>`)}catch(e){}return r};
 const ISLRX=/^(island|kitchen|school|orchard|boat|theatre|post)$/;
 const gg=window.go;window.go=function(v){const on=ISLRX.test(v);document.body.classList.toggle('isl',on);if(!on)OV.style.display='none';const r=gg.apply(this,arguments);if(on)$('#app').innerHTML='';return r};
 
