@@ -2658,4 +2658,7 @@ body.isl .cl{animation:none!important}
 </style><script>
 /* games: no device (iPad) robotic voice - only the recorded clips play */
 window.lwNoTTS=function(){return /^(games|memory|shadowg|odd|cups|basket|pattern|catchg|bubbles|shapes|instr|balloons|paint|match|puzzle)$/.test(window.__lwv||'')};
+
+/* games menu: no speaker buttons on the game tiles */
+(function(){const g0=window.games;if(typeof g0!=='function')return;window.games=function(){const r=g0.apply(this,arguments);try{document.querySelectorAll('#app .tile .spk').forEach(e=>e.remove())}catch(e){}return r}})();
 </script></body></html>
